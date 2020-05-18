@@ -1,0 +1,15 @@
+.log {
+    padding: 5px 5px 5px 5px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.dismiss-button {
+    margin: 5px 5px 5px 5px;
+    width: 50px;
+    height: 25px;
+    min-height: 25px;
+}

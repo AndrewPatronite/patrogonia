@@ -1,0 +1,13 @@
+.patrogonia {
+    display: flex;
+    flex: 1 1 auto;
+    width: 1000px;
+    max-width: 1000px;
+    height: 1000px;
+    max-height: 1000px;
+}
+
+.battle {
+    max-width: 1000px;
+    max-height: 1000px;
+}

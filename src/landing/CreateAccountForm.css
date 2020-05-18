@@ -1,0 +1,23 @@
+.create-account {
+    padding: 50px 50px 50px 50px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border: 2px solid white;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.create-account > label {
+    margin-bottom: 10px;
+}
+
+.create-account > label > input {
+    margin-left: 5px;
+}
+
+.create-account > .link-button {
+    margin: 0;
+    margin-top: 15px;
+}

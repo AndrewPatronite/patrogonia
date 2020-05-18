@@ -1,0 +1,126 @@
+.battle {
+    background-color: #fafafa;
+    border: 5px solid white;
+    border-radius: 5px;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+}
+
+.enemies {
+    display: flex;
+    justify-content: space-evenly;
+    min-height: 568px;
+    height: 568px;
+    max-height: 568px;
+    background-size: cover;
+}
+
+.enemy {
+    margin: 50px 0 5px 0;
+    width: 200px;
+    background-position-x: center;
+    background-position-y: bottom;
+    background-repeat: no-repeat;
+}
+
+.mouse {
+    background-image: url('./enemy/mouse.svg');
+}
+
+.rat {
+    background-image: url('./enemy/rat.svg');
+}
+
+.boar {
+    background-image: url('./enemy/boar.svg');
+}
+
+.goblin {
+    background-image: url('./enemy/goblin.svg');
+}
+
+.skeleton {
+    background-image: url('./enemy/skeleton.svg');
+}
+
+.knight {
+    background-image: url('./enemy/knight.svg');
+}
+
+.selected {
+    border-radius: 5px;
+    border: 3px solid #3734ff;
+}
+
+.log {
+    margin: 1px 1px 1px 1px;
+    display: flex;
+    flex: 1 1 auto;
+    color: #606060;
+    font-size: 15px;
+    border: 5px solid white;
+}
+
+.players {
+    margin: 0 1px 1px 1px;
+    display: flex;
+    flex: 1 1 auto;
+    max-height: 150px;
+}
+
+.player-panel {
+    padding: 5px 5px 5px 5px;
+    border: 5px solid white;
+    border-radius: 5px;
+    display: flex;
+}
+
+.player-stats {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+    max-height: 90px;
+}
+
+label {
+    font-size: 15px;
+    color: #606060;
+}
+
+.action-options {
+    display: flex;
+    flex-direction: column;
+    max-height: 90px;
+}
+
+p {
+    margin: 0;
+}
+
+.option-panel {
+    display: flex;
+    align-items: center;
+    margin-left: 25px;
+}
+
+.option-select {
+    max-height: 80px;
+    min-width: 80px;
+    color: #606060;
+    background-color: #ffffff;
+    border-radius: 3px;
+}
+
+.option-select-selected {
+    color: #606060;
+    background-color: #aaaaaa;
+}
+
+.dire {
+    border: 5px solid #e31e2d;
+}
+
+.death {
+    border: 5px solid black;
+}

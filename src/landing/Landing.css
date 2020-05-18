@@ -1,0 +1,34 @@
+.landing {
+    background-color: #fafafa;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.title {
+    text-align: left;
+    text-shadow: 3px 3px #aaaaaa;
+    font-size: 50px;
+    color: #120c74;
+}
+
+.invalid {
+    color: #e31e2d;
+    font-size: 12px;
+}
+
+.landing-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.landing-footer > label {
+    font-size: 12px;
+}
+
+.landing-footer > .credits {
+    margin-bottom: 5px;
+}
