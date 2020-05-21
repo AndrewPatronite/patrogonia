@@ -2,6 +2,7 @@ import { useCallback, useReducer } from 'react';
 import {
     createAccountAction,
     loadPlayer as loadPlayerAction,
+    loadSaveAction,
     loginAction,
     updatePlayerAction,
 } from './actions/playerAction';
@@ -29,6 +30,11 @@ export const PlayerState = () => {
         []
     );
 
+    const loadSave = useCallback(
+        (playerId) => loadSaveAction(dispatchPlayer, playerId),
+        []
+    );
+
     const login = useCallback(
         (username, password, onFailure) =>
             loginAction(dispatchPlayer, username, password, onFailure),
@@ -41,5 +47,5 @@ export const PlayerState = () => {
         []
     );
 
-    return [currentPlayer, login, createAccount, updatePlayer, loadPlayer];
+    return [currentPlayer, login, createAccount, updatePlayer, loadPlayer, loadSave];
 };

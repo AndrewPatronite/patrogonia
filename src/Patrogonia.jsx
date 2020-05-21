@@ -16,6 +16,7 @@ const Patrogonia = () => {
         createAccount,
         updatePlayer,
         loadPlayer,
+        loadSave,
     ] = PlayerState();
 
     useEffect(playerNavigationEffect(currentPlayer, updatePlayer), [
@@ -31,6 +32,7 @@ const Patrogonia = () => {
                         loadPlayer={loadPlayer}
                         updatePlayer={updatePlayer}
                         battleUrl={battleUrl}
+                        loadSave={loadSave}
                     />
                 ) : (
                     <World

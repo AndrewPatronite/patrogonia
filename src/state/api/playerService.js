@@ -60,3 +60,14 @@ export const updatePlayer = (player, onSuccess, onFailure) => {
         })
         .catch((error) => onFailure(error));
 };
+
+export const loadSave = (playerId, onSuccess, onFailure) => {
+    return axiosInstance
+        .put(`/loadSave/${playerId}`)
+        .then((response) => {
+            if (response.status === HttpStatus.OK) {
+                onSuccess();
+            }
+        })
+        .catch((error) => onFailure(error));
+};

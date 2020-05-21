@@ -1,6 +1,7 @@
 import React from 'react';
 import { has } from 'lodash';
 import PlayerTurnWizard from './PlayerTurnWizard';
+import './PlayerPanel.css'
 
 const PlayerPanel = ({
     currentPlayer,
@@ -13,6 +14,7 @@ const PlayerPanel = ({
     roundPlayerActions,
     selectedEnemyId,
     playerTurnEnabled,
+    loadSave,
 }) => {
     const currentPlayerTurn =
         currentPlayer.id === playerId &&
@@ -25,7 +27,7 @@ const PlayerPanel = ({
                 <label>{`HP: ${hp}/${hpTotal}`}</label>
                 <label>{`MP: ${mp}/${mpTotal}`}</label>
             </div>
-            {currentPlayerTurn && (
+            {currentPlayerTurn && (hp > 0 ? (
                 <PlayerTurnWizard
                     currentPlayer={currentPlayer}
                     players={players}
@@ -35,7 +37,11 @@ const PlayerPanel = ({
                     selectedEnemyId={selectedEnemyId}
                     playerTurnEnabled={playerTurnEnabled}
                 />
-            )}
+            ) : (
+                <button className="load-save" autoFocus={true} onClick={() => loadSave(playerId)}>
+                    Load save
+                </button>
+            ))}
         </div>
     );
 };

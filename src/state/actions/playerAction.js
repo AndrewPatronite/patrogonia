@@ -2,6 +2,7 @@ import { pick } from 'lodash';
 import {
     createAccount,
     getPlayer,
+    loadSave,
     login,
     updatePlayer,
 } from '../api/playerService';
@@ -27,6 +28,14 @@ export const loadPlayer = (dispatch, playerId) =>
     getPlayer(playerId, (player) => {
         storeAndDispatchPlayerUpdate(player, dispatch);
     });
+
+export const loadSaveAction = (dispatch, playerId) => {
+    loadSave(
+        playerId,
+        () => loadPlayer(dispatch, playerId),
+        (error) => console.log(`Failed to load save ${JSON.stringify(error)}`)
+    );
+};
 
 export const updatePlayerAction = (dispatch, player, updateToServer) => {
     if (updateToServer) {

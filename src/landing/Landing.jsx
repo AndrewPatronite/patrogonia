@@ -4,10 +4,12 @@ import LoginForm from './LoginForm';
 import './Landing.css';
 import Credits from '../credits/Credits';
 import HttpStatus from '../state/api/HttpStatus';
+import preval from 'preval.macro'
 
 const Landing = ({ login, createAccount }) => {
     const [returning, setReturning] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
+    const lastUpdate = preval`module.exports = new Date().toLocaleString();`
 
     const handleCreateAccount = (player) =>
         createAccount(player, (error) => {
@@ -46,6 +48,9 @@ const Landing = ({ login, createAccount }) => {
             )}
             <div className="spacer" />
             <div className="landing-footer">
+                <label>
+                    Last update: {lastUpdate}
+                </label>
                 <label>Recommended: Chrome with viewport: 1000 x 1000</label>
                 <Credits />
             </div>
