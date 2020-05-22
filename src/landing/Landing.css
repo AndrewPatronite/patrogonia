@@ -25,6 +25,10 @@
     align-items: center;
 }
 
+.landing-footer > .fa-dragon {
+    margin-bottom: 10px;
+}
+
 .landing-footer > label {
     font-size: 12px;
 }

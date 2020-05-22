@@ -2,6 +2,18 @@
     position: relative;
 }
 
+.player > .fa-dragon {
+    position: absolute;
+    top: 0;
+    left: 5px;
+}
+
+.fa-campground {
+    position: absolute;
+    top: 0;
+    left: 5px;
+}
+
 @keyframes hero-up {
     0% {
         background-image: url('./hero/hero-up1.svg');

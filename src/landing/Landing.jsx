@@ -5,6 +5,8 @@ import './Landing.css';
 import Credits from '../credits/Credits';
 import HttpStatus from '../state/api/HttpStatus';
 import preval from 'preval.macro'
+import { faDragon } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Landing = ({ login, createAccount }) => {
     const [returning, setReturning] = useState(true);
@@ -48,6 +50,7 @@ const Landing = ({ login, createAccount }) => {
             )}
             <div className="spacer" />
             <div className="landing-footer">
+                <FontAwesomeIcon icon={faDragon} />
                 <label>
                     Last update: {lastUpdate}
                 </label>
