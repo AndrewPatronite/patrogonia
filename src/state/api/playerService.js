@@ -2,7 +2,7 @@ import axios from 'axios';
 import HttpStatus from './HttpStatus';
 
 const axiosInstance = axios.create({
-    baseURL: '/player',
+    baseURL: `${process.env.REACT_APP_BASE_URL}/player`,
     headers: { 'Content-Type': 'application/json' },
 });
 

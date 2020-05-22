@@ -6,8 +6,8 @@ import { PlayerState } from './state/PlayerState';
 import { playerNavigationEffect } from './navigation/playerNavigationEffect';
 import './Patrogonia.css';
 
-const playerUrl = 'ws://localhost:8080/players';
-const battleUrl = 'ws://localhost:8080/battles';
+const playerUrl = `${process.env.REACT_APP_WEBSOCKET_BASE_URL}/players`;
+const battleUrl = `${process.env.REACT_APP_WEBSOCKET_BASE_URL}/battles`;
 
 const Patrogonia = () => {
     const [
