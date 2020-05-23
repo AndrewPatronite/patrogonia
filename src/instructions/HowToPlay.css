@@ -1,0 +1,86 @@
+.how-to-play {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+}
+
+.how-to-play-header {
+    display: flex;
+    flex-direction: column;
+    padding: 100px;
+}
+
+.how-to-play-header > h2 {
+    text-align: left;
+    text-shadow: 3px 3px #aaaaaa;
+    font-size: 35px;
+    color: #120c74;
+    margin-bottom: 50px;
+}
+
+.how-to-play-header > span {
+    margin-bottom: 50px;
+    width: 600px
+}
+
+.how-to-play-row {
+    display: flex;
+    flex: 1 1 auto;
+    padding: 0 50px 0 50px;
+    margin-bottom: 100px;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.how-to-play-row > .square-image {
+    height: 275px;
+    width: 275px;
+    margin: 0 10px 0 10px;
+}
+
+.how-to-play-row > .fa-arrow-left {
+    margin-top: 110px;
+}
+
+.how-to-play-row > .fa-arrow-right {
+    margin-top: 110px;
+}
+
+.how-to-play-row > .defeated {
+    margin-left: 100px;
+}
+
+.how-to-play-text-area {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    margin: 0 50px 0 50px;
+}
+
+.how-to-play-text-area > .description {
+    width: 300px;
+    margin-bottom: 25px;
+}
+
+.how-to-play-text-area > h3 {
+    color: #120c74;
+}
+
+.good-luck {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 100px;
+}
+
+.good-luck > h3 {
+    color: #120c74;
+}
+
+.good-luck > .play-button {
+    margin: 5px 5px 5px 5px;
+    width: 50px;
+    height: 25px;
+    min-height: 25px;
+}

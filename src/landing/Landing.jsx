@@ -7,8 +7,9 @@ import HttpStatus from '../state/api/HttpStatus';
 import preval from 'preval.macro'
 import { faDragon } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import LinkButton from "../control/LinkButton";
 
-const Landing = ({ login, createAccount }) => {
+const Landing = ({ login, createAccount, showInstructions }) => {
     const [returning, setReturning] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
     const lastUpdate = preval`module.exports = new Date().toLocaleString();`
@@ -55,6 +56,10 @@ const Landing = ({ login, createAccount }) => {
                     Last update: {lastUpdate}
                 </label>
                 <label>Recommended: Chrome with viewport: 1000 x 1000</label>
+                <LinkButton
+                    onClick={() => showInstructions()}
+                    label="How to play"
+                />
                 <Credits />
             </div>
         </div>

@@ -56,6 +56,11 @@ const Log = ({
         }
     }, [deliveredEntries, logEntryMusicPlayed]);
 
+    const getButtonText = () =>
+        deliveredEntries[deliveredEntries.length - 1].content.includes('destroyed')
+            ? 'Load save'
+            : 'OK';
+
     return (
         <div className={`log ${statusClass}`}>
             {!isEmpty(deliveredEntries) &&
@@ -68,7 +73,7 @@ const Log = ({
                     className="dismiss-button"
                     onClick={onDismiss}
                 >
-                    OK
+                    {getButtonText()}
                 </button>
             )}
             <div ref={scrollTo} />

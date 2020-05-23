@@ -13,14 +13,24 @@ export const loginAction = (dispatch, username, password, onFailure) =>
     login(
         username,
         password,
-        (loggedInPlayer) => updatePlayerAction(dispatch, loggedInPlayer, false),
+        (loggedInPlayer) =>
+            updatePlayerAction(
+                dispatch,
+                { ...loggedInPlayer, loggedIn: true },
+                false
+            ),
         (error) => onFailure(error)
     );
 
 export const createAccountAction = (dispatch, player, onFailure) =>
     createAccount(
         player,
-        (createdPlayer) => updatePlayerAction(dispatch, createdPlayer, false),
+        (createdPlayer) =>
+            updatePlayerAction(
+                dispatch,
+                { ...createdPlayer, loggedIn: true },
+                false
+            ),
         (error) => onFailure(error)
     );
 
@@ -68,10 +78,9 @@ export const updatePlayerAction = (dispatch, player, updateToServer) => {
 };
 
 const storeAndDispatchPlayerUpdate = (updatedPlayer, dispatch) => {
-    const loggedInPlayer = { ...updatedPlayer, loggedIn: true };
-    localStorage.setItem('currentPlayer', JSON.stringify(loggedInPlayer));
+    localStorage.setItem('currentPlayer', JSON.stringify(updatedPlayer));
     dispatch({
         type: SET_PLAYER,
-        updatedPlayer: loggedInPlayer,
+        updatedPlayer,
     });
 };
