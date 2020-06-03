@@ -34,9 +34,6 @@ export const takeTurn = (
     const onSuccess = () => {};
     const onFailure = (error) =>
         console.log('Failed to take turn: ' + JSON.stringify(error));
-    console.log(
-        'player ' + playerId + ' turn: ' + playerAction + ' ' + targetId
-    );
     taketurnRemote(
         battleId,
         playerId,
