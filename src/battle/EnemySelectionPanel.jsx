@@ -7,7 +7,6 @@ const EnemySelectionPanel = ({
     action,
     handleBack,
     handleNext,
-    showBackButton,
     selectEnemy,
     selectedEnemyId,
     playerTurnEnabled,
@@ -35,7 +34,7 @@ const EnemySelectionPanel = ({
                 onBack={handleBack}
                 onChange={selectEnemy}
                 onNext={handleNext}
-                showBackButton={showBackButton}
+                showBackButton={true}
             />
         </div>
     );

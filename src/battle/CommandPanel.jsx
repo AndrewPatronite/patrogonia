@@ -4,9 +4,7 @@ import OptionPanel from './OptionPanel';
 
 const CommandPanel = ({
     currentPlayer,
-    handleBack,
-    handleNext,
-    showBackButton,
+    handleCommand,
 }) => {
     const actionLabel = 'Command';
     const options = [{ value: 'attack', display: 'Attack' }];
@@ -22,9 +20,8 @@ const CommandPanel = ({
             <label>{actionLabel}</label>
             <OptionPanel
                 options={options}
-                onBack={handleBack}
-                onNext={handleNext}
-                showBackButton={showBackButton}
+                onNext={handleCommand}
+                showBackButton={false}
             />
         </div>
     );

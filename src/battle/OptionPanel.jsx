@@ -3,7 +3,7 @@ import { inRange } from 'lodash';
 
 const OptionPanel = ({
     options,
-    onBack,
+    onBack = () => {},
     onChange = () => {},
     onNext,
     showBackButton,
@@ -47,7 +47,7 @@ const OptionPanel = ({
 
     return (
         <div className="option-panel">
-            {showBackButton && <button onClick={onBack}>{'<<'}</button>}
+            {showBackButton && <button className="back-button" onClick={onBack}>{'<<'}</button>}
             <select
                 className="option-select"
                 autoFocus={true}
@@ -62,7 +62,7 @@ const OptionPanel = ({
                     </option>
                 ))}
             </select>
-            <button onClick={() => onNext(selectedValue)}>{'>>'}</button>
+            <button className="next-button" onClick={() => onNext(selectedValue)}>{'>>'}</button>
         </div>
     );
 };

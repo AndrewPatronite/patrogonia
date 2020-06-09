@@ -25,9 +25,7 @@ const PlayerTurnWizard = ({
             return (
                 <CommandPanel
                     currentPlayer={currentPlayer}
-                    handleBack={handleBack}
-                    handleNext={handleCommand}
-                    showBackButton={false}
+                    handleCommand={handleCommand}
                 />
             );
         case 'attack':
@@ -37,7 +35,6 @@ const PlayerTurnWizard = ({
                     action={action}
                     handleBack={handleBack}
                     handleNext={submitTurn}
-                    showBackButton={true}
                     selectEnemy={selectEnemy}
                     selectedEnemyId={selectedEnemyId}
                     playerTurnEnabled={playerTurnEnabled}
@@ -52,7 +49,6 @@ const PlayerTurnWizard = ({
                         action={spellName}
                         handleBack={handleBack}
                         handleNext={submitTurn}
-                        showBackButton={true}
                         selectedEnemyId={selectedEnemyId}
                         playerTurnEnabled={playerTurnEnabled}
                     />
