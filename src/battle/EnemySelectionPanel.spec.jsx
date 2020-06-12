@@ -8,7 +8,7 @@ describe('EnemySelectionPanel', () => {
     let subject;
 
     beforeEach(() => {
-        jest.spyOn(ReactAlias, 'useEffect').mockImplementation((f) => f());
+        jest.spyOn(ReactAlias, 'useEffect').mockImplementation((effect) => effect());
         props = {
             enemies: [
                 { id: 'ffff12345', name: 'Skeleton', stats: { hp: 20 } },

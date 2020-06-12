@@ -5,7 +5,7 @@ import { pauseSound, playSound } from '../environment/sound/sound';
 import playerAttackSound from '../environment/sound/FXhome.com/FXhome.com Fighting Swing Sound 02.mp3';
 import enemyAttackSound from '../environment/sound/FXhome.com/FXhome.com Fighting Swing Sound 27.mp3';
 import levelUpSound from '../environment/sound/zapsplat/cartoon_success_fanfair.mp3';
-import destroyedSound from '../environment/sound/zapsplat/cartoon_fail_strings_trumpet.mp3';
+import partyDestroyedSound from '../environment/sound/zapsplat/cartoon_fail_strings_trumpet.mp3';
 
 const Log = ({
     deliveredEntries,
@@ -49,7 +49,8 @@ const Log = ({
                     playSound('level-up');
                     setEntryPlayed(lastDeliveredEntryIndex);
                 } else if (content.includes('destroyed')) {
-                    playSound('destroyed');
+                    pauseSound('battle-music');
+                    playSound('party-destroyed');
                     setEntryPlayed(lastDeliveredEntryIndex);
                 }
             }
@@ -57,7 +58,9 @@ const Log = ({
     }, [deliveredEntries, logEntryMusicPlayed]);
 
     const getButtonText = () =>
-        deliveredEntries[deliveredEntries.length - 1].content.includes('destroyed')
+        deliveredEntries[deliveredEntries.length - 1].content.includes(
+            'destroyed'
+        )
             ? 'Load save'
             : 'OK';
 
@@ -76,7 +79,7 @@ const Log = ({
                     {getButtonText()}
                 </button>
             )}
-            <div ref={scrollTo} />
+            <div className='scroll-to' ref={scrollTo} />
             <audio className="player-attack">
                 <source src={playerAttackSound} />
             </audio>
@@ -86,8 +89,8 @@ const Log = ({
             <audio className="level-up">
                 <source src={levelUpSound} />
             </audio>
-            <audio className="destroyed">
-                <source src={destroyedSound} />
+            <audio className="party-destroyed">
+                <source src={partyDestroyedSound} />
             </audio>
         </div>
     );
