@@ -49,6 +49,7 @@ const PlayerTurnWizard = ({
                         action={spellName}
                         handleBack={handleBack}
                         handleNext={submitTurn}
+                        selectEnemy={selectEnemy}
                         selectedEnemyId={selectedEnemyId}
                         playerTurnEnabled={playerTurnEnabled}
                     />

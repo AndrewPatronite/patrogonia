@@ -1,5 +1,5 @@
 {
-    "name": "adventure",
+    "name": "patrogonia",
     "version": "0.1.0",
     "private": true,
     "dependencies": {
@@ -62,5 +62,23 @@
     "prettier": {
         "singleQuote": true,
         "tabWidth": 4
+    },
+    "jest": {
+        "collectCoverageFrom": [
+            "<rootDir>/src/**/*.{js,jsx,ts,tsx}",
+            "!<rootDir>/node_modules/",
+            "!<rootDir>/path/to/dir/"
+        ],
+        "coverageThreshold": {
+            "global": {
+                "branches": 90,
+                "functions": 90,
+                "lines": 90,
+                "statements": 90
+            }
+        },
+        "coverageReporters": [
+            "text"
+        ]
     }
 }
