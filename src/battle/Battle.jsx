@@ -10,7 +10,13 @@ import { subscribe } from '../subscription/subscribe';
 import { playSound, pauseSound } from '../environment/sound/sound';
 import battleMusic from '../environment/sound/crusaderp/BattleNO3.mp3';
 
-const Battle = ({ currentPlayer, loadPlayer, updatePlayer, battleUrl, loadSave }) => {
+const Battle = ({
+    currentPlayer,
+    loadPlayer,
+    updatePlayer,
+    battleUrl,
+    loadSave,
+}) => {
     const [battleMessage, setBattleMessage] = useState({});
     useEffect(() => {
         const battleSubscription = subscribe(battleUrl, setBattleMessage);
@@ -44,9 +50,10 @@ const Battle = ({ currentPlayer, loadPlayer, updatePlayer, battleUrl, loadSave }
 
     useEffect(() => {
         if (allMessagesDelivered) {
-            setPlayerTurnEnabled(true);
             if (battleEnded) {
                 pauseSound('battle-music');
+            } else {
+                setPlayerTurnEnabled(true);
             }
         }
     }, [allMessagesDelivered, battleEnded]);
