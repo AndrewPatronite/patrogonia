@@ -22,6 +22,7 @@ const Player = ({
     const lastUpdateDate = lastUpdate && new Date(lastUpdate);
     const now = new Date();
     const camping =
+        lastUpdateDate &&
         now.getTime() - lastUpdateDate.getTime() > CAMPING_DURATION_MILLIS;
     return (
         <div className="player">
@@ -36,7 +37,7 @@ const Player = ({
             {isCurrentPlayer && isSaveLocation && (
                 <div className="saved">
                     <p>HP/MP restored</p>
-                    <p>Game Saved</p>
+                    <p>Game saved</p>
                 </div>
             )}
             {battleId ? (

@@ -3,7 +3,7 @@ export const getMapDisplayRange = (currentPlayer, map) => {
         location: { rowIndex, columnIndex },
     } = currentPlayer;
     const maxRowIndex = map.layout.length - 1;
-    const maxcolumnIndex = map.layout[0].length - 1;
+    const maxColumnIndex = map.layout[0].length - 1;
     const centeringOffset = 6;
     const minimumEndIndex = 9;
     const tilesToDisplay = 10;
@@ -13,7 +13,7 @@ export const getMapDisplayRange = (currentPlayer, map) => {
     );
     const rowStartIndex = Math.max(rowEndIndex - tilesToDisplay + 1, 0);
     const columnEndIndex = Math.max(
-        Math.min(columnIndex + centeringOffset, maxcolumnIndex),
+        Math.min(columnIndex + centeringOffset, maxColumnIndex),
         minimumEndIndex
     );
     const columnStartIndex = Math.max(columnEndIndex - tilesToDisplay + 1, 0);

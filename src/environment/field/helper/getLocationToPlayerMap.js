@@ -1,6 +1,6 @@
 import { filter, forEach, isEmpty, isEqual } from 'lodash';
 
-export const getLocationToPlayerMap = (playersOnMap, currentPlayer) => {
+export const getLocationToPlayerMap = (playersOnMap, currentPlayer = {}) => {
     const locationToPlayers = {};
     const { location: currentPlayerLocation } = currentPlayer;
     if (!isEmpty(playersOnMap) && !isEmpty(currentPlayerLocation)) {
