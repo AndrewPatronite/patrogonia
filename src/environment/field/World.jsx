@@ -11,10 +11,10 @@ import caveMusic from '../sound/crusaderp/AcrosstheSandWIP2.mp3';
 
 const World = ({ currentPlayer, playerUrl }) => {
     const [playerLocationMessage, setPlayerLocationMessage] = useState({});
-
     const {
         location: { mapName },
     } = currentPlayer;
+
     useEffect(() => {
         if (mapName.includes('field')) {
             pauseSound('cave-music');
@@ -33,6 +33,7 @@ const World = ({ currentPlayer, playerUrl }) => {
         return () => playerLocationSubscription.close();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
     const [map, mapPlayers] = MapState(
         currentPlayer,
         playerLocationMessage,

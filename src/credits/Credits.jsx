@@ -26,7 +26,7 @@ const Credits = () => {
     return (
         <div className="credits">
             <LinkButton
-                className={showingCredits && 'hidden'}
+                className={showingCredits ? 'hidden' : undefined}
                 onClick={() => showCredits(true)}
                 label="credits"
             />
@@ -39,6 +39,7 @@ const Credits = () => {
                     <h4 className="header">Created by</h4>
                     <label>Andrew Patronite</label>
                     <a href="mailto:patronite@gmail.com">patronite@gmail.com</a>
+
                     <h4 className="header">Music</h4>
                     <label>Crusaderp</label>
                     <a
@@ -48,6 +49,7 @@ const Credits = () => {
                     >
                         https://soundcloud.com/crusaderp/sets/the-frontier
                     </a>
+
                     <h4 className="header">Battle sound effects</h4>
                     <label>James Tubbritt (Sharp)</label>
                     <a
@@ -60,11 +62,11 @@ const Credits = () => {
 
                     <h4 className="header">Trumpet sound effects</h4>
                     <a
-                        href="https://www.zapsplat.com/"
+                        href="https://www.zapsplat.com"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        https://www.zapsplat.com/
+                        https://www.zapsplat.com
                     </a>
                 </div>
             </Modal>
