@@ -5,7 +5,9 @@ export const playSound = (soundClass) => {
         const sound = getSound(soundClass);
         sound.play();
     } catch (e) {
-        console.log(`Trouble playing ${soundClass} sound ${JSON.stringify(e)}`);
+        console.log(
+            `Trouble playing ${soundClass} sound: ${JSON.stringify(e)}`
+        );
     }
 };
 
@@ -15,7 +17,7 @@ export const pauseSound = (soundClass) => {
         sound.pause();
     } catch (e) {
         console.log(
-            `Trouble stopping ${soundClass} sound ${JSON.stringify(e)}`
+            `Trouble pausing ${soundClass} sound: ${JSON.stringify(e)}`
         );
     }
 };
