@@ -36,6 +36,7 @@ const PlayerPanel = ({
                     takeTurn={takeTurn}
                     selectedEnemyId={selectedEnemyId}
                     playerTurnEnabled={playerTurnEnabled}
+                    mp={mp}
                 />
             ) : (
                 <button className="load-save" autoFocus={true} onClick={() => loadSave(playerId)}>

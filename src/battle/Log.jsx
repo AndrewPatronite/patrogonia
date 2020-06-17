@@ -6,6 +6,7 @@ import playerAttackSound from '../environment/sound/FXhome.com/FXhome.com Fighti
 import enemyAttackSound from '../environment/sound/FXhome.com/FXhome.com Fighting Swing Sound 27.mp3';
 import levelUpSound from '../environment/sound/zapsplat/cartoon_success_fanfair.mp3';
 import partyDestroyedSound from '../environment/sound/zapsplat/cartoon_fail_strings_trumpet.mp3';
+import healingSound from '../environment/sound/zapsplat/zapsplat_fantasy_magic_mystery_glissando_bell_43990.mp3';
 
 const Log = ({
     deliveredEntries,
@@ -44,6 +45,8 @@ const Log = ({
                         playSound('enemy-attack');
                     }
                     setEntryPlayed(lastDeliveredEntryIndex);
+                } else if (content.includes('casts Heal')) {
+                    playSound('heal');
                 } else if (content.includes('level')) {
                     pauseSound('battle-music');
                     playSound('level-up');
@@ -79,7 +82,7 @@ const Log = ({
                     {getButtonText()}
                 </button>
             )}
-            <div className='scroll-to' ref={scrollTo} />
+            <div className="scroll-to" ref={scrollTo} />
             <audio className="player-attack">
                 <source src={playerAttackSound} />
             </audio>
@@ -91,6 +94,9 @@ const Log = ({
             </audio>
             <audio className="party-destroyed">
                 <source src={partyDestroyedSound} />
+            </audio>
+            <audio className="heal">
+                <source src={healingSound} />
             </audio>
         </div>
     );

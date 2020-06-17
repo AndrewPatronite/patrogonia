@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
+import {upperFirst} from 'lodash';
 import CommandPanel from './CommandPanel';
 import EnemySelectionPanel from './EnemySelectionPanel';
 import PlayerSelectionPanel from './PlayerSelectionPanel';
@@ -11,21 +12,47 @@ const PlayerTurnWizard = ({
     takeTurn,
     selectedEnemyId,
     playerTurnEnabled,
+    mp,
 }) => {
     const [action, setAction] = useState('command');
-    const handleBack = () => setAction('command');
-    const handleCommand = (command) =>
-        ['parry', 'run'].includes(command)
-            ? takeTurn(command)
-            : setAction(command);
-    const submitTurn = (targetId) => takeTurn(action, targetId);
-
+    const handleBack = () => {
+        selectEnemy(undefined);
+        setAction('command');
+    };
+    const handleCommand = (command) => {
+        switch (command) {
+            case 'parry':
+            case 'run':
+                takeTurn(command);
+                break;
+            case 'attack':
+                setAction(command);
+                break;
+            default:
+                const { spellName, offensive } = JSON.parse(command);
+                const formattedSpellName = upperFirst(spellName.toLowerCase());
+                if (offensive) {
+                    if (enemies.length > 1) {
+                        setAction(command);
+                    } else {
+                        takeTurn(formattedSpellName, selectedEnemyId);
+                    }
+                } else {
+                    if (players.length > 1) {
+                        setAction(command);
+                    } else {
+                        takeTurn(formattedSpellName, currentPlayer.id);
+                    }
+                }
+        }
+    };
     switch (action) {
         case 'command':
             return (
                 <CommandPanel
                     currentPlayer={currentPlayer}
                     handleCommand={handleCommand}
+                    mp={mp}
                 />
             );
         case 'attack':
@@ -34,37 +61,34 @@ const PlayerTurnWizard = ({
                     enemies={enemies}
                     action={action}
                     handleBack={handleBack}
-                    handleNext={submitTurn}
+                    handleNext={(targetId) => takeTurn(action, targetId)}
                     selectEnemy={selectEnemy}
                     selectedEnemyId={selectedEnemyId}
                     playerTurnEnabled={playerTurnEnabled}
                 />
             );
         default:
-            const { spellName, offensive } = action;
-            if (offensive) {
-                return (
-                    <EnemySelectionPanel
-                        enemies={enemies}
-                        action={spellName}
-                        handleBack={handleBack}
-                        handleNext={submitTurn}
-                        selectEnemy={selectEnemy}
-                        selectedEnemyId={selectedEnemyId}
-                        playerTurnEnabled={playerTurnEnabled}
-                    />
-                );
-            } else {
-                return (
-                    <PlayerSelectionPanel
-                        players={players}
-                        action={spellName}
-                        handleBack={handleBack}
-                        handleNext={submitTurn}
-                        showBackButton={true}
-                    />
-                );
-            }
+            const { spellName, offensive } = JSON.parse(action);
+            const formattedSpellName = upperFirst(spellName.toLowerCase());
+            return offensive ? (
+                <EnemySelectionPanel
+                    enemies={enemies}
+                    action={formattedSpellName}
+                    handleBack={handleBack}
+                    handleNext={(targetId) => takeTurn(formattedSpellName, targetId)}
+                    selectEnemy={selectEnemy}
+                    selectedEnemyId={selectedEnemyId}
+                    playerTurnEnabled={playerTurnEnabled}
+                />
+            ) : (
+                <PlayerSelectionPanel
+                    players={players}
+                    action={formattedSpellName}
+                    handleBack={handleBack}
+                    handleNext={(targetId) => takeTurn(formattedSpellName, targetId)}
+                    showBackButton={true}
+                />
+            );
     }
 };
 

@@ -60,7 +60,7 @@ const Credits = () => {
                         http://www.irishacts.com
                     </a>
 
-                    <h4 className="header">Trumpet sound effects</h4>
+                    <h4 className="header">Trumpet and spell sound effects</h4>
                     <a
                         href="https://www.zapsplat.com"
                         target="_blank"

@@ -1,16 +1,16 @@
 import React from 'react';
-import { upperFirst } from 'lodash';
+import { filter, isEmpty, upperFirst } from 'lodash';
 import OptionPanel from './OptionPanel';
 
-const CommandPanel = ({
-    currentPlayer,
-    handleCommand,
-}) => {
+const CommandPanel = ({ currentPlayer, handleCommand, mp }) => {
     const actionLabel = 'Command';
     const options = [{ value: 'attack', display: 'Attack' }];
-    if (currentPlayer.spells) {
-        currentPlayer.spells.map((spell) =>
-            options.push({ value: spell, display: upperFirst(spell.spellName) })
+    if (!isEmpty(currentPlayer.spells)) {
+        filter(currentPlayer.spells, spell => spell.mpCost <= mp).map((spell) =>
+            options.push({
+                value: JSON.stringify(spell),
+                display: upperFirst(spell.spellName.toLowerCase()),
+            })
         );
     }
     options.push({ value: 'parry', display: 'Parry' });

@@ -78,7 +78,7 @@ describe('Credits', () => {
         })
 
         it('has credits for the Trumpet sound effects', () => {
-            expect(subject.find('.header').at(3).text()).toEqual('Trumpet sound effects');
+            expect(subject.find('.header').at(3).text()).toEqual('Trumpet and spell sound effects');
             const link = subject.find('a').at(3);
             expect(link.prop('href')).toEqual('https://www.zapsplat.com')
             expect(link.prop('target')).toEqual('_blank')

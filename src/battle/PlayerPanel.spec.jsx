@@ -84,6 +84,7 @@ describe('PlayerPanel', () => {
                 takeTurn: props.takeTurn,
                 selectedEnemyId: 'ccc123eee',
                 playerTurnEnabled: true,
+                mp: 5,
             });
         });
 

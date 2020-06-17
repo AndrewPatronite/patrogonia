@@ -10,12 +10,13 @@ describe('CommandPanel', () => {
         props = {
             currentPlayer: {
                 spells: [
-                    { spellName: 'heal' },
-                    { spellName: 'fire' },
-                    { spellName: 'ice' },
+                    { spellName: 'HEAL', mpCost: 5 },
+                    { spellName: 'FIRE', mpCost: 5 },
+                    { spellName: 'ICE', mpCost: 5 },
                 ],
             },
             handleCommand: jasmine.createSpy('handleCommand'),
+            mp: 10,
         };
         subject = shallow(<CommandPanel {...props} />);
     });
@@ -40,21 +41,48 @@ describe('CommandPanel', () => {
                     },
                     {
                         display: 'Heal',
-                        value: {
-                            spellName: 'heal',
-                        },
+                        value: JSON.stringify({
+                            spellName: 'HEAL',
+                            mpCost: 5,
+                        }),
                     },
                     {
                         display: 'Fire',
-                        value: {
-                            spellName: 'fire',
-                        },
+                        value: JSON.stringify({
+                            spellName: 'FIRE',
+                            mpCost: 5,
+                        }),
                     },
                     {
                         display: 'Ice',
-                        value: {
-                            spellName: 'ice',
-                        },
+                        value: JSON.stringify({
+                            spellName: 'ICE',
+                            mpCost: 5,
+                        }),
+                    },
+                    {
+                        display: 'Parry',
+                        value: 'parry',
+                    },
+                    {
+                        display: 'Run',
+                        value: 'run',
+                    },
+                ],
+                onNext: props.handleCommand,
+                showBackButton: false,
+            });
+        });
+
+        it('has the expected props for someone without spells', () => {
+            props.currentPlayer.spells = [];
+            subject = shallow(<CommandPanel {...props} />);
+            const optionPanel = subject.find(OptionPanel);
+            expect(optionPanel.props()).toEqual({
+                options: [
+                    {
+                        display: 'Attack',
+                        value: 'attack',
                     },
                     {
                         display: 'Parry',
@@ -72,8 +100,8 @@ describe('CommandPanel', () => {
 
         it('forwards onNext call to supplied handleCommand', () => {
             const optionPanel = subject.find(OptionPanel);
-            optionPanel.simulate('next', 'fire')
-            expect(props.handleCommand).toHaveBeenCalledWith('fire')
-        })
-    })
+            optionPanel.simulate('next', 'fire');
+            expect(props.handleCommand).toHaveBeenCalledWith('fire');
+        });
+    });
 });

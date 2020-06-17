@@ -10,6 +10,10 @@ describe('PlayerTurnWizard', () => {
         id: 1,
         name: 'Redwan',
     };
+    const anotherPlayer = {
+        id: 2,
+        name: 'Andy',
+    };
     const anotherEnemyId = 'cccc123';
     let props;
     let subject;
@@ -17,7 +21,7 @@ describe('PlayerTurnWizard', () => {
     beforeEach(() => {
         props = {
             currentPlayer,
-            players: [currentPlayer],
+            players: [currentPlayer, anotherPlayer],
             enemies: [
                 { id: 'abcdef123123', name: 'Skeleton' },
                 { id: anotherEnemyId, name: 'Knight' },
@@ -60,7 +64,10 @@ describe('PlayerTurnWizard', () => {
 
         it('advances to EnemySelectionPanel if command is an offensive spell', () => {
             const commandPanel = subject.find(CommandPanel);
-            const iceSpell = { offensive: true };
+            const iceSpell = JSON.stringify({
+                spellName: 'ICE',
+                offensive: true,
+            });
             commandPanel.prop('handleCommand')(iceSpell);
             expect(props.takeTurn).not.toHaveBeenCalled();
             expect(subject.find(EnemySelectionPanel).exists()).toEqual(true);
@@ -68,7 +75,7 @@ describe('PlayerTurnWizard', () => {
 
         it('advances to PlayerSelectionPanel if command is a defensive spell', () => {
             const commandPanel = subject.find(CommandPanel);
-            const healSpell = { spellName: 'Heal' };
+            const healSpell = JSON.stringify({ spellName: 'HEAL' });
             commandPanel.prop('handleCommand')(healSpell);
             expect(props.takeTurn).not.toHaveBeenCalled();
             expect(subject.find(PlayerSelectionPanel).exists()).toEqual(true);
@@ -121,7 +128,7 @@ describe('PlayerTurnWizard', () => {
     });
 
     describe('offensive spell - EnemySelectionPanel', () => {
-        const iceSpell = { spellName: 'Ice', offensive: true };
+        const iceSpell = JSON.stringify({ spellName: 'ICE', offensive: true });
         let enemySelectionPanel;
 
         beforeEach(() => {
@@ -154,7 +161,7 @@ describe('PlayerTurnWizard', () => {
             enemySelectionPanel.prop('handleNext')(props.selectedEnemyId);
 
             expect(props.takeTurn).toHaveBeenCalledWith(
-                iceSpell,
+                'Ice',
                 props.selectedEnemyId
             );
         });
@@ -167,14 +174,14 @@ describe('PlayerTurnWizard', () => {
     });
 
     describe('defensive spell - PlayerSelectionPanel', () => {
-        const healSpell = { spellName: 'Heal' };
-        let playerSelectionPanel
+        const healSpell = JSON.stringify({ spellName: 'HEAL' });
+        let playerSelectionPanel;
 
         beforeEach(() => {
             const commandPanel = subject.find(CommandPanel);
             commandPanel.prop('handleCommand')(healSpell);
-            playerSelectionPanel = subject.find(PlayerSelectionPanel)
-        })
+            playerSelectionPanel = subject.find(PlayerSelectionPanel);
+        });
 
         it('is a PlayerSelectionPanel with the expected props', () => {
             expect(playerSelectionPanel.props()).toEqual({
@@ -182,8 +189,8 @@ describe('PlayerTurnWizard', () => {
                 action: 'Heal',
                 handleBack: jasmine.any(Function),
                 handleNext: jasmine.any(Function),
-                showBackButton: true
-            })
+                showBackButton: true,
+            });
         });
 
         it('returns to the CommandPanel onBack', () => {
@@ -195,12 +202,25 @@ describe('PlayerTurnWizard', () => {
         });
 
         it('submits the turn onNext', () => {
-            const anotherPlayerId = 2
-            playerSelectionPanel.prop('handleNext')(anotherPlayerId);
+            playerSelectionPanel.prop('handleNext')(anotherPlayer.id);
 
             expect(props.takeTurn).toHaveBeenCalledWith(
-                healSpell,
-                anotherPlayerId
+                'Heal',
+                anotherPlayer.id
+            );
+        });
+
+        it('heals the current player if there are no others to choose', () => {
+            props.players.pop();
+            subject = shallow(<PlayerTurnWizard {...props} />);
+            const commandPanel = subject.find(CommandPanel);
+            commandPanel.prop('handleCommand')(healSpell);
+            playerSelectionPanel = subject.find(PlayerSelectionPanel);
+            expect(playerSelectionPanel.exists()).toEqual(false);
+
+            expect(props.takeTurn).toHaveBeenCalledWith(
+                'Heal',
+                currentPlayer.id
             );
         });
     });
