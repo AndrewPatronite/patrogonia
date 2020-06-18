@@ -20,11 +20,11 @@ const Description = () => (
     <div className="how-to-play-text-area">
         <h3>How to play</h3>
         <span className="description">
-            Chronicles of Patrogonia is a classic style RPG where you gain
+            Chronicles of Patrogonia is a classic RPG where you gain
             experience and gold by defeating enemies in battle.
         </span>
         <span className="description">
-            You can team up with other players too to help even the odds.
+            You can even team up with other players to help even the odds.
         </span>
     </div>
     <img className="battle" src={Battle} alt="Player in battle" />
@@ -60,7 +60,7 @@ const IdlePlayers = () => (
 const Saving = () => (
     <div className="how-to-play-row">
         <img className="square-image" src={Town2} alt="Player saving" />
-        <FontAwesomeIcon icon={faArrowLeft} size="3x" />
+        <FontAwesomeIcon icon={faArrowLeft} size="2x" />
         <img className="square-image" src={Town1} alt="Player saving" />
         <div className="how-to-play-text-area">
             <h3>Saving</h3>
@@ -97,7 +97,7 @@ const BattleControls = () => (
             </span>
         </div>
         <img className="square-image" src={Commands1} alt="Battle commands" />
-        <FontAwesomeIcon icon={faArrowRight} size="3x" />
+        <FontAwesomeIcon icon={faArrowRight} size="2x" />
         <img className="square-image" src={Commands2} alt="Choosing targets" />
     </div>
 );
