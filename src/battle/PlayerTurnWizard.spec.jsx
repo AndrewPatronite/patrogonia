@@ -23,8 +23,8 @@ describe('PlayerTurnWizard', () => {
             currentPlayer,
             players: [currentPlayer, anotherPlayer],
             enemies: [
-                { id: 'abcdef123123', name: 'Skeleton' },
-                { id: anotherEnemyId, name: 'Knight' },
+                { id: 'abcdef123123', name: 'Skeleton', stats: { hp: 20 } },
+                { id: anotherEnemyId, name: 'Knight', stats: { hp: 25 } },
             ],
             selectEnemy: jasmine.createSpy('selectEnemy'),
             takeTurn: jasmine.createSpy('takeTurn'),
@@ -93,7 +93,7 @@ describe('PlayerTurnWizard', () => {
 
         it('is a EnemySelectionPanel with the expected props', () => {
             expect(enemySelectionPanel.props()).toEqual({
-                enemies: props.enemies,
+                livingEnemies: props.enemies,
                 action: 'attack',
                 handleBack: jasmine.any(Function),
                 handleNext: jasmine.any(Function),
@@ -139,7 +139,7 @@ describe('PlayerTurnWizard', () => {
 
         it('is a EnemySelectionPanel with the expected props', () => {
             expect(enemySelectionPanel.props()).toEqual({
-                enemies: props.enemies,
+                livingEnemies: props.enemies,
                 action: 'Ice',
                 handleBack: jasmine.any(Function),
                 handleNext: jasmine.any(Function),

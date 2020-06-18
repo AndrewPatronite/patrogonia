@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {upperFirst} from 'lodash';
+import React, { useMemo, useState } from 'react';
+import { filter, upperFirst } from 'lodash';
 import CommandPanel from './CommandPanel';
 import EnemySelectionPanel from './EnemySelectionPanel';
 import PlayerSelectionPanel from './PlayerSelectionPanel';
@@ -15,6 +15,10 @@ const PlayerTurnWizard = ({
     mp,
 }) => {
     const [action, setAction] = useState('command');
+    const livingEnemies = useMemo(
+        () => filter(enemies, (enemy) => enemy.stats.hp > 0),
+        [enemies]
+    );
     const handleBack = () => {
         selectEnemy(undefined);
         setAction('command');
@@ -26,16 +30,20 @@ const PlayerTurnWizard = ({
                 takeTurn(command);
                 break;
             case 'attack':
-                setAction(command);
+                if (livingEnemies.length > 1) {
+                    setAction(command);
+                } else {
+                    takeTurn(command, livingEnemies[0].id);
+                }
                 break;
             default:
                 const { spellName, offensive } = JSON.parse(command);
                 const formattedSpellName = upperFirst(spellName.toLowerCase());
                 if (offensive) {
-                    if (enemies.length > 1) {
+                    if (livingEnemies.length > 1) {
                         setAction(command);
                     } else {
-                        takeTurn(formattedSpellName, selectedEnemyId);
+                        takeTurn(formattedSpellName, livingEnemies[0].id);
                     }
                 } else {
                     if (players.length > 1) {
@@ -58,7 +66,7 @@ const PlayerTurnWizard = ({
         case 'attack':
             return (
                 <EnemySelectionPanel
-                    enemies={enemies}
+                    livingEnemies={livingEnemies}
                     action={action}
                     handleBack={handleBack}
                     handleNext={(targetId) => takeTurn(action, targetId)}
@@ -72,7 +80,7 @@ const PlayerTurnWizard = ({
             const formattedSpellName = upperFirst(spellName.toLowerCase());
             return offensive ? (
                 <EnemySelectionPanel
-                    enemies={enemies}
+                    livingEnemies={livingEnemies}
                     action={formattedSpellName}
                     handleBack={handleBack}
                     handleNext={(targetId) => takeTurn(formattedSpellName, targetId)}

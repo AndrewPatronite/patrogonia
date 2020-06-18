@@ -8,11 +8,13 @@ describe('EnemySelectionPanel', () => {
     let subject;
 
     beforeEach(() => {
-        jest.spyOn(ReactAlias, 'useEffect').mockImplementation((effect) => effect());
+        jest.spyOn(ReactAlias, 'useEffect').mockImplementation((effect) =>
+            effect()
+        );
         props = {
             enemies: [
                 { id: 'ffff12345', name: 'Skeleton', stats: { hp: 20 } },
-                { id: 'aaaa12345', name: 'Knight', stats: { hp: 0 } },
+                { id: 'aaaa12345', name: 'Knight', stats: { hp: 20 } },
             ],
             action: 'attack',
             handleBack: jasmine.createSpy('handleBack'),
@@ -41,6 +43,10 @@ describe('EnemySelectionPanel', () => {
                     {
                         display: 'Skeleton',
                         value: 'ffff12345',
+                    },
+                    {
+                        display: 'Knight',
+                        value: 'aaaa12345',
                     },
                 ],
                 onBack: props.handleBack,
