@@ -66,7 +66,7 @@ const PlayerTurnWizard = ({
         case 'attack':
             return (
                 <EnemySelectionPanel
-                    livingEnemies={livingEnemies}
+                    enemies={livingEnemies}
                     action={action}
                     handleBack={handleBack}
                     handleNext={(targetId) => takeTurn(action, targetId)}
@@ -80,7 +80,7 @@ const PlayerTurnWizard = ({
             const formattedSpellName = upperFirst(spellName.toLowerCase());
             return offensive ? (
                 <EnemySelectionPanel
-                    livingEnemies={livingEnemies}
+                    enemies={livingEnemies}
                     action={formattedSpellName}
                     handleBack={handleBack}
                     handleNext={(targetId) => takeTurn(formattedSpellName, targetId)}

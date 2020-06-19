@@ -93,7 +93,7 @@ describe('PlayerTurnWizard', () => {
 
         it('is a EnemySelectionPanel with the expected props', () => {
             expect(enemySelectionPanel.props()).toEqual({
-                livingEnemies: props.enemies,
+                enemies: props.enemies,
                 action: 'attack',
                 handleBack: jasmine.any(Function),
                 handleNext: jasmine.any(Function),
@@ -139,7 +139,7 @@ describe('PlayerTurnWizard', () => {
 
         it('is a EnemySelectionPanel with the expected props', () => {
             expect(enemySelectionPanel.props()).toEqual({
-                livingEnemies: props.enemies,
+                enemies: props.enemies,
                 action: 'Ice',
                 handleBack: jasmine.any(Function),
                 handleNext: jasmine.any(Function),
