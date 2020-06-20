@@ -76,7 +76,7 @@
     display: flex;
 }
 
-.player-stats {
+.player-panel > .player-stats {
     display: flex;
     flex-direction: column;
     margin-right: 20px;
@@ -105,7 +105,7 @@ p {
 }
 
 .option-select {
-    max-height: 80px;
+    max-height: 90px;
     min-width: 80px;
     color: #606060;
     background-color: #ffffff;

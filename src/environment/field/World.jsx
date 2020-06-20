@@ -8,11 +8,16 @@ import { subscribe } from '../../subscription/subscribe';
 import { playSound, pauseSound } from '../sound/sound';
 import fieldMusic from '../sound/crusaderp/BattleHighlands.mp3';
 import caveMusic from '../sound/crusaderp/AcrosstheSandWIP2.mp3';
+import PlayerStatsModal from '../../player/PlayerStatsModal';
+
+const SHOW_PLAYER_STATS_DELAY = 5000;
 
 const World = ({ currentPlayer, playerUrl }) => {
     const [playerLocationMessage, setPlayerLocationMessage] = useState({});
+    const [showPlayerStatsModal, setShowPlayerStatsModal] = useState(false);
     const {
-        location: { mapName },
+        location: { mapName, rowIndex, columnIndex },
+        stats,
     } = currentPlayer;
 
     useEffect(() => {
@@ -33,6 +38,15 @@ const World = ({ currentPlayer, playerUrl }) => {
         return () => playerLocationSubscription.close();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        setShowPlayerStatsModal(false);
+        const timer = setTimeout(
+            () => setShowPlayerStatsModal(true),
+            SHOW_PLAYER_STATS_DELAY
+        );
+        return () => clearTimeout(timer);
+    }, [rowIndex, columnIndex]);
 
     const [map, mapPlayers] = MapState(
         currentPlayer,
@@ -67,6 +81,11 @@ const World = ({ currentPlayer, playerUrl }) => {
             <audio className="cave-music" autoPlay loop>
                 <source src={caveMusic} />
             </audio>
+            <PlayerStatsModal
+                showPlayerStats={showPlayerStatsModal}
+                onClose={() => setShowPlayerStatsModal(false)}
+                stats={stats}
+            />
         </div>
     );
 };

@@ -1,0 +1,21 @@
+.player-stats-modal {
+    max-height: 329px;
+    max-width: 229px;
+}
+
+.player-stats-modal > .player-stats {
+    padding: 25px 25px 25px 25px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fafafa;
+    border: 2px solid white;
+    border-radius: 5px;
+    height: 275px;
+    width: 175px;
+}
+
+.player-stats-modal > .player-stats > .player-stat {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}

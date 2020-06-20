@@ -1,4 +1,5 @@
 import React, * as ReactAlias from 'react';
+import { isEqual } from 'lodash';
 import { shallow } from 'enzyme';
 import World from './World';
 import { Legend } from '../maps/Legend';
@@ -8,6 +9,7 @@ import * as MapStateAlias from '../../state/MapState';
 import * as LocationToPlayerHelper from './helper/getLocationToPlayerMap';
 import * as Subscriptions from '../../subscription/subscribe';
 import * as Player from '../sound/sound';
+import PlayerStatsModal from '../../player/PlayerStatsModal';
 
 describe('World', () => {
     const { WATER: W, GRASS: G, TOWN: T } = Legend.symbols;
@@ -23,10 +25,12 @@ describe('World', () => {
     const currentPlayer = {
         id: 1,
         location: { mapName: 'cave1', rowIndex: 1, columnIndex: 2 },
+        stats: { hp: 9 },
     };
     const anotherPlayer = {
         id: 2,
         location: { mapName: 'field1', rowIndex: 3, columnIndex: 4 },
+        stats: { hp: 10 },
     };
     const mapPlayers = {
         field1: [anotherPlayer],
@@ -39,17 +43,30 @@ describe('World', () => {
     let props;
     let subject;
     let playerLocationSubscription;
+    let setShowPlayerStatsModal;
 
     beforeEach(() => {
+        setShowPlayerStatsModal = jasmine.createSpy('setShowPlayerStatsModal');
+        jest.spyOn(ReactAlias, 'useState').mockImplementation(
+            (initialState) => {
+                if (isEqual(initialState, {})) {
+                    return [initialState, () => {}];
+                } else if (initialState === false) {
+                    return [initialState, setShowPlayerStatsModal];
+                }
+            }
+        );
         jest.spyOn(ReactAlias, 'useEffect').mockImplementation((effect) =>
             effect()
         );
         spyOn(Player, 'playSound');
         spyOn(Player, 'pauseSound');
         playerLocationSubscription = {
-            close: jasmine.createSpy('close')
-        }
-        spyOn(Subscriptions, 'subscribe').and.returnValue(playerLocationSubscription);
+            close: jasmine.createSpy('close'),
+        };
+        spyOn(Subscriptions, 'subscribe').and.returnValue(
+            playerLocationSubscription
+        );
         spyOn(MapStateAlias, 'MapState').and.returnValue([map, mapPlayers]);
         spyOn(LocationToPlayerHelper, 'getLocationToPlayerMap').and.returnValue(
             locationToPlayersMap
@@ -60,6 +77,7 @@ describe('World', () => {
             columnStartIndex: 1,
             columnEndIndex: 3,
         });
+        jest.useFakeTimers();
         props = {
             currentPlayer,
             playerUrl: 'wss://localhost:8443/players',
@@ -142,22 +160,53 @@ describe('World', () => {
         );
     });
 
+    describe('PlayerStatsModal', () => {
+        it('has the expected props', () => {
+            const playerStatsModal = subject.find(PlayerStatsModal);
+            expect(playerStatsModal.props()).toEqual({
+                showPlayerStats: false,
+                onClose: jasmine.any(Function),
+                stats: currentPlayer.stats,
+            });
+        });
+
+        it('toggles the modal to be invisible onClose', () => {
+            const playerStatsModal = subject.find(PlayerStatsModal);
+            playerStatsModal.simulate('close');
+            expect(setShowPlayerStatsModal).toHaveBeenCalledWith(false);
+        });
+    });
+
     it('plays field music for field maps', () => {
-        props.currentPlayer = anotherPlayer
+        props.currentPlayer = anotherPlayer;
         subject = shallow(<World {...props} />);
 
-        expect(Player.pauseSound).toHaveBeenCalledWith('cave-music')
-        expect(Player.playSound).toHaveBeenCalledWith('field-music')
-    })
+        expect(Player.pauseSound).toHaveBeenCalledWith('cave-music');
+        expect(Player.playSound).toHaveBeenCalledWith('field-music');
+    });
 
     it('plays cave music for cave maps', () => {
-        expect(Player.pauseSound).toHaveBeenCalledWith('field-music')
-        expect(Player.playSound).toHaveBeenCalledWith('cave-music')
-    })
+        expect(Player.pauseSound).toHaveBeenCalledWith('field-music');
+        expect(Player.playSound).toHaveBeenCalledWith('cave-music');
+    });
 
     it('subscribes to player location notifications and closes the connection during unmounting', () => {
-        expect(Subscriptions.subscribe).toHaveBeenCalledWith(props.playerUrl, jasmine.any(Function))
-        ReactAlias.useEffect.mock.calls[1][0]()()
-        expect(playerLocationSubscription.close).toHaveBeenCalled()
-    })
+        expect(Subscriptions.subscribe).toHaveBeenCalledWith(
+            props.playerUrl,
+            jasmine.any(Function)
+        );
+        ReactAlias.useEffect.mock.calls[1][0]()();
+        expect(playerLocationSubscription.close).toHaveBeenCalled();
+    });
+
+    it('sets show player stats modal via 5 second timer that it clears ', () => {
+        expect(setShowPlayerStatsModal).toHaveBeenCalledWith(false);
+
+        jest.runAllTimers();
+        expect(setTimeout).toHaveBeenCalledWith(jasmine.any(Function), 5000)
+        expect(setShowPlayerStatsModal).toHaveBeenCalledWith(true);
+
+        ReactAlias.useEffect.mock.calls[2][0]()()
+        expect(clearTimeout).toHaveBeenCalled()
+    });
 });
