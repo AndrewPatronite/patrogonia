@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Tile from './Tile';
-import Player from '../../player/Player';
+import Character from '../../player/Character'
 import { Legend } from '../maps/Legend';
 
 describe('Tile', () => {
@@ -75,7 +75,7 @@ describe('Tile', () => {
         expect(subject.prop('className')).toEqual(
             'tile rc5-5 grass water-above water-left'
         );
-        const player = subject.find(Player);
+        const player = subject.find(Character);
         expect(player.props()).toEqual({
             player: currentPlayer,
             isCurrentPlayer: true,
@@ -88,7 +88,7 @@ describe('Tile', () => {
         expect(subject.prop('className')).toEqual(
             'tile rc7-4 grass water-left water-below'
         );
-        const player = subject.find(Player);
+        const player = subject.find(Character);
         expect(player.props()).toEqual({
             player: stranger,
             isCurrentPlayer: false,
@@ -101,7 +101,7 @@ describe('Tile', () => {
         expect(subject.prop('className')).toEqual(
             'tile rc5-6 town water-above water-right'
         );
-        const player = subject.find(Player);
+        const player = subject.find(Character);
         expect(player.props()).toEqual({
             player: saved,
             isCurrentPlayer: false,

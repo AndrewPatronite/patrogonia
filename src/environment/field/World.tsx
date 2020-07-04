@@ -6,13 +6,15 @@ import { MapState } from '../../state/MapState';
 import { getLocationToPlayerMap } from './helper/getLocationToPlayerMap';
 import { subscribe } from '../../subscription/subscribe';
 import { playSound, pauseSound } from '../sound/sound';
-import fieldMusic from '../sound/crusaderp/BattleHighlands.mp3';
-import caveMusic from '../sound/crusaderp/AcrosstheSandWIP2.mp3';
 import PlayerStatsModal from '../../player/PlayerStatsModal';
+import Player from '../../player/Player';
+
+const fieldMusic = require('../sound/crusaderp/BattleHighlands.mp3');
+const caveMusic = require('../sound/crusaderp/AcrosstheSandWIP2.mp3');
 
 const SHOW_PLAYER_STATS_DELAY = 5000;
 
-const World = ({ currentPlayer, playerUrl }) => {
+const World = ({ currentPlayer, playerUrl }: { currentPlayer: Player, playerUrl: string }) => {
     const [playerLocationMessage, setPlayerLocationMessage] = useState({});
     const [showPlayerStatsModal, setShowPlayerStatsModal] = useState(false);
     const {
@@ -64,7 +66,7 @@ const World = ({ currentPlayer, playerUrl }) => {
         <div className="world">
             {map.layout
                 .slice(rowStartIndex, rowEndIndex + 1)
-                .map((rowSymbols, rowIndexOffset) => (
+                .map((rowSymbols: string[], rowIndexOffset: number) => (
                     <TileRow
                         key={`tileRow-${rowStartIndex + rowIndexOffset}`}
                         rowSymbols={rowSymbols}

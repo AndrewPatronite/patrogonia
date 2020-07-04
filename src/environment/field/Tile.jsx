@@ -2,7 +2,7 @@ import React from 'react';
 import { find, isEmpty, isEqual } from 'lodash';
 import { Legend } from '../maps/Legend';
 import { getBorderClasses } from './helper/getBorderClasses';
-import Player from '../../player/Player';
+import Character from '../../player/Character'
 import { getTileKey } from './helper/getTileKey';
 
 const Tile = ({
@@ -39,7 +39,7 @@ const Tile = ({
             className={`tile rc${tileKey} ${className}${borderClasses}`}
         >
             {playerToDisplay ? (
-                <Player
+                <Character
                     player={playerToDisplay}
                     isCurrentPlayer={isEqual(
                         playerToDisplay.id,

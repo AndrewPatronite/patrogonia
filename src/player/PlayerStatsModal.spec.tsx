@@ -1,11 +1,11 @@
 import React, * as ReactAlias from 'react';
-import { shallow } from 'enzyme';
+import {shallow, ShallowWrapper} from 'enzyme';
 import Modal from 'react-modal';
 import PlayerStatsModal from './PlayerStatsModal';
 
 describe('PlayerStatsModal', () => {
     let props;
-    let subject;
+    let subject: ShallowWrapper;
 
     beforeEach(() => {
         jest.spyOn(ReactAlias, 'useEffect').mockImplementation((effect) =>
@@ -52,7 +52,7 @@ describe('PlayerStatsModal', () => {
     });
 
     it('has player stats housing individual stats', () => {
-        const verifyStat = (playerStat, expectedLabel, expectedValue) => {
+        const verifyStat = (playerStat: ShallowWrapper, expectedLabel: string, expectedValue: string) => {
             expect(playerStat.find('label').text()).toEqual(expectedLabel);
             expect(playerStat.find('span').text()).toEqual(expectedValue);
         };

@@ -1,4 +1,6 @@
+import Map from './Map'
 import { Legend } from './Legend';
+import Entrance from "./Entrance";
 
 const {
     WATER: W,
@@ -12,19 +14,19 @@ const {
 } = Legend.symbols;
 
 export const Maps = {
-    canTraverse(nextPosition) {
+    canTraverse(nextPosition: string): boolean {
         return [G, D, F, T].includes(nextPosition);
     },
 
-    isTravelDestination(name) {
+    isTravelDestination(name: string): boolean {
         return ['field1', 'cave1', 'field2'].includes(name);
     },
 
-    isTown(name) {
+    isTown(name: string): boolean {
         return name === T;
     },
 
-    field1(entranceName = 'start') {
+    field1(entranceName: string = 'start'): Map {
         return {
             name: 'field1',
             layout: [
@@ -40,7 +42,7 @@ export const Maps = {
                 [W, W, W, F, F, W, W, W, W, W, W, W, W],
                 [W, W, W, W, W, W, W, W, W, W, W, W, W],
             ],
-            entrance: {
+            entrance: ((): Entrance => { const entrances: Record<string, Entrance> = {
                 start: {
                     rowIndex: 6,
                     columnIndex: 7,
@@ -49,11 +51,12 @@ export const Maps = {
                     rowIndex: 7,
                     columnIndex: 4,
                 },
-            }[entranceName],
+            }
+            return entrances[entranceName]})(),
         };
     },
 
-    cave1(entranceName = 'field1') {
+    cave1(entranceName = 'field1'): Map {
         // prettier-ignore
         return {
             name: 'cave1',
@@ -98,7 +101,7 @@ export const Maps = {
                 [L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L],
 
             ],
-            entrance: {
+            entrance: ((): Entrance => { const entrances: Record<string, Entrance> = {
                 field1: {
                     rowIndex: 2,
                     columnIndex: 2,
@@ -107,11 +110,12 @@ export const Maps = {
                     rowIndex: 35,
                     columnIndex: 37,
                 },
-            }[entranceName],
+            }
+            return entrances[entranceName]})(),
         };
     },
 
-    field2() {
+    field2(): Map {
         // prettier-ignore
         return {
             name: 'field2',

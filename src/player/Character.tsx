@@ -1,12 +1,13 @@
 import React from 'react';
 import { isEqual } from 'lodash';
-import './Player.css';
+import './Character.css';
 import { faCampground, faDragon } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Player from "./Player";
 
 const CAMPING_DURATION_MILLIS = 10000;
 
-const Player = ({
+const Character = ({
     player: {
         name: playerName,
         location: { facing: directionFacing },
@@ -15,6 +16,10 @@ const Player = ({
     },
     isCurrentPlayer,
     isSaveLocation,
+}: {
+    player: Player,
+    isCurrentPlayer: boolean,
+    isSaveLocation: boolean,
 }) => {
     const playerClassName = `${
         isCurrentPlayer ? 'hero' : 'peer'
@@ -49,4 +54,4 @@ const Player = ({
     );
 };
 
-export default Player;
+export default Character;

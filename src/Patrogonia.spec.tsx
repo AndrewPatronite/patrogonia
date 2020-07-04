@@ -6,9 +6,37 @@ import World from './environment/field/World';
 import Landing from './landing/Landing';
 import HowToPlay from './instructions/HowToPlay';
 import * as PlayerStateAlias from './state/PlayerState';
+import Player from "./player/Player";
 
 describe('Patrogonia', () => {
-    const currentPlayer = {};
+    const currentPlayer: Player = {
+        id: 0,
+        lastUpdate: "",
+        location: {
+            mapName: 'field1',
+            rowIndex: 6,
+            columnIndex: 7,
+            facing: 'down'
+        },
+        loggedIn: false,
+        name: "",
+        skipInstructions: false,
+        spells: [],
+        stats: {
+            playerName: 'Redwan',
+            level: 1,
+            hp: 10,
+            hpTotal: 10,
+            mp: 1,
+            mpTotal: 1,
+            gold: 7,
+            xp: 5,
+            xpTillNextLevel: 8,
+            attack: 5,
+            defense: 5,
+            agility: 5,
+        }
+    };
     const login = jasmine.createSpy('login');
     const createAccount = jasmine.createSpy('createAccount');
     const updatePlayer = jasmine.createSpy('updatePlayer');
@@ -18,6 +46,7 @@ describe('Patrogonia', () => {
 
     beforeEach(() => {
         window.process = {
+            // @ts-ignore
             env: {
                 REACT_APP_WEBSOCKET_BASE_URL: 'wss://localhost:8443',
             },
@@ -72,6 +101,7 @@ describe('Patrogonia', () => {
 
         expect(updatePlayer).toHaveBeenCalledWith(
             {
+                ...currentPlayer,
                 loggedIn: true,
                 skipInstructions: true,
             },

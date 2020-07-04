@@ -33,7 +33,7 @@ const Patrogonia = () => {
         }
     }, [currentPlayer.loggedIn, currentPlayer.skipInstructions]);
 
-    const skipInstructions = (shouldSkip) => {
+    const skipInstructions = (shouldSkip: boolean) => {
         setShowInstructions(false);
         updatePlayer({ ...currentPlayer, skipInstructions: shouldSkip }, false);
     };

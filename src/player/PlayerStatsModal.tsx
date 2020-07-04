@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Modal from 'react-modal';
 import './PlayerStatsModal.css';
+import Stats from './Stats';
 
 const PlayerStatsModal = ({
     showPlayerStats,
@@ -19,6 +20,10 @@ const PlayerStatsModal = ({
         defense,
         agility,
     },
+}: {
+    showPlayerStats: boolean,
+    onClose: (event: React.MouseEvent | React.KeyboardEvent) => void,
+    stats: Stats,
 }) => {
     useEffect(() => {
         Modal.setAppElement('body');
