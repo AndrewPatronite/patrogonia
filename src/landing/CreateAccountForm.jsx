@@ -22,7 +22,7 @@ const CreateAccountForm = ({
             isValidPassword(password, confirmedPassword, setErrorMessage)
         ) {
             const location = {
-                mapName: 'field1',
+                mapName: 'Atoris',
                 rowIndex: 6,
                 columnIndex: 7,
                 facing: 'down',

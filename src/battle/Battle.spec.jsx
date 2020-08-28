@@ -68,7 +68,7 @@ describe('Battle', () => {
         props = {
             currentPlayer: {
                 location: {
-                    mapName: 'cave1',
+                    mapName: 'Lava Grotto',
                 },
             },
             loadPlayer: jasmine.createSpy('loadPlayer'),
@@ -99,7 +99,7 @@ describe('Battle', () => {
     it('has an EnemyDisplay with the expected props', () => {
         const enemyDisplay = subject.find(EnemyDisplay);
         expect(enemyDisplay.props()).toEqual({
-            mapName: 'cave1',
+            mapName: 'Lava Grotto',
             enemies: battle.enemies,
             selectedEnemyId: undefined,
             deliveredLogEntries: [

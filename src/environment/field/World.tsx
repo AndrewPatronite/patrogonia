@@ -7,23 +7,36 @@ import { getLocationToPlayerMap } from './helper/getLocationToPlayerMap';
 import { subscribe } from '../../subscription/subscribe';
 import { playSound, pauseSound } from '../sound/sound';
 import PlayerStatsModal from '../../player/PlayerStatsModal';
+import FieldMenu from '../../player/FieldMenu';
 import Player from '../../player/Player';
+import { Maps } from '../maps/Maps';
 
 const fieldMusic = require('../sound/crusaderp/BattleHighlands.mp3');
 const caveMusic = require('../sound/crusaderp/AcrosstheSandWIP2.mp3');
 
 const SHOW_PLAYER_STATS_DELAY = 5000;
 
-const World = ({ currentPlayer, playerUrl }: { currentPlayer: Player, playerUrl: string }) => {
+const World = ({
+    currentPlayer,
+    playerUrl,
+    closeFieldMenu,
+    castSpell,
+}: {
+    currentPlayer: Player;
+    playerUrl: string;
+    closeFieldMenu: (event: React.MouseEvent | React.KeyboardEvent) => void;
+    castSpell: (spellName: string, targetId: string) => void;
+}) => {
     const [playerLocationMessage, setPlayerLocationMessage] = useState({});
     const [showPlayerStatsModal, setShowPlayerStatsModal] = useState(false);
     const {
         location: { mapName, rowIndex, columnIndex },
         stats,
+        showFieldMenu,
     } = currentPlayer;
 
     useEffect(() => {
-        if (mapName.includes('field')) {
+        if (Maps.isField(mapName)) {
             pauseSound('cave-music');
             playSound('field-music');
         } else {
@@ -84,9 +97,15 @@ const World = ({ currentPlayer, playerUrl }: { currentPlayer: Player, playerUrl:
                 <source src={caveMusic} />
             </audio>
             <PlayerStatsModal
-                showPlayerStats={showPlayerStatsModal}
+                showPlayerStats={showPlayerStatsModal && !showFieldMenu}
                 onClose={() => setShowPlayerStatsModal(false)}
                 stats={stats}
+            />
+            <FieldMenu
+                showFieldMenu={showFieldMenu}
+                closeFieldMenu={closeFieldMenu}
+                currentPlayer={currentPlayer}
+                castSpell={castSpell}
             />
         </div>
     );

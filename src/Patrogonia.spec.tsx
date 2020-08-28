@@ -6,20 +6,20 @@ import World from './environment/field/World';
 import Landing from './landing/Landing';
 import HowToPlay from './instructions/HowToPlay';
 import * as PlayerStateAlias from './state/PlayerState';
-import Player from "./player/Player";
+import Player from './player/Player';
 
 describe('Patrogonia', () => {
     const currentPlayer: Player = {
         id: 0,
-        lastUpdate: "",
+        lastUpdate: '',
         location: {
-            mapName: 'field1',
+            mapName: 'Atoris',
             rowIndex: 6,
             columnIndex: 7,
-            facing: 'down'
+            facing: 'down',
         },
         loggedIn: false,
-        name: "",
+        name: '',
         skipInstructions: false,
         spells: [],
         stats: {
@@ -35,13 +35,14 @@ describe('Patrogonia', () => {
             attack: 5,
             defense: 5,
             agility: 5,
-        }
+        },
     };
     const login = jasmine.createSpy('login');
     const createAccount = jasmine.createSpy('createAccount');
     const updatePlayer = jasmine.createSpy('updatePlayer');
     const loadPlayer = jasmine.createSpy('loadPlayer');
     const loadSave = jasmine.createSpy('loadSave');
+    const castSpell = jasmine.createSpy('castSpell');
     const originalProcess = window.process;
 
     beforeEach(() => {
@@ -65,6 +66,7 @@ describe('Patrogonia', () => {
             updatePlayer,
             loadPlayer,
             loadSave,
+            castSpell,
         ]);
         return shallow(<Patrogonia />);
     };
@@ -125,6 +127,8 @@ describe('Patrogonia', () => {
         expect(world.props()).toEqual({
             currentPlayer,
             playerUrl: 'wss://localhost:8443/players',
+            castSpell,
+            closeFieldMenu: jasmine.any(Function),
         });
     });
 
@@ -139,7 +143,7 @@ describe('Patrogonia', () => {
             loadPlayer,
             updatePlayer,
             battleUrl: 'wss://localhost:8443/battles',
-            loadSave
+            loadSave,
         });
     });
 });

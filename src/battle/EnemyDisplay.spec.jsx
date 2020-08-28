@@ -8,7 +8,7 @@ describe('EnemyDisplay', () => {
 
     beforeEach(() => {
         props = {
-            mapName: 'cave1',
+            mapName: 'Lava Grotto',
             enemies: [
                 { id: 'ffff123', name: 'Rat', stats: { hp: 0 } },
                 { id: 'eeee123', name: 'Rat', stats: { hp: 0 } },

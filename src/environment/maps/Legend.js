@@ -5,7 +5,6 @@ const DIRT = 'D';
 const ROCK = 'R';
 const LAVA = 'L';
 const FOREST = 'F';
-const TOWN = 'T';
 
 export const Legend = {
     [WATER]: 'water',
@@ -15,7 +14,6 @@ export const Legend = {
     [ROCK]: 'rock',
     [LAVA]: 'lava',
     [FOREST]: 'forest',
-    [TOWN]: 'town',
     symbols: {
         WATER,
         GRASS,
@@ -24,6 +22,5 @@ export const Legend = {
         ROCK,
         LAVA,
         FOREST,
-        TOWN,
     },
 };

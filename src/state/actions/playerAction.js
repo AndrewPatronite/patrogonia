@@ -5,6 +5,7 @@ import {
     loadSave,
     login,
     updatePlayer,
+    castSpell as castSpellRemote,
 } from '../api/playerService';
 
 export const SET_PLAYER = 'SET_PLAYER';
@@ -47,18 +48,23 @@ export const loadSaveAction = (dispatch, playerId) => {
     );
 };
 
+const getPlayerForServer = (player) =>
+    pick(
+        player,
+        'id',
+        'name',
+        'username',
+        'location',
+        'stats',
+        'saveGame',
+        'visited',
+        'spells'
+    );
+
 export const updatePlayerAction = (dispatch, player, updateToServer) => {
     if (updateToServer) {
         updatePlayer(
-            pick(
-                player,
-                'id',
-                'name',
-                'username',
-                'location',
-                'stats',
-                'saveGame'
-            ),
+            getPlayerForServer(player),
             (playerResponse) => {
                 const updatedPlayer = {
                     ...player,
@@ -83,4 +89,22 @@ const storeAndDispatchPlayerUpdate = (updatedPlayer, dispatch) => {
         type: SET_PLAYER,
         updatedPlayer,
     });
+};
+
+export const castSpell = (dispatch, currentPlayer, spellName, targetId) => {
+    castSpellRemote(
+        getPlayerForServer(currentPlayer),
+        spellName,
+        targetId,
+        (playerResponse) => {
+            const updatedPlayer = {
+                ...currentPlayer,
+                ...playerResponse,
+            };
+            storeAndDispatchPlayerUpdate(updatedPlayer, dispatch);
+        },
+        (error) => {
+            console.log('Failed to cast spell: ' + JSON.stringify(error));
+        }
+    );
 };

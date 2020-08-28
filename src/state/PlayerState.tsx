@@ -5,6 +5,7 @@ import {
     loadSaveAction,
     loginAction,
     updatePlayerAction,
+    castSpell as castSpellAction,
 } from './actions/playerAction';
 import { playerReducer } from './reducers/playerReducer';
 
@@ -47,5 +48,19 @@ export const PlayerState = () => {
         []
     );
 
-    return [currentPlayer, login, createAccount, updatePlayer, loadPlayer, loadSave];
+    const castSpell = useCallback(
+        (spellName: string, targetId: string) =>
+            castSpellAction(dispatchPlayer, currentPlayer, spellName, targetId),
+        [currentPlayer]
+    );
+
+    return [
+        currentPlayer,
+        login,
+        createAccount,
+        updatePlayer,
+        loadPlayer,
+        loadSave,
+        castSpell,
+    ];
 };

@@ -38,6 +38,7 @@ describe('OptionPanel', () => {
                 children: '<<',
                 className: 'back-button',
                 onClick: props.onBack,
+                disabled: false
             });
         });
 
@@ -62,6 +63,7 @@ describe('OptionPanel', () => {
                 onChange: jasmine.any(Function),
                 onKeyDown: jasmine.any(Function),
                 children: jasmine.any(Array),
+                disabled: false
             });
         });
 
@@ -133,6 +135,7 @@ describe('OptionPanel', () => {
                 className: 'next-button',
                 children: '>>',
                 onClick: jasmine.any(Function),
+                disabled: false
             });
         });
 
@@ -140,6 +143,15 @@ describe('OptionPanel', () => {
             subject.find('.next-button').simulate('click');
 
             expect(props.onNext).toHaveBeenCalledWith('attack');
+        });
+
+        it('calls onNext with the initialValue when present', () => {
+            props.initialValue = 'spell'
+            subject = shallow(<OptionPanel {...props} />);
+
+            subject.find('.next-button').simulate('click');
+
+            expect(props.onNext).toHaveBeenCalledWith('spell');
         });
     });
 });

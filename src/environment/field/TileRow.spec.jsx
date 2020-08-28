@@ -5,11 +5,11 @@ import { Legend } from '../maps/Legend';
 import Tile from './Tile';
 
 describe('TileRow', () => {
-    const { WATER: W, GRASS: G, TOWN: T } = Legend.symbols;
+    const { WATER: W, GRASS: G } = Legend.symbols;
     const mapLayout = [
         [W, W, W, W, W],
         [W, W, G, W, W],
-        [W, G, T, G, W],
+        [W, G, 'Dewhurst', G, W],
         [W, W, G, W, W],
         [W, W, W, W, W],
     ];
@@ -23,7 +23,7 @@ describe('TileRow', () => {
             rowSymbols: mapLayout[rowIndex],
             rowIndex,
             locationToPlayersMap: {
-                cave1: [currentPlayer],
+                ['Lava Grotto']: [currentPlayer],
             },
             displayIndexRange: { columnStartIndex: 1, columnEndIndex: 3 },
             mapLayout,
@@ -49,7 +49,7 @@ describe('TileRow', () => {
             currentPlayer
         });
         expect(tiles.at(1).props()).toEqual({
-            mapSymbol: T,
+            mapSymbol: 'Dewhurst',
             rowIndex,
             columnIndex: 2,
             locationToPlayersMap: props.locationToPlayersMap,

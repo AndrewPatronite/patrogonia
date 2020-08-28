@@ -3,4 +3,5 @@ export default interface Location {
     rowIndex: number,
     columnIndex: number,
     facing: string
+    entranceName: string
 }

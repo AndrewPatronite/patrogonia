@@ -1,10 +1,11 @@
 import React, * as ReactAlias from 'react';
-import {shallow, ShallowWrapper} from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import Modal from 'react-modal';
 import PlayerStatsModal from './PlayerStatsModal';
+import PlayerStatsPanel from './PlayerStatsPanel';
 
 describe('PlayerStatsModal', () => {
-    let props;
+    let props: any;
     let subject: ShallowWrapper;
 
     beforeEach(() => {
@@ -51,24 +52,11 @@ describe('PlayerStatsModal', () => {
         expect(subject.prop('shouldFocusAfterRender')).toEqual(false);
     });
 
-    it('has player stats housing individual stats', () => {
-        const verifyStat = (playerStat: ShallowWrapper, expectedLabel: string, expectedValue: string) => {
-            expect(playerStat.find('label').text()).toEqual(expectedLabel);
-            expect(playerStat.find('span').text()).toEqual(expectedValue);
-        };
-
-        const playerStats = subject.find('.player-stats').find('.player-stat');
-        expect(playerStats.length).toEqual(10);
-        verifyStat(playerStats.at(0), 'Player', 'Redwan');
-        verifyStat(playerStats.at(1), 'Level', '1');
-        verifyStat(playerStats.at(2), 'HP', '9/12');
-        verifyStat(playerStats.at(3), 'MP', '1/1');
-        verifyStat(playerStats.at(4), 'Gold', '6');
-        verifyStat(playerStats.at(5), 'XP', '8');
-        verifyStat(playerStats.at(6), 'XP till next level', '7');
-        verifyStat(playerStats.at(7), 'Attack', '5');
-        verifyStat(playerStats.at(8), 'Defense', '4');
-        verifyStat(playerStats.at(9), 'Agility', '5');
+    it('has a PlayerStatsPanel with the expected props', () => {
+        const playerStats = subject.find(PlayerStatsPanel);
+        expect(playerStats.props()).toEqual({
+            playerStats: props.stats
+        })
     });
 
     it('calls Modal.setAppElement', () => {

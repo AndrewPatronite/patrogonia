@@ -17,6 +17,7 @@ const Patrogonia = () => {
         updatePlayer,
         loadPlayer,
         loadSave,
+        castSpell,
     ] = PlayerState();
 
     useEffect(playerNavigationEffect(currentPlayer, updatePlayer), [
@@ -38,6 +39,9 @@ const Patrogonia = () => {
         updatePlayer({ ...currentPlayer, skipInstructions: shouldSkip }, false);
     };
 
+    const closeFieldMenu = () =>
+        updatePlayer({ ...currentPlayer, showFieldMenu: false }, false);
+
     return (
         <div className="patrogonia">
             {showInstructions ? (
@@ -55,6 +59,8 @@ const Patrogonia = () => {
                     <World
                         currentPlayer={currentPlayer}
                         playerUrl={playerUrl}
+                        closeFieldMenu={closeFieldMenu}
+                        castSpell={castSpell}
                     />
                 )
             ) : (

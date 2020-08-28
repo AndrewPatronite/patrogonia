@@ -10,9 +10,11 @@ describe('CommandPanel', () => {
         props = {
             currentPlayer: {
                 spells: [
-                    { spellName: 'HEAL', mpCost: 5 },
-                    { spellName: 'FIRE', mpCost: 5 },
-                    { spellName: 'ICE', mpCost: 5 },
+                    { spellName: 'HEAL', mpCost: 5, battleSpell: true },
+                    { spellName: 'FIRE', mpCost: 5, battleSpell: true },
+                    { spellName: 'ICE', mpCost: 5, battleSpell: true },
+                    { spellName: 'RETURN', mpCost: 5, battleSpell: false },
+                    { spellName: 'OUTSIDE', mpCost: 5, battleSpell: false },
                 ],
             },
             handleCommand: jasmine.createSpy('handleCommand'),
@@ -44,6 +46,7 @@ describe('CommandPanel', () => {
                         value: JSON.stringify({
                             spellName: 'HEAL',
                             mpCost: 5,
+                            battleSpell: true
                         }),
                     },
                     {
@@ -51,6 +54,7 @@ describe('CommandPanel', () => {
                         value: JSON.stringify({
                             spellName: 'FIRE',
                             mpCost: 5,
+                            battleSpell: true
                         }),
                     },
                     {
@@ -58,6 +62,7 @@ describe('CommandPanel', () => {
                         value: JSON.stringify({
                             spellName: 'ICE',
                             mpCost: 5,
+                            battleSpell: true
                         }),
                     },
                     {

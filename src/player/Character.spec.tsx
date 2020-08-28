@@ -22,7 +22,7 @@ describe('Character', () => {
         props = {
             player: {
                 name: 'Redwan',
-                location: { facing, rowIndex: 1, columnIndex: 2, mapName: 'cave1' },
+                location: { facing, rowIndex: 1, columnIndex: 2, mapName: 'Lava Grotto' },
                 battleId,
                 lastUpdate,
                 id: 1,

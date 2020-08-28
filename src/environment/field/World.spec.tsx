@@ -12,29 +12,29 @@ import * as Player from '../sound/sound';
 import PlayerStatsModal from '../../player/PlayerStatsModal';
 
 describe('World', () => {
-    const { WATER: W, GRASS: G, TOWN: T } = Legend.symbols;
+    const { WATER: W, GRASS: G } = Legend.symbols;
     const map = {
         layout: [
             [W, W, W, W, W],
             [W, W, G, W, W],
-            [W, G, T, G, W],
+            [W, G, 'Dewhurst', G, W],
             [W, W, G, W, W],
             [W, W, W, W, W],
         ],
     };
     const currentPlayer = {
         id: 1,
-        location: { mapName: 'cave1', rowIndex: 1, columnIndex: 2 },
+        location: { mapName: 'Lava Grotto', rowIndex: 1, columnIndex: 2 },
         stats: { hp: 9 },
     };
     const anotherPlayer = {
         id: 2,
-        location: { mapName: 'field1', rowIndex: 3, columnIndex: 4 },
+        location: { mapName: 'Atoris', rowIndex: 3, columnIndex: 4 },
         stats: { hp: 10 },
     };
     const mapPlayers = {
-        field1: [anotherPlayer],
-        cave1: [currentPlayer],
+        ['Atoris']: [anotherPlayer],
+        ['Lava Grotto']: [currentPlayer],
     };
     const locationToPlayersMap = {
         '1-2': [currentPlayer],

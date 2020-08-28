@@ -11,5 +11,7 @@ export default interface Player {
     spells: Spell[],
     stats: Stats,
     location: Location,
-    lastUpdate: string
+    lastUpdate: string,
+    showFieldMenu: boolean
+    visited: string[]
 }

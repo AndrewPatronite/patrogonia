@@ -71,3 +71,14 @@ export const loadSave = (playerId, onSuccess, onFailure) => {
         })
         .catch((error) => onFailure(error));
 };
+
+export const castSpell = (player, spellName, targetId, onSuccess, onFailure) => {
+    return axiosInstance
+        .put(`/castSpell/${spellName}/${targetId}`, player)
+        .then((response) => {
+            if (response.status === HttpStatus.OK) {
+                onSuccess(response.data);
+            }
+        })
+        .catch((error) => onFailure(error));
+};

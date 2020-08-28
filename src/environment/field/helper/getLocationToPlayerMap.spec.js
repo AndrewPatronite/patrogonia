@@ -14,15 +14,15 @@ describe('getLocationToPlayerMap', () => {
                 columnIndex,
             },
         });
-        const currentPlayer = getPlayer(1,'cave1', 1, 2);
-        const currentPlayerCompanion = getPlayer(2,'cave1', 1, 2);
-        const caveDweller = getPlayer(3, 'cave1', 3, 4);
-        const beginner = getPlayer(4,'field1', 5, 6);
-        const tough = getPlayer(5,'field2', 7, 8);
+        const currentPlayer = getPlayer(1,'Lava Grotto', 1, 2);
+        const currentPlayerCompanion = getPlayer(2,'Lava Grotto', 1, 2);
+        const caveDweller = getPlayer(3, 'Lava Grotto', 3, 4);
+        const beginner = getPlayer(4,'Atoris', 5, 6);
+        const tough = getPlayer(5,'Grimes', 7, 8);
         const playersOnMap = {
-            field1: [beginner],
-            cave1: [currentPlayer, currentPlayerCompanion, caveDweller, beginner],
-            field2: [tough],
+            ['Atoris']: [beginner],
+            ['Lava Grotto']: [currentPlayer, currentPlayerCompanion, caveDweller, beginner],
+            ['Grimes']: [tough],
         };
         expect(getLocationToPlayerMap(playersOnMap, currentPlayer)).toEqual({
             "1-2": [currentPlayerCompanion, currentPlayer],

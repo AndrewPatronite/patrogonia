@@ -12,6 +12,8 @@ import Commands2 from './screenshots/commands2.png';
 import Destroyed from './screenshots/destroyed.png';
 import Town1 from './screenshots/town1.png';
 import Town2 from './screenshots/town2.png';
+import FieldMenu1 from './screenshots/fieldmenu1.png'
+import FieldMenu2 from './screenshots/fieldmenu2.png'
 import './HowToPlay.css';
 
 const Description = () => (
@@ -102,6 +104,29 @@ const BattleControls = () => (
     </div>
 );
 
+const FieldMenu = () => (
+    <div className="how-to-play-row">
+        <div className="how-to-play-text-area">
+            <h3>Field menu</h3>
+            <span className="description">
+                You can open the field menu by pressing Enter.
+            </span>
+            <span className="description">
+                The menu options work like the battle ones.
+            </span>
+            <span className="description">
+                You can view your player's stats or cast spells that you have learned.
+            </span>
+            <span className="description">
+                Pressing Esc or clicking outside of the field menu closes it.
+            </span>
+        </div>
+        <img className="square-image" src={FieldMenu1} alt="Opening field menu" />
+        <FontAwesomeIcon icon={faArrowRight} size="2x" />
+        <img className="square-image" src={FieldMenu2} alt="Choosing spells" />
+    </div>
+);
+
 const Defeat = () => (
     <div className="how-to-play-row">
         <img className="defeated" src={Destroyed} alt="Party destroyed" />
@@ -126,6 +151,7 @@ const Instructions = [
     IdlePlayers,
     Saving,
     BattleControls,
+    FieldMenu,
     Defeat,
 ];
 

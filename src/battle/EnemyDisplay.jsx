@@ -1,6 +1,7 @@
 import React from 'react';
 import { filter, find, isEqual } from 'lodash';
 import './EnemyDisplay.css';
+import { Maps } from '../environment/maps/Maps';
 
 const EnemyDisplay = ({
     mapName,
@@ -8,7 +9,9 @@ const EnemyDisplay = ({
     selectedEnemyId,
     deliveredLogEntries,
 }) => {
-    const enemiesClassName = `enemies ${mapName.substring(0, 4)}`;
+    const enemiesClassName = `enemies ${
+        Maps.isField(mapName) ? 'field' : 'cave'
+    }`;
     const getEnemyClassName = (enemy) =>
         `enemy ${enemy.name.toLowerCase()}${
             enemy.id === selectedEnemyId ? ' selected' : ''

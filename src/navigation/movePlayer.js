@@ -31,6 +31,7 @@ const updatePlayerLocation = (
         updatePlayer({
             ...currentPlayer,
             location: {
+                ...currentPlayer.location,
                 mapName: currentMap.name,
                 rowIndex: nextRowIndex,
                 columnIndex: nextColumnIndex,

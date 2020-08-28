@@ -5,7 +5,7 @@ import Character from '../../player/Character'
 import { Legend } from '../maps/Legend';
 
 describe('Tile', () => {
-    const { GRASS: G, WATER: W, TOWN: T } = Legend.symbols;
+    const { GRASS: G, WATER: W } = Legend.symbols;
     const map = {
         layout: [
             [W, W, W, W, W, W, W, W, W, W],
@@ -13,8 +13,8 @@ describe('Tile', () => {
             [W, W, W, W, W, W, W, W, W, W],
             [W, W, W, W, W, W, W, W, W, W],
             [W, W, W, W, W, W, W, W, W, W],
-            [W, W, W, W, W, G, T, W, W, W],
-            [W, W, W, W, 'cave1', G, G, W, W, W],
+            [W, W, W, W, W, G, 'Dewhurst', W, W, W],
+            [W, W, W, W, 'Lava Grotto', G, G, W, W, W],
             [W, W, W, W, G, G, G, W, W, W],
             [W, W, W, W, W, W, W, W, W, W],
             [W, W, W, W, W, W, W, W, W, W],
@@ -45,7 +45,7 @@ describe('Tile', () => {
             columnIndex,
             locationToPlayersMap: {
                 '5-5': [currentPlayer, currentPlayerCompanion],
-                '5-6': [saved, townie],
+                '5-6': [saved, townie, currentPlayer],
                 '7-4': [stranger],
             },
             mapLayout: map.layout,
@@ -67,7 +67,7 @@ describe('Tile', () => {
         expect(subject.prop('className')).toEqual(
             'tile rc6-4 entrance water-above water-left'
         );
-        expect(subject.find('p').text()).toEqual('cave1');
+        expect(subject.find('p').text()).toEqual('Lava Grotto');
     });
 
     it('has the expected classNames shows current player if more than one on the tile', () => {
@@ -96,15 +96,15 @@ describe('Tile', () => {
         });
     });
 
-    it('has the expected classNames and a player at a town', () => {
+    it('has the expected classNames and a player at a town, if the player is currentPlayer', () => {
         const subject = getSubject(5, 6);
         expect(subject.prop('className')).toEqual(
             'tile rc5-6 town water-above water-right'
         );
         const player = subject.find(Character);
         expect(player.props()).toEqual({
-            player: saved,
-            isCurrentPlayer: false,
+            player: currentPlayer,
+            isCurrentPlayer: true,
             isSaveLocation: true,
         });
     });
