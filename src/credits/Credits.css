@@ -1,18 +1,3 @@
 .hidden {
     display: none;
 }
-
-.header {
-    color: #120c74;
-    margin-top: 20px;
-    margin-bottom: 7px;
-}
-
-.credits-modal {
-    display: flex;
-    flex-direction: column;
-}
-
-.credits-modal > a {
-    margin-bottom: 20px;
-}

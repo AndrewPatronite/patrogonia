@@ -8,6 +8,7 @@ import Log from './Log';
 import PlayerPanel from './PlayerPanel';
 import * as Subscriptions from '../subscription/subscribe';
 import * as Player from '../environment/sound/sound';
+import ThemedPanel from "../components/theme/ThemedPanel";
 
 describe('Battle', () => {
     const currentPlayerId = 1;
@@ -80,7 +81,7 @@ describe('Battle', () => {
     });
 
     it('is a div with className supplied by getBattleStatusClass', () => {
-        expect(subject.type()).toEqual('div');
+        expect(subject.type()).toEqual(ThemedPanel);
         expect(subject.prop('className')).toEqual('battle dire');
     });
 

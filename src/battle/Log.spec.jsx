@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import Log from './Log';
 import * as Player from '../environment/sound/sound';
 import { pauseSound } from '../environment/sound/sound';
+import ThemedPanel from "../components/theme/ThemedPanel";
 
 describe('Log', () => {
     let scrollToRef;
@@ -36,13 +37,15 @@ describe('Log', () => {
         subject = shallow(<Log {...props} />);
     });
 
-    it('is a div with the expected className', () => {
-        expect(subject.type()).toEqual('div');
+    it('is a ThemedPanel with the expected props', () => {
+        expect(subject.type()).toEqual(ThemedPanel);
         expect(subject.prop('className')).toEqual('log dire');
+        expect(subject.prop('flexDirection')).toEqual('column');
+        expect(subject.prop('padding')).toEqual('5px');
     });
 
     it('has no content if delivered entries is empty', () => {
-        expect(subject.find('p').exists()).toEqual(false);
+        expect(subject.find('.log-entry').exists()).toEqual(false);
     });
 
     it('has content of each delivered entry', () => {
@@ -51,7 +54,7 @@ describe('Log', () => {
             { content: 'Redwan attacks Skeleton dealing 10 damage.' },
         ];
         subject = shallow(<Log {...props} />);
-        const content = subject.find('p');
+        const content = subject.find('.log-entry');
         expect(content.length).toEqual(2);
         expect(content.at(0).text()).toEqual('Enemies approach.');
         expect(content.at(1).text()).toEqual(

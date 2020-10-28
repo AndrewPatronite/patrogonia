@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 import { faDragon } from '@fortawesome/free-solid-svg-icons';
 import { faCampground } from '@fortawesome/free-solid-svg-icons';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Battle from './screenshots/battle.png'
+import Battle from './screenshots/battle.png';
 import InBattle from './screenshots/inBattle.png';
 import Camping from './screenshots/camping.png';
 import Commands1 from './screenshots/commands.png';
@@ -12,30 +13,102 @@ import Commands2 from './screenshots/commands2.png';
 import Destroyed from './screenshots/destroyed.png';
 import Town1 from './screenshots/town1.png';
 import Town2 from './screenshots/town2.png';
-import FieldMenu1 from './screenshots/fieldmenu1.png'
-import FieldMenu2 from './screenshots/fieldmenu2.png'
-import './HowToPlay.css';
+import FieldMenu1 from './screenshots/fieldmenu1.png';
+import FieldMenu2 from './screenshots/fieldmenu2.png';
+import { ThemeContext } from '../components/theme/ThemeContext';
+import LinkButton from '../control/LinkButton';
+
+const HowToPlayDiv = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    min-height: 1000px;
+    background-color: ${(props) => props.theme.backgroundColor};
+    color: ${(props) => props.theme.textColor};
+
+    .navigation-buttons {
+        margin: 50px 0 25px 50px;
+
+        button {
+            margin: 5px 5px 5px 5px;
+            width: 50px;
+            height: 25px;
+            min-height: 25px;
+        }
+    }
+
+    svg {
+        color: black;
+    }
+
+    .how-to-play-row {
+        display: flex;
+        padding: 0 25px 0 25px;
+        align-items: center;
+        justify-content: center;
+
+        .battle {
+            max-height: 379px;
+            max-width: 504px;
+        }
+
+        .square-image {
+            height: 275px;
+            width: 275px;
+            margin: 0 10px 0 10px;
+        }
+
+        .player-in-battle {
+            margin: 0 10px 0 100px;
+        }
+
+        .saved,
+        .defeated {
+            margin-left: 100px;
+        }
+
+        .how-to-play-text-area {
+            display: flex;
+            flex: 1 1 auto;
+            flex-direction: column;
+            margin: 0 50px 0 50px;
+
+            .description {
+                width: 250px;
+                margin-bottom: 25px;
+            }
+
+            h3 {
+                color: ${(props) => props.theme.headingColor};
+            }
+        }
+    }
+`;
 
 const Description = () => (
-
-<div className="how-to-play-row">
-    <div className="how-to-play-text-area">
-        <h3>How to play</h3>
-        <span className="description">
-            Chronicles of Patrogonia is a classic RPG where you gain
-            experience and gold by defeating enemies in battle.
-        </span>
-        <span className="description">
-            You can even team up with other players to help even the odds.
-        </span>
+    <div className="how-to-play-row">
+        <div className="how-to-play-text-area">
+            <h3>How to play</h3>
+            <span className="description">
+                Chronicles of Patrogonia is a classic RPG where you gain
+                experience and gold by defeating enemies in battle.
+            </span>
+            <span className="description">
+                You can even team up with other players to help even the odds.
+            </span>
+        </div>
+        <img className="battle" src={Battle} alt="Player in battle" />
     </div>
-    <img className="battle" src={Battle} alt="Player in battle" />
-</div>
 );
 
 const PlayersInBattle = () => (
     <div className="how-to-play-row">
-        <img className="square-image player-in-battle" src={InBattle} alt="Player in battle" />
+        <img
+            className="square-image player-in-battle"
+            src={InBattle}
+            alt="Player in battle"
+        />
         <div className="how-to-play-text-area">
             <h3>Players in battle</h3>
             <span className="description">
@@ -115,13 +188,18 @@ const FieldMenu = () => (
                 The menu options work like the battle ones.
             </span>
             <span className="description">
-                You can view your player's stats or cast spells that you have learned.
+                You can view your player's stats or cast spells that you have
+                learned.
             </span>
             <span className="description">
                 Pressing Esc or clicking outside of the field menu closes it.
             </span>
         </div>
-        <img className="square-image" src={FieldMenu1} alt="Opening field menu" />
+        <img
+            className="square-image"
+            src={FieldMenu1}
+            alt="Opening field menu"
+        />
         <FontAwesomeIcon icon={faArrowRight} size="2x" />
         <img className="square-image" src={FieldMenu2} alt="Choosing spells" />
     </div>
@@ -157,6 +235,8 @@ const Instructions = [
 
 const HowToPlay = ({ onDismiss }) => {
     const [instructionIndex, setInstructionIndex] = useState(0);
+    const nextButtonRef = useRef(null);
+    const { theme } = useContext(ThemeContext);
     const Instruction = Instructions[instructionIndex];
     const isFirstInstruction = instructionIndex === 0;
     const isLastInstruction = instructionIndex === Instructions.length - 1;
@@ -177,22 +257,26 @@ const HowToPlay = ({ onDismiss }) => {
         }
     };
 
+    useLayoutEffect(() => {
+        nextButtonRef.current.focus();
+    }, []);
+
     return (
-        <div className="how-to-play">
-            <Instruction />
+        <HowToPlayDiv className="how-to-play" theme={theme}>
             <div className="navigation-buttons">
-                <button className="back-button" onClick={handleBackClick}>
+                <LinkButton className="back-button" onClick={handleBackClick}>
                     {isFirstInstruction ? 'Skip' : 'Back'}
-                </button>
-                <button
-                    autoFocus={true}
+                </LinkButton>
+                <LinkButton
+                    ref={nextButtonRef}
                     className="next-button"
                     onClick={handleNextClick}
                 >
                     {isLastInstruction ? 'Play' : 'Next'}
-                </button>
+                </LinkButton>
             </div>
-        </div>
+            <Instruction />
+        </HowToPlayDiv>
     );
 };
 

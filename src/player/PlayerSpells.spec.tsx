@@ -3,6 +3,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import PlayerSpells from './PlayerSpells';
 import Spell from './Spell';
 import OptionPanel from '../battle/OptionPanel';
+import ThemedPanel from '../components/theme/ThemedPanel';
 
 describe('PlayerSpells', () => {
     let onBack: jasmine.Spy;
@@ -80,13 +81,14 @@ describe('PlayerSpells', () => {
         subject = shallow(<PlayerSpells {...props} />);
     });
 
-    it('is a div with the expected class name', () => {
-        expect(subject.type()).toEqual('div');
+    it('is a ThemedPanel with the expected class name', () => {
+        expect(subject.type()).toEqual(ThemedPanel);
         expect(subject.prop('className')).toEqual('player-spells');
+        expect(subject.prop('heading')).toEqual('Spells');
+        expect(subject.prop('flexDirection')).toEqual('column');
     });
 
-    it('has a header and an OptionPanel for spells', () => {
-        expect(subject.find('.header').text()).toEqual('Spells');
+    it('has an OptionPanel for spells', () => {
         const optionPanel = subject.find(OptionPanel);
         expect(optionPanel.props()).toEqual({
             options: [
@@ -199,9 +201,9 @@ describe('PlayerSpells', () => {
         const spellCost = subject.find('.spell-cost');
         expect(spellCost.text()).toEqual('Cost 7/20');
         // @ts-ignore
-        optionPanel.prop('onBack')()
-        expect(setSpellCast).toHaveBeenCalledWith({})
-        setSpellCast.calls.reset()
+        optionPanel.prop('onBack')();
+        expect(setSpellCast).toHaveBeenCalledWith({});
+        setSpellCast.calls.reset();
     });
 
     it('casts the chosen spell via useEffect', () => {
@@ -212,12 +214,12 @@ describe('PlayerSpells', () => {
         subject = shallow(<PlayerSpells {...props} />);
         let optionPanel = subject.find(OptionPanel);
         // @ts-ignore
-        optionPanel.prop('onNext')('Dewhurst')
+        optionPanel.prop('onNext')('Dewhurst');
         expect(setSpellCast).toHaveBeenCalledWith({
             name: 'RETURN',
             targetId: 'Dewhurst',
-            confirmed: true
-        })
+            confirmed: true,
+        });
 
         jest.useFakeTimers();
         jest.spyOn(ReactAlias, 'useState').mockImplementation(() => [
@@ -226,18 +228,18 @@ describe('PlayerSpells', () => {
         ]);
         subject = shallow(<PlayerSpells {...props} />);
         optionPanel = subject.find(OptionPanel);
-        expect(optionPanel.prop('disabled')).toEqual(true)
-        const spellStatus = subject.find('.spell-status')
-        expect(spellStatus.text()).toEqual('Redwan cast Return')
+        expect(optionPanel.prop('disabled')).toEqual(true);
+        const spellStatus = subject.find('.spell-status');
+        expect(spellStatus.text()).toEqual('Redwan cast Return');
         jest.runAllTimers();
-        expect(setTimeout).toHaveBeenCalledWith(jasmine.any(Function), 4000)
-        expect(castSpell).toHaveBeenCalledWith('RETURN', 'Dewhurst')
-        expect(setSpellCast).toHaveBeenCalledWith({})
-        expect(onBack).toHaveBeenCalled()
+        expect(setTimeout).toHaveBeenCalledWith(jasmine.any(Function), 4000);
+        expect(castSpell).toHaveBeenCalledWith('RETURN', 'Dewhurst');
+        expect(setSpellCast).toHaveBeenCalledWith({});
+        expect(onBack).toHaveBeenCalled();
         // @ts-ignore
-        ReactAlias.useEffect.mock.calls[0][0]()()
-        expect(clearTimeout).toHaveBeenCalled()
-    })
+        ReactAlias.useEffect.mock.calls[0][0]()();
+        expect(clearTimeout).toHaveBeenCalled();
+    });
 
     it('has audio for Heal', () => {
         const healAudio = subject.find('.heal');

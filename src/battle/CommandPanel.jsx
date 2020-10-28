@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { filter, isEmpty, upperFirst } from 'lodash';
 import OptionPanel from './OptionPanel';
+import ThemedHeader from '../components/theme/ThemedHeader';
+import { ThemeContext } from '../components/theme/ThemeContext';
 
 const CommandPanel = ({ currentPlayer, handleCommand, mp }) => {
+    const { theme } = useContext(ThemeContext);
     const actionLabel = 'Command';
     const options = [{ value: 'attack', display: 'Attack' }];
+
     if (!isEmpty(currentPlayer.spells)) {
         filter(
             currentPlayer.spells,
@@ -18,9 +22,10 @@ const CommandPanel = ({ currentPlayer, handleCommand, mp }) => {
     }
     options.push({ value: 'parry', display: 'Parry' });
     options.push({ value: 'run', display: 'Run' });
+
     return (
         <div className="action-options">
-            <label>{actionLabel}</label>
+            <ThemedHeader theme={theme}>{actionLabel}</ThemedHeader>
             <OptionPanel
                 options={options}
                 onNext={handleCommand}

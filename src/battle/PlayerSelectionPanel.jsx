@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { upperFirst } from 'lodash';
 import OptionPanel from './OptionPanel';
+import ThemedHeader from "../components/theme/ThemedHeader";
+import {ThemeContext} from "../components/theme/ThemeContext";
 
 const PlayerSelectionPanel = ({
     players,
@@ -9,21 +11,25 @@ const PlayerSelectionPanel = ({
     handleNext,
     showBackButton,
 }) => {
-    const options = players.map(({ playerId, playerName }) => ({
-        value: playerId,
-        display: playerName,
-    }));
-    return (
-        <div className="action-options">
-            <label>{upperFirst(action)}</label>
-            <OptionPanel
-                options={options}
-                onBack={handleBack}
-                onNext={handleNext}
-                showBackButton={showBackButton}
-            />
-        </div>
-    );
-};
+          const { theme } = useContext(ThemeContext);
+          const options = players.map(({ playerId, playerName }) => ({
+              value: playerId,
+              display: playerName,
+          }));
+
+          return (
+              <div className="action-options">
+                  <ThemedHeader theme={theme}>
+                      {upperFirst(action)}
+                  </ThemedHeader>
+                  <OptionPanel
+                      options={options}
+                      onBack={handleBack}
+                      onNext={handleNext}
+                      showBackButton={showBackButton}
+                  />
+              </div>
+          );
+      };
 
 export default PlayerSelectionPanel;

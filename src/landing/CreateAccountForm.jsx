@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { isEmpty } from 'lodash';
 import { isValidPassword } from './helper/passwordValidator';
 import LinkButton from '../control/LinkButton';
-import './CreateAccountForm.css';
+import ThemeSwitch from '../components/theme/ThemeSwitch';
 
 const CreateAccountForm = ({
     createAccount,
@@ -77,14 +77,16 @@ const CreateAccountForm = ({
                 />
             </label>
             <label className="invalid">{errorMessage}</label>
+            <ThemeSwitch />
             <input type="submit" value={'Create'} />
             <LinkButton
                 onClick={() => {
                     setErrorMessage('');
                     backToLoginClick();
                 }}
-                label="Back to login"
-            />
+            >
+                Back to login
+            </LinkButton>
         </form>
     );
 };

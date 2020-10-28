@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { find, isEmpty, sortBy, upperFirst } from 'lodash';
 import Player from './Player';
-import './PlayerSpells.css';
 import OptionPanel from '../battle/OptionPanel';
 import { playSound } from '../environment/sound/sound';
 import Spell from './Spell';
+import ThemedPanel from '../components/theme/ThemedPanel';
+import Row from '../components/Row';
 
 const healingSound = require('../environment/sound/zapsplat/zapsplat_fantasy_magic_mystery_glissando_bell_43990.mp3');
 const warpSound = require('../environment/sound/zapsplat/magic_spell_ascending_metallic_pad.mp3');
@@ -70,9 +71,10 @@ const PlayerSpells = ({
             RETURN: 'warp',
         };
         const { name, targetId } = spellCast;
-        let timer: NodeJS.Timeout
+        let timer: NodeJS.Timeout;
         if (name && targetId) {
             playSound(spellSounds[name]);
+            // @ts-ignore
             timer = setTimeout(() => {
                 castSpell(name, targetId);
                 setSpellCast({});
@@ -116,32 +118,46 @@ const PlayerSpells = ({
     const showSpellCost = !isEmpty(availableSpells) && !spellTarget;
 
     return (
-        <div className="player-spells">
-            <h5 className="header">Spells</h5>
+        <ThemedPanel
+            className="player-spells"
+            heading="Spells"
+            flexDirection="column"
+        >
             {spellConfirmed && spellName === 'RETURN' ? (
                 <>
-                    <span>Return to</span>
-                    <OptionPanel {...townMenuProps} />
+                    <Row>
+                        <span>Return to</span>
+                    </Row>
+                    <Row>
+                        <OptionPanel {...townMenuProps} />
+                    </Row>
                 </>
             ) : (
-                <OptionPanel {...spellMenuProps} />
+                <Row>
+                    <OptionPanel {...spellMenuProps} />
+                </Row>
             )}
+
             {showSpellCost && (
-                <span className="spell-cost">
-                    {`Cost ${
-                        spellName
-                            // @ts-ignore
-                            ? find(availableSpells, { spellName }).mpCost
-                            : availableSpells[0].mpCost
-                    }/${playerMp}`}
-                </span>
+                <Row>
+                    <span className="spell-cost">
+                        {`Cost ${
+                            spellName
+                                ? // @ts-ignore
+                                  find(availableSpells, { spellName }).mpCost
+                                : availableSpells[0].mpCost
+                        }/${playerMp}`}
+                    </span>
+                </Row>
             )}
             {spellName && spellTarget && (
-                <span className="spell-status">
-                    {`${playerName} cast ${upperFirst(
-                        spellName.toLowerCase()
-                    )}`}
-                </span>
+                <Row>
+                    <span className="spell-status">
+                        {`${playerName} cast ${upperFirst(
+                            spellName.toLowerCase()
+                        )}`}
+                    </span>
+                </Row>
             )}
             <audio className="heal">
                 <source src={healingSound} />
@@ -149,7 +165,7 @@ const PlayerSpells = ({
             <audio className="warp">
                 <source src={warpSound} />
             </audio>
-        </div>
+        </ThemedPanel>
     );
 };
 

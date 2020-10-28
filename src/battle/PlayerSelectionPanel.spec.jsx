@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import PlayerSelectionPanel from './PlayerSelectionPanel';
 import OptionPanel from './OptionPanel';
+import ThemedHeader from "../components/theme/ThemedHeader";
 
 describe('PlayerSelectionPanel', () => {
     let props;
@@ -26,8 +27,8 @@ describe('PlayerSelectionPanel', () => {
         expect(subject.prop('className')).toEqual('action-options')
     });
 
-    it('has an action label', () => {
-        expect(subject.find('label').text()).toEqual('Heal');
+    it('has an action ThemedHeader', () => {
+        expect(subject.find(ThemedHeader).text()).toEqual('Heal');
     });
 
     describe('OptionPanel', () => {

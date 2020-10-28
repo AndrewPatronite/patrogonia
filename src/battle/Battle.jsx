@@ -9,6 +9,7 @@ import { BattleState } from '../state/BattleState';
 import { subscribe } from '../subscription/subscribe';
 import { playSound, pauseSound } from '../environment/sound/sound';
 import battleMusic from '../environment/sound/crusaderp/BattleNO3.mp3';
+import ThemedPanel from "../components/theme/ThemedPanel";
 
 const Battle = ({
     currentPlayer,
@@ -59,7 +60,7 @@ const Battle = ({
     }, [allMessagesDelivered, battleEnded]);
 
     return (
-        <div className={`battle ${battleStatusClass}`}>
+        <ThemedPanel className={`battle ${battleStatusClass}`} flexDirection="column" padding='0'>
             <audio className="battle-music" autoPlay loop>
                 <source src={battleMusic} />
             </audio>
@@ -100,7 +101,7 @@ const Battle = ({
                     ))}
                 </div>
             )}
-        </div>
+        </ThemedPanel>
     );
 };
 

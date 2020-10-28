@@ -1,5 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { isEmpty } from 'lodash';
+import styled from 'styled-components';
 import './Log.css';
 import { pauseSound, playSound } from '../environment/sound/sound';
 import playerAttackSound from '../environment/sound/FXhome.com/FXhome.com Fighting Swing Sound 02.mp3';
@@ -8,6 +9,18 @@ import levelUpSound from '../environment/sound/zapsplat/cartoon_success_fanfair.
 import partyDestroyedSound from '../environment/sound/zapsplat/cartoon_fail_strings_trumpet.mp3';
 import healingSound from '../environment/sound/zapsplat/zapsplat_fantasy_magic_mystery_glissando_bell_43990.mp3';
 import iceSound from '../environment/sound/zapsplat/sound_spark_Ice_Spell_Elsas_Frozen_Death_Touch_01.mp3';
+import ThemedPanel from '../components/theme/ThemedPanel';
+
+const LogEntry = styled.p`
+    margin: 0;
+`;
+
+const DismissButton = styled.button`
+    margin: 5px 5px 5px 5px;
+    width: 85px;
+    height: 25px;
+    min-height: 25px;
+`;
 
 const Log = ({
     deliveredEntries,
@@ -71,19 +84,25 @@ const Log = ({
             : 'OK';
 
     return (
-        <div className={`log ${statusClass}`}>
+        <ThemedPanel
+            className={`log ${statusClass}`}
+            flexDirection="column"
+            padding="5px"
+        >
             {!isEmpty(deliveredEntries) &&
                 deliveredEntries.map((entry, index) => (
-                    <p key={index}>{entry.content}</p>
+                    <LogEntry className="log-entry" key={index}>
+                        {entry.content}
+                    </LogEntry>
                 ))}
             {showDismiss && allMessagesDelivered && (
-                <button
+                <DismissButton
                     autoFocus={true}
                     className="dismiss-button"
                     onClick={onDismiss}
                 >
                     {getButtonText()}
-                </button>
+                </DismissButton>
             )}
             <div className="scroll-to" ref={scrollTo} />
             <audio className="player-attack">
@@ -104,7 +123,7 @@ const Log = ({
             <audio className="ice">
                 <source src={iceSound} />
             </audio>
-        </div>
+        </ThemedPanel>
     );
 };
 

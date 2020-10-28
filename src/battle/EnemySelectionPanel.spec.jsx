@@ -2,6 +2,7 @@ import React, * as ReactAlias from 'react';
 import { shallow } from 'enzyme';
 import EnemySelectionPanel from './EnemySelectionPanel';
 import OptionPanel from './OptionPanel';
+import ThemedHeader from "../components/theme/ThemedHeader";
 
 describe('EnemySelectionPanel', () => {
     let props;
@@ -31,8 +32,8 @@ describe('EnemySelectionPanel', () => {
         expect(subject.prop('className')).toEqual('action-options');
     });
 
-    it('has an action label', () => {
-        expect(subject.find('label').text()).toEqual('Attack');
+    it('has an action ThemedHeader', () => {
+        expect(subject.find(ThemedHeader).text()).toEqual('Attack');
     });
 
     describe('OptionPanel', () => {

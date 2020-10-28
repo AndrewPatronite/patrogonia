@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import './LoginForm.css';
 import LinkButton from '../control/LinkButton';
+import ThemeSwitch from '../components/theme/ThemeSwitch';
 
 const LoginForm = ({
     login,
@@ -37,14 +37,16 @@ const LoginForm = ({
                 />
             </label>
             <label className="invalid">{errorMessage}</label>
+            <ThemeSwitch />
             <input type="submit" value={'Login'} />
             <LinkButton
                 onClick={() => {
                     setErrorMessage('');
                     createAccountClick();
                 }}
-                label="Create an account"
-            />
+            >
+                Create an account
+            </LinkButton>
         </form>
     );
 };

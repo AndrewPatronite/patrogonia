@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import PlayerPanel from './PlayerPanel';
 import PlayerTurnWizard from './PlayerTurnWizard';
+import ThemedPanel from "../components/theme/ThemedPanel";
 
 describe('PlayerPanel', () => {
     let props;
@@ -33,17 +34,16 @@ describe('PlayerPanel', () => {
         subject = shallow(<PlayerPanel {...props} />);
     });
 
-    it('is a div with the expected classNames', () => {
-        expect(subject.type()).toEqual('div');
+    it('is a ThemedPanel with the expected classNames', () => {
+        expect(subject.type()).toEqual(ThemedPanel);
         expect(subject.prop('className')).toEqual('player-panel dire');
     });
 
     it('has a div containing player stats', () => {
         const playerStats = subject.find('.player-stats');
-        expect(playerStats.type()).toEqual('div');
         const statsLabels = playerStats.find('label');
         expect(statsLabels.length).toEqual(4);
-        expect(statsLabels.at(0).text()).toEqual('Redwan');
+        expect(statsLabels.at(0).text()).toEqual('Player: Redwan');
         expect(statsLabels.at(1).text()).toEqual('Level: 5');
         expect(statsLabels.at(2).text()).toEqual('HP: 50/54');
         expect(statsLabels.at(3).text()).toEqual('MP: 5/10');

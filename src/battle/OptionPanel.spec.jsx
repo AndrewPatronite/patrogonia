@@ -21,8 +21,7 @@ describe('OptionPanel', () => {
         subject = shallow(<OptionPanel {...props} />);
     });
 
-    it('is a div with the expected class', () => {
-        expect(subject.type()).toEqual('div');
+    it('has the expected class', () => {
         expect(subject.prop('className')).toEqual('option-panel');
     });
 

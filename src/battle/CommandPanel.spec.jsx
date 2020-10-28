@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import CommandPanel from './CommandPanel';
 import OptionPanel from './OptionPanel';
+import ThemedHeader from "../components/theme/ThemedHeader";
 
 describe('CommandPanel', () => {
     let props;
@@ -29,7 +30,7 @@ describe('CommandPanel', () => {
     });
 
     it('has a command label', () => {
-        expect(subject.find('label').text()).toEqual('Command');
+        expect(subject.find(ThemedHeader).text()).toEqual('Command');
     });
 
     describe('OptionPanel', () => {

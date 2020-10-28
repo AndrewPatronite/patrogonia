@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { upperFirst } from 'lodash';
 import OptionPanel from './OptionPanel';
+import ThemedHeader from '../components/theme/ThemedHeader';
+import { ThemeContext } from '../components/theme/ThemeContext';
 
 const EnemySelectionPanel = ({
     enemies,
@@ -11,6 +13,7 @@ const EnemySelectionPanel = ({
     selectedEnemyId,
     playerTurnEnabled,
 }) => {
+    const { theme } = useContext(ThemeContext);
     const options = enemies.map(({ id, name }) => ({
         value: id,
         display: name,
@@ -24,7 +27,7 @@ const EnemySelectionPanel = ({
 
     return (
         <div className="action-options">
-            <label>{upperFirst(action)}</label>
+            <ThemedHeader theme={theme}>{upperFirst(action)}</ThemedHeader>
             <OptionPanel
                 options={options}
                 onBack={handleBack}

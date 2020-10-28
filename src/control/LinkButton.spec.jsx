@@ -9,11 +9,11 @@ describe('LinkButton', () => {
     };
 
     it('is a button with the expected props', () => {
-        const subject = shallow(<LinkButton {...props} />);
+        const subject = shallow(<LinkButton {...props}>Whatchamacallit</LinkButton>);
         expect(subject.type()).toEqual('button');
         expect(subject.props()).toEqual({
             type: 'button',
-            className: 'link-button',
+            className: 'link-button light',
             onClick: props.onClick,
             children: 'Whatchamacallit'
         });

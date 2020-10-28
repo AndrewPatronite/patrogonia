@@ -1,12 +1,3 @@
-.battle {
-    background-color: #fafafa;
-    border: 5px solid white;
-    border-radius: 5px;
-    display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
-}
-
 .enemies {
     display: flex;
     justify-content: space-evenly;
@@ -14,6 +5,8 @@
     height: 568px;
     max-height: 568px;
     background-size: cover;
+    background-color: white;
+    margin: 1px;
 }
 
 .enemy {
@@ -53,13 +46,8 @@
     border: 3px solid #3734ff;
 }
 
-.log {
-    margin: 1px 1px 1px 1px;
-    display: flex;
-    flex: 1 1 auto;
-    color: #606060;
-    font-size: 15px;
-    border: 5px solid white;
+.battle .log {
+    margin: 1px;
 }
 
 .players {
@@ -69,58 +57,10 @@
     max-height: 150px;
 }
 
-.player-panel {
-    padding: 5px 5px 5px 5px;
-    border: 5px solid white;
-    border-radius: 5px;
-    display: flex;
+.battle.dire {
+    border: 2px solid #e31e2d;
 }
 
-.player-panel > .player-stats {
-    display: flex;
-    flex-direction: column;
-    margin-right: 20px;
-    max-height: 90px;
-}
-
-label {
-    font-size: 15px;
-    color: #606060;
-}
-
-.action-options {
-    display: flex;
-    flex-direction: column;
-    max-height: 90px;
-}
-
-p {
-    margin: 0;
-}
-
-.option-panel {
-    display: flex;
-    align-items: center;
-    margin-left: 25px;
-}
-
-.option-select {
-    max-height: 90px;
-    min-width: 80px;
-    color: #606060;
-    background-color: #ffffff;
-    border-radius: 3px;
-}
-
-.option-select-selected {
-    color: #606060;
-    background-color: #aaaaaa;
-}
-
-.dire {
-    border: 5px solid #e31e2d;
-}
-
-.death {
-    border: 5px solid black;
+.battle.death {
+    border: 2px solid black;
 }

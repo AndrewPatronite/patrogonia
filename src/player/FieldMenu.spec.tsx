@@ -6,6 +6,7 @@ import Spell from './Spell';
 import OptionPanel from '../battle/OptionPanel';
 import PlayerStatsPanel from './PlayerStatsPanel';
 import PlayerSpells from './PlayerSpells';
+import ThemedPanel from "../components/theme/ThemedPanel";
 
 describe('FieldMenu', () => {
     const availableSpells: Spell[] = [
@@ -89,10 +90,11 @@ describe('FieldMenu', () => {
                 right: 'auto',
                 bottom: 'auto',
                 marginRight: '-50%',
+                maxWidth: '339px',
                 transform: 'translate(5%, 5%)',
             },
         });
-        expect(subject.find('.field-menu').type()).toEqual('div');
+        expect(subject.find('.field-menu').type()).toEqual(ThemedPanel);
     });
 
     it('calls closeFieldMenu when requested', () => {
@@ -110,6 +112,10 @@ describe('FieldMenu', () => {
                     value: 'spells',
                     display: 'Spells',
                     disabled: false,
+                },
+                {
+                    display: 'Options',
+                    value: 'playerOptions',
                 },
             ],
             onBack: jasmine.any(Function),
@@ -132,6 +138,10 @@ describe('FieldMenu', () => {
                     value: 'spells',
                     display: 'Spells',
                     disabled: true,
+                },
+                {
+                    display: 'Options',
+                    value: 'playerOptions',
                 },
             ],
             onBack: jasmine.any(Function),
@@ -246,7 +256,6 @@ describe('FieldMenu', () => {
             const playerSpells = subject.find(PlayerSpells);
             playerSpells.prop('onBack')();
             expect(optionPanelRef.current.focus).toHaveBeenCalled();
-            expect(setMenuChoice).toHaveBeenCalledWith('playerStats');
         });
     });
 });

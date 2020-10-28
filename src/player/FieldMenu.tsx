@@ -1,12 +1,13 @@
 import React, { useRef, useState } from 'react';
 import { filter, isEmpty } from 'lodash';
 import Modal from 'react-modal';
-import './FieldMenu.css';
 import Player from './Player';
 import OptionPanel from '../battle/OptionPanel';
 import PlayerStatsPanel from './PlayerStatsPanel';
 import PlayerSpells from './PlayerSpells';
 import { Maps } from '../environment/maps/Maps';
+import PlayerOptions from './PlayerOptions';
+import ThemedPanel from '../components/theme/ThemedPanel';
 
 const FieldMenu = ({
     showFieldMenu,
@@ -51,11 +52,12 @@ const FieldMenu = ({
                         onBack={() => {
                             // @ts-ignore
                             optionPanelRef.current.focus();
-                            setMenuChoice('playerStats');
                         }}
                         castSpell={castSpell}
                     />
                 );
+            case 'playerOptions':
+                return <PlayerOptions />;
             case 'playerStats':
             default:
                 return <PlayerStatsPanel playerStats={currentPlayer.stats} />;
@@ -73,6 +75,7 @@ const FieldMenu = ({
                 menuChoice === 'playerStats'
                     ? 'translate(5%, 5%)'
                     : 'translate(5%, 10%)',
+            maxWidth: '339px'
         },
     };
 
@@ -84,6 +87,7 @@ const FieldMenu = ({
                 display: 'Spells',
                 disabled: isEmpty(availableSpells),
             },
+            { value: 'playerOptions', display: 'Options' },
         ],
         onBack: () => {},
         onNext: () => {},
@@ -100,10 +104,11 @@ const FieldMenu = ({
             onRequestClose={closeFieldMenu}
             style={modalStyle}
         >
-            <div className="field-menu">
+            <ThemedPanel className="field-menu" padding="0">
+                &nbsp;
                 <OptionPanel {...fieldMenuProps} ref={optionPanelRef} />
                 {displayMenuOption()}
-            </div>
+            </ThemedPanel>
         </Modal>
     );
 };

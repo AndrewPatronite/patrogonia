@@ -4,7 +4,15 @@
     cursor: pointer;
     text-decoration: underline;
     display: inline;
-    padding: 0;
+    padding: 4px;
+}
+
+.link-button.light {
+    color: blue;
+}
+
+.link-button.dark {
+    color: white;
 }
 
 .link-button:hover,

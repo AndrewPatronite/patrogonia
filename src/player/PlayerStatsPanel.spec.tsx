@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import PlayerStatsPanel from './PlayerStatsPanel';
+import ThemedPanel from "../components/theme/ThemedPanel";
 
 describe('PlayerStatsPanel', () => {
     let props;
@@ -26,16 +27,13 @@ describe('PlayerStatsPanel', () => {
         subject = shallow(<PlayerStatsPanel {...props} />);
     });
 
-    it('is a div with the expected props', () => {
-        expect(subject.type()).toEqual('div');
+    it('is a ThemedPanel with the expected props', () => {
+        expect(subject.type()).toEqual(ThemedPanel);
         expect(subject.prop('className')).toEqual('player-stats-panel');
+        expect(subject.prop('width')).toEqual('175px');
+        expect(subject.prop('heading')).toEqual('Stats');
+        expect(subject.prop('flexDirection')).toEqual('column');
     });
-
-    it('has a header with a class name and Stats', () => {
-        const header = subject.find('.header')
-        expect(header.type()).toEqual('h5')
-        expect(header.text()).toEqual('Stats')
-    })
 
     it('has player stats housing individual stats', () => {
         const verifyStat = (
