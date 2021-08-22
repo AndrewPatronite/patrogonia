@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { has } from 'lodash';
 import PlayerTurnWizard from './PlayerTurnWizard';
 import styled from 'styled-components';
 import ThemedPanel from '../components/theme/ThemedPanel';
-import './PlayerPanel.css'
+import './PlayerPanel.css';
 
 const PlayerStats = styled.div`
     display: flex;

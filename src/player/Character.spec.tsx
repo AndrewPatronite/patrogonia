@@ -2,13 +2,13 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Character from './Character';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Player from "./Player";
+import Player from './Player';
 
 describe('Character', () => {
     interface Props {
-        player: Player,
-        isCurrentPlayer: boolean,
-        isSaveLocation: boolean
+        player: Player;
+        isCurrentPlayer: boolean;
+        isSaveLocation: boolean;
     }
     let props: Props;
 
@@ -22,7 +22,12 @@ describe('Character', () => {
         props = {
             player: {
                 name: 'Redwan',
-                location: { facing, rowIndex: 1, columnIndex: 2, mapName: 'Lava Grotto' },
+                location: {
+                    facing,
+                    rowIndex: 1,
+                    columnIndex: 2,
+                    mapName: 'Lava Grotto',
+                },
                 battleId,
                 lastUpdate,
                 id: 1,
@@ -42,7 +47,7 @@ describe('Character', () => {
                     attack: 5,
                     defense: 5,
                     agility: 5,
-                }
+                },
             },
             isCurrentPlayer,
             isSaveLocation,
@@ -86,7 +91,7 @@ describe('Character', () => {
 
     it('shows a heal-n-save notification when current user is at a save location', () => {
         const subject = getCharacter('right', undefined, undefined, true, true);
-        const saved = subject.find('.saved');
+        const saved = subject.find('.fade');
         const notifications = saved.find('p');
         expect(notifications.length).toEqual(2);
         expect(notifications.at(0).text()).toEqual('HP/MP restored');

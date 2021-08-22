@@ -17,6 +17,7 @@ import FieldMenu1 from './screenshots/fieldmenu1.png';
 import FieldMenu2 from './screenshots/fieldmenu2.png';
 import { ThemeContext } from '../components/theme/ThemeContext';
 import LinkButton from '../control/LinkButton';
+import { Link } from 'react-router-dom';
 
 const HowToPlayDiv = styled.div`
     display: flex;
@@ -35,6 +36,7 @@ const HowToPlayDiv = styled.div`
             width: 50px;
             height: 25px;
             min-height: 25px;
+            font-size: 16px;
         }
     }
 
@@ -233,28 +235,21 @@ const Instructions = [
     Defeat,
 ];
 
-const HowToPlay = ({ onDismiss }) => {
+const HowToPlay = ({ nextPath }) => {
     const [instructionIndex, setInstructionIndex] = useState(0);
     const nextButtonRef = useRef(null);
     const { theme } = useContext(ThemeContext);
     const Instruction = Instructions[instructionIndex];
     const isFirstInstruction = instructionIndex === 0;
     const isLastInstruction = instructionIndex === Instructions.length - 1;
+    const isLightTheme = theme.name === 'light'
 
     const handleBackClick = () => {
-        if (isFirstInstruction) {
-            onDismiss();
-        } else {
-            setInstructionIndex(instructionIndex - 1);
-        }
+        setInstructionIndex(instructionIndex - 1);
     };
 
     const handleNextClick = () => {
-        if (isLastInstruction) {
-            onDismiss();
-        } else {
-            setInstructionIndex(instructionIndex + 1);
-        }
+        setInstructionIndex(instructionIndex + 1);
     };
 
     useLayoutEffect(() => {
@@ -264,16 +259,45 @@ const HowToPlay = ({ onDismiss }) => {
     return (
         <HowToPlayDiv className="how-to-play" theme={theme}>
             <div className="navigation-buttons">
-                <LinkButton className="back-button" onClick={handleBackClick}>
-                    {isFirstInstruction ? 'Skip' : 'Back'}
-                </LinkButton>
-                <LinkButton
-                    ref={nextButtonRef}
-                    className="next-button"
-                    onClick={handleNextClick}
-                >
-                    {isLastInstruction ? 'Play' : 'Next'}
-                </LinkButton>
+                {isFirstInstruction ? (
+                    <Link
+                        className={
+                            isLightTheme
+                                ? 'link-button light'
+                                : 'link-button dark'
+                        }
+                        to={nextPath}
+                    >
+                        Skip
+                    </Link>
+                ) : (
+                    <LinkButton
+                        className="back-button"
+                        onClick={handleBackClick}
+                    >
+                        Back
+                    </LinkButton>
+                )}
+                {isLastInstruction ? (
+                    <Link
+                        className={
+                            isLightTheme
+                                ? 'link-button light'
+                                : 'link-button dark'
+                        }
+                        to={nextPath}
+                    >
+                        Play
+                    </Link>
+                ) : (
+                    <LinkButton
+                        ref={nextButtonRef}
+                        className="next-button"
+                        onClick={handleNextClick}
+                    >
+                        Next
+                    </LinkButton>
+                )}
             </div>
             <Instruction />
         </HowToPlayDiv>

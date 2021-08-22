@@ -7,8 +7,9 @@ import HttpStatus from '../state/api/HttpStatus';
 import preval from 'preval.macro';
 import { faDragon } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import LinkButton from '../control/LinkButton';
 import { ThemeContext } from '../components/theme/ThemeContext';
+import { Link } from 'react-router-dom';
+import '../control/LinkButton.css';
 
 const LandingDiv = styled.div`
     background-color: ${(props) => props.theme.backgroundColor};
@@ -79,11 +80,12 @@ const LandingFooter = styled.div`
     }
 `;
 
-const Landing = ({ login, createAccount, showInstructions }) => {
+const Landing = ({ login, createAccount }) => {
     const [returning, setReturning] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
     const lastUpdate = preval`module.exports = new Date().toLocaleString();`;
     const { theme } = useContext(ThemeContext);
+    const isLightTheme = theme.name === 'light';
 
     const handleCreateAccount = (player) =>
         createAccount(player, (error) => {
@@ -127,9 +129,14 @@ const Landing = ({ login, createAccount, showInstructions }) => {
                 <FontAwesomeIcon icon={faDragon} />
                 <label>Last update: {lastUpdate}</label>
                 <label>Recommended: Chrome with viewport: 1000 x 1000</label>
-                <LinkButton onClick={() => showInstructions()}>
+                <Link
+                    className={
+                        isLightTheme ? 'link-button light' : 'link-button dark'
+                    }
+                    to="/how-to-play"
+                >
                     How to play
-                </LinkButton>
+                </Link>
                 <Credits />
             </LandingFooter>
         </LandingDiv>

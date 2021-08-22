@@ -1,6 +1,8 @@
-import Map from './Map'
+import Map from './Map';
 import { Legend } from './Legend';
-import Entrance from "./Entrance";
+import Entrance from './Entrance';
+import { Nigel, Tristan, Alastair, Barnaby } from '../../npcs';
+import { Finlay } from '../../npcs/Npcs';
 
 const {
     WATER: W,
@@ -17,8 +19,19 @@ export const Maps = {
         return [G, D, F].includes(nextPosition) || this.isTown(nextPosition);
     },
 
+    isSaveLocation(position: string): boolean {
+        return ['Dewhurst', 'Fernsworth', 'Easthaven'].includes(position);
+    },
+
     isTravelDestination(name: string): boolean {
-        return ['Atoris', 'Lava Grotto', 'Grimes'].includes(name);
+        return [
+            'Dewhurst',
+            'Atoris',
+            'Lava Grotto',
+            'Grimes',
+            'Fernsworth',
+            'Easthaven',
+        ].includes(name);
     },
 
     isTown(name: string): boolean {
@@ -33,7 +46,7 @@ export const Maps = {
         return ['Atoris', 'Grimes'].includes(name);
     },
 
-    'Atoris'(entranceName: string = 'start'): Map {
+    Atoris(entranceName: string = 'start'): Map {
         return {
             name: 'Atoris',
             layout: [
@@ -49,18 +62,156 @@ export const Maps = {
                 [W, W, W, F, F, W, W, W, W, W, W, W, W],
                 [W, W, W, W, W, W, W, W, W, W, W, W, W],
             ],
-            entrance: ((): Entrance => { const entrances: Record<string, Entrance> = {
-                start: {
-                    rowIndex: 6,
-                    columnIndex: 7,
-                },
-                'Lava Grotto': {
-                    rowIndex: 7,
-                    columnIndex: 4,
-                },
-            }
-            return entrances[entranceName]})(),
+            entrance: ((): Entrance => {
+                const entrances: Record<string, Entrance> = {
+                    start: {
+                        rowIndex: 6,
+                        columnIndex: 7,
+                    },
+                    'Lava Grotto': {
+                        rowIndex: 7,
+                        columnIndex: 4,
+                    },
+                };
+                return entrances[entranceName];
+            })(),
+            npcs: [],
         };
+    },
+
+    Dewhurst(entranceName: string = 'Atoris'): Map {
+        // prettier-ignore
+        return {
+            name: 'Dewhurst',
+            layout: [
+                [W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W],
+                [W, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F],
+                [W, F, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, F],
+                [W, F, R, G, G, G, G, G, G, G, G, G, G, G, F, G, G, F, G, G, G, G, G, R, F],
+                [W, F, R, G, R, R, R, R, R, R, R, G, G, G, G, F, G, G, F, G, G, G, G, R, F],
+                [W, F, R, G, R, D, R, R, R, D, R, G, G, G, F, G, F, G, G, G, G, G, G, R, F],
+                [W, F, R, G, R, D, D, D, D, D, R, G, G, G, G, G, G, F, G, G, G, G, G, R, F],
+                [W, F, R, G, R, R, R, D, R, R, R, G, G, G, G, G, G, F, G, G, G, G, G, R, F],
+                [W, F, R, G, R, D, D, D, D, D, R, G, G, G, G, G, G, G, D, D, D, D, D, D, D],
+                [W, F, R, G, R, R, R, D, R, R, R, G, G, G, G, G, G, G, D, G, G, G, G, R, F],
+                [W, F, R, G, G, G, G, D, G, G, G, G, G, G, G, G, D, D, D, G, F, F, G, R, F],
+                [W, F, R, G, G, G, G, D, D, D, G, G, G, G, G, G, D, G, G, G, F, G, G, R, F],
+                [W, F, R, G, G, G, G, G, G, D, G, G, G, G, D, D, D, G, F, F, G, F, G, R, F],
+                [W, F, R, G, G, G, G, G, G, D, G, G, G, G, D, G, G, G, F, G, F, F, G, R, F],
+                [W, F, R, G, G, G, G, D, D, D, D, D, D, D, D, D, D, G, G, F, G, F, G, R, F],
+                [W, F, R, G, G, G, G, D, G, G, G, G, G, G, G, G, D, D, G, G, G, G, F, R, F],
+                [W, F, R, G, G, G, G, D, G, G, G, G, G, G, G, G, G, D, D, G, G, F, G, R, F],
+                [W, F, R, G, G, D, D, D, G, G, G, G, G, G, G, G, G, G, D, G, G, G, G, R, F],
+                [W, F, R, G, G, D, G, G, G, G, G, G, G, G, G, G, G, G, D, G, G, G, G, R, F],
+                [W, F, R, G, G, D, G, G, G, G, G, G, G, G, G, R, R, R, D, R, R, R, G, R, F],
+                [W, F, R, G, F, D, G, G, F, G, G, G, G, G, G, R, D, D, D, D, D, R, G, R, F],
+                [W, F, R, F, F, D, F, F, G, G, G, G, G, G, G, R, D, D, D, D, D, R, G, R, F],
+                [W, F, R, F, F, W, F, F, G, G, G, G, G, G, G, R, R, D, D, D, R, R, G, R, F],
+                [W, F, R, F, W, W, W, F, F, G, F, G, G, G, G, R, D, D, R, D, D, R, G, R, F],
+                [W, W, W, W, W, W, W, W, F, G, G, G, G, G, G, R, D, D, R, D, D, R, G, R, F],
+                [W, F, R, F, W, W, W, F, F, F, G, G, G, G, G, R, D, D, R, D, D, R, G, R, F],
+                [W, F, R, F, F, W, F, F, F, G, G, G, G, G, G, R, R, R, R, R, R, R, G, R, F],
+                [W, F, R, F, F, F, F, F, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, R, F],
+                [W, F, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, F],
+                [W, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F],
+                [W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W]
+            ],
+            entrance: {
+                rowIndex: 8,
+                columnIndex: 24
+            },
+            exit: {
+                mapName: 'Atoris',
+                rowIndex: 6,
+                columnIndex: 7,
+            },
+            npcs: [Alastair, Barnaby]
+        }
+    },
+
+    Fernsworth(entranceName = 'Grimes'): Map {
+        // prettier-ignore
+        return {
+            name: 'Fernsworth',
+            layout: [
+                [M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M],
+                [F, F, G, F, F, G, F, F, F, F, G, F, F, F, G, F, F, F, G, F, F, F, M],
+                [G, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, F, M],
+                [F, R, G, G, G, G, G, G, F, G, G, G, F, G, G, G, F, F, F, G, R, G, M],
+                [F, R, G, F, G, F, G, G, G, G, F, G, F, G, G, G, G, F, F, G, R, F, M],
+                [F, R, G, G, G, G, G, G, F, G, G, G, F, G, G, G, F, G, F, F, R, G, M],
+                [G, R, G, R, R, R, R, R, G, F, G, G, G, G, F, G, G, F, G, G, R, F, M],
+                [F, R, G, R, D, D, D, R, G, G, G, G, G, F, G, G, G, G, F, G, R, F, M],
+                [F, R, G, R, D, D, D, R, F, G, G, G, G, G, R, R, R, R, R, G, R, G, M],
+                [F, R, G, R, D, D, D, R, G, G, G, G, G, G, R, D, D, D, R, G, R, F, M],
+                [F, R, G, R, R, D, R, R, G, G, G, G, G, G, R, R, D, R, R, G, R, F, M],
+                [F, R, G, G, G, D, G, G, G, G, G, G, G, G, R, D, D, D, R, G, R, F, M],
+                [F, R, G, G, G, D, G, G, G, G, G, G, G, G, R, R, D, R, R, G, R, G, M],
+                [D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, G, G, G, R, F, M],
+                [F, R, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, R, G, M],
+                [G, R, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, R, F, M],
+                [F, R, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, R, F, M],
+                [F, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, F, M],
+                [F, F, G, G, F, F, G, F, G, F, F, F, G, F, F, G, F, F, F, G, G, F, M],
+                [M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M]
+            ],
+            entrance: {
+                rowIndex: 13,
+                columnIndex: 0
+            },
+            exit: {
+                mapName: 'Grimes',
+                rowIndex: 8,
+                columnIndex: 16,
+            },
+            npcs:[Finlay]
+        }
+    },
+
+    Easthaven(entranceName = 'Grimes'): Map {
+        // prettier-ignore
+        return {
+            name: 'Easthaven',
+            layout: [
+                [F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F],
+                [F, W, W, W, W, W, W, W, W, W, W, W, D, W, W, W, W, W, W, W, W, W, W, W, F],
+                [F, W, R, R, R, R, R, R, R, R, R, R, D, R, R, R, R, R, R, R, R, R, R, W, F],
+                [F, W, R, G, G, G, G, G, G, G, G, G, D, G, G, G, G, G, G, G, G, G, R, W, F],
+                [F, W, R, G, R, R, R, R, R, G, G, G, D, G, G, G, G, G, G, G, G, G, R, W, F],
+                [F, W, R, G, R, D, D, D, R, G, G, G, D, G, G, G, G, G, G, G, G, G, R, W, F],
+                [F, W, R, G, R, D, D, D, R, G, G, G, D, G, G, G, G, G, G, G, G, G, R, W, F],
+                [F, W, R, G, R, D, D, D, R, G, G, G, D, G, G, G, G, G, G, G, G, G, R, W, F],
+                [F, W, R, G, R, R, D, R, R, G, G, G, D, G, G, G, G, G, G, G, G, G, R, W, F],
+                [F, W, R, G, G, G, D, G, G, G, G, G, D, G, G, G, G, G, G, G, G, G, R, W, F],
+                [F, W, R, G, G, G, D, D, G, G, G, G, D, G, G, G, G, G, G, G, G, G, R, W, F],
+                [F, W, R, G, G, G, G, D, G, G, G, D, D, D, G, G, G, G, G, G, G, G, R, W, F],
+                [F, W, R, G, G, G, G, D, G, G, D, D, W, D, D, G, G, G, G, G, G, G, R, W, F],
+                [F, D, D, D, D, D, D, D, D, D, D, W, W, W, D, D, D, D, D, D, D, D, D, D, F],
+                [F, W, R, G, G, G, G, G, G, G, D, D, W, D, D, G, G, D, G, G, G, G, R, W, F],
+                [F, W, R, G, G, G, G, G, G, G, G, D, D, D, G, G, G, D, G, G, G, G, R, W, F],
+                [F, W, R, G, G, G, G, G, G, G, G, G, D, G, G, G, G, D, D, G, G, G, R, W, F],
+                [F, W, R, G, G, G, G, G, G, G, G, G, D, G, G, G, G, G, D, G, G, G, R, W, F],
+                [F, W, R, G, G, G, G, G, G, G, G, G, D, G, G, G, R, R, D, R, R, G, R, W, F],
+                [F, W, R, G, G, G, G, G, G, G, G, G, D, G, G, G, R, D, D, D, R, G, R, W, F],
+                [F, W, R, G, G, G, G, G, G, G, G, G, D, G, G, G, R, D, D, D, R, G, R, W, F],
+                [F, W, R, G, G, G, G, G, G, G, G, G, D, G, G, G, R, D, D, D, R, G, R, W, F],
+                [F, W, R, G, G, G, G, G, G, G, G, G, D, G, G, G, R, R, R, R, R, G, R, W, F],
+                [F, W, R, G, G, G, G, G, G, G, G, G, D, G, G, G, G, G, G, G, G, G, R, W, F],
+                [F, W, R, R, R, R, R, R, R, R, R, R, D, R, R, R, R, R, R, R, R, R, R, W, F],
+                [F, W, W, W, W, W, W, W, W, W, W, W, D, W, W, W, W, W, W, W, W, W, W, W, F],
+                [F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F],
+            ],
+            entrance: {
+                rowIndex: 13,
+                columnIndex: 0,
+            },
+            exit: {
+                mapName: 'Grimes',
+                rowIndex: 12,
+                columnIndex: 42,
+            },
+            npcs: [Nigel, Tristan]
+        }
     },
 
     'Lava Grotto'(entranceName = 'Atoris'): Map {
@@ -119,10 +270,11 @@ export const Maps = {
                 },
             }
             return entrances[entranceName]})(),
+            npcs: []
         };
     },
 
-    'Grimes'(): Map {
+    Grimes(): Map {
         // prettier-ignore
         return {
             name: 'Grimes',
@@ -162,6 +314,7 @@ export const Maps = {
                 rowIndex: 21,
                 columnIndex: 7,
             },
+            npcs: []
         };
     },
 };

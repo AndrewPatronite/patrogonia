@@ -8,6 +8,7 @@ const TileRow = ({
     displayIndexRange: { columnStartIndex, columnEndIndex },
     mapLayout,
     currentPlayer,
+    npcs,
 }) => (
     <div className="row">
         {rowSymbols
@@ -23,6 +24,7 @@ const TileRow = ({
                     locationToPlayersMap={locationToPlayersMap}
                     mapLayout={mapLayout}
                     currentPlayer={currentPlayer}
+                    npcs={npcs}
                 />
             ))}
     </div>

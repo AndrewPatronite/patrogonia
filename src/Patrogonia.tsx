@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import Battle from './battle/Battle';
-import World from './environment/field/World';
+import React, { useEffect } from 'react';
+import { Route, useHistory, Switch } from 'react-router-dom';
+import { PlayerState } from './state/PlayerState';
 import Landing from './landing/Landing';
 import HowToPlay from './instructions/HowToPlay';
-import { PlayerState } from './state/PlayerState';
-import { playerNavigationEffect } from './navigation/playerNavigationEffect';
+import World from './environment/field/World';
+import Battle from './battle/Battle';
 import './Patrogonia.css';
+import PermissionRoute from './PermissionRoute';
 
 const Patrogonia = () => {
-    const playerUrl = `${process.env.REACT_APP_WEBSOCKET_BASE_URL}/players`;
     const battleUrl = `${process.env.REACT_APP_WEBSOCKET_BASE_URL}/battles`;
     const [
         currentPlayer,
@@ -19,58 +19,64 @@ const Patrogonia = () => {
         loadSave,
         castSpell,
     ] = PlayerState();
-
-    useEffect(playerNavigationEffect(currentPlayer, updatePlayer), [
-        currentPlayer,
-    ]);
-
-    const [showInstructions, setShowInstructions] = useState(
-        currentPlayer.loggedIn && !currentPlayer.skipInstructions
-    );
+    const history = useHistory();
 
     useEffect(() => {
-        if (currentPlayer.loggedIn && !currentPlayer.skipInstructions) {
-            setShowInstructions(true);
+        const {
+            location: { pathname },
+        } = history;
+        let nextPath;
+
+        if (!currentPlayer.loggedIn) {
+            nextPath = '/login';
+        } else if (!currentPlayer.skipInstructions) {
+            updatePlayer({ ...currentPlayer, skipInstructions: true }, false);
+            nextPath = '/how-to-play';
+        } else if (currentPlayer.battleId) {
+            nextPath = '/battle';
+        } else {
+            nextPath = '/field';
         }
-    }, [currentPlayer.loggedIn, currentPlayer.skipInstructions]);
-
-    const skipInstructions = (shouldSkip: boolean) => {
-        setShowInstructions(false);
-        updatePlayer({ ...currentPlayer, skipInstructions: shouldSkip }, false);
-    };
-
-    const closeFieldMenu = () =>
-        updatePlayer({ ...currentPlayer, showFieldMenu: false }, false);
+        if (nextPath !== pathname) {
+            history.replace(nextPath);
+        }
+    }, [currentPlayer, history, updatePlayer]);
 
     return (
-        <div className="patrogonia">
-            {showInstructions ? (
-                <HowToPlay onDismiss={() => skipInstructions(true)} />
-            ) : currentPlayer.loggedIn ? (
-                currentPlayer.battleId ? (
-                    <Battle
-                        currentPlayer={currentPlayer}
-                        loadPlayer={loadPlayer}
-                        updatePlayer={updatePlayer}
-                        battleUrl={battleUrl}
-                        loadSave={loadSave}
-                    />
-                ) : (
+        <Switch>
+            <Route path="/how-to-play">
+                <HowToPlay
+                    nextPath={currentPlayer.loggedIn ? '/field' : '/login'}
+                />
+            </Route>
+            <PermissionRoute
+                hasPermission={currentPlayer.loggedIn}
+                path="/battle"
+            >
+                <Battle
+                    currentPlayer={currentPlayer}
+                    loadPlayer={loadPlayer}
+                    updatePlayer={updatePlayer}
+                    battleUrl={battleUrl}
+                    loadSave={loadSave}
+                />
+            </PermissionRoute>
+            <PermissionRoute
+                hasPermission={currentPlayer.loggedIn}
+                path="/field"
+            >
+                <div className="patrogonia">
                     <World
                         currentPlayer={currentPlayer}
-                        playerUrl={playerUrl}
-                        closeFieldMenu={closeFieldMenu}
                         castSpell={castSpell}
+                        updatePlayer={updatePlayer}
                     />
-                )
-            ) : (
-                <Landing
-                    login={login}
-                    createAccount={createAccount}
-                    showInstructions={() => setShowInstructions(true)}
-                />
-            )}
-        </div>
+                </div>
+            </PermissionRoute>
+            <Route path={['/', '/login']}>
+                <Landing login={login} createAccount={createAccount} />
+            </Route>
+        </Switch>
     );
 };
 

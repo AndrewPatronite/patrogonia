@@ -35,7 +35,9 @@ const FieldMenu = ({
                     canCast = Maps.isCave(currentPlayer.location.mapName);
                     break;
                 case 'RETURN':
-                    canCast = Maps.isField(currentPlayer.location.mapName);
+                    canCast =
+                        Maps.isField(currentPlayer.location.mapName) ||
+                        Maps.isTown(currentPlayer.location.mapName);
                     break;
             }
         }
@@ -75,7 +77,7 @@ const FieldMenu = ({
                 menuChoice === 'playerStats'
                     ? 'translate(5%, 5%)'
                     : 'translate(5%, 10%)',
-            maxWidth: '339px'
+            maxWidth: '339px',
         },
     };
 

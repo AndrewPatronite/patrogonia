@@ -1,4 +1,4 @@
-export const Direction = {
+export const DirectionKeyMapper = {
     isDirectionKey(key) {
         return [
             'ArrowUp',

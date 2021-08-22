@@ -5,6 +5,7 @@ import { getBorderClasses } from './helper/getBorderClasses';
 import Character from '../../player/Character';
 import { getTileKey } from './helper/getTileKey';
 import { Maps } from '../maps/Maps';
+import { isAdjacentToCurrentPlayer } from '../../utils';
 
 const Tile = ({
     mapSymbol,
@@ -13,6 +14,7 @@ const Tile = ({
     locationToPlayersMap,
     mapLayout,
     currentPlayer,
+    npcs,
 }) => {
     const { id: currentPlayerId } = currentPlayer;
     const isTown = Maps.isTown(mapSymbol);
@@ -35,6 +37,19 @@ const Tile = ({
     const tileKey = getTileKey(rowIndex, columnIndex);
     const playersOnTile = locationToPlayersMap[tileKey];
     const playerToDisplay = getPlayerToDisplay(playersOnTile, currentPlayerId);
+    const npcToDisplay = npcs.find(
+        (npc) =>
+            npc.currentRowIndex === rowIndex &&
+            npc.currentColumnIndex === columnIndex
+    );
+
+    const npcInDialogRange =
+        npcToDisplay &&
+        isAdjacentToCurrentPlayer(
+            currentPlayer,
+            npcToDisplay.currentRowIndex,
+            npcToDisplay.currentColumnIndex
+        );
     return (
         <div
             key={tileKey}
@@ -52,6 +67,18 @@ const Tile = ({
                 />
             ) : (
                 entranceName && <p>{entranceName}</p>
+            )}
+            {npcToDisplay && (
+                <Character
+                    player={{
+                        name: npcToDisplay.name,
+                        location: { facing: npcToDisplay.directionFacing },
+                        lastUpdate: new Date().toString(),
+                    }}
+                    isCurrentPlayer={false}
+                    isSaveLocation={false}
+                    inDialogRange={npcInDialogRange}
+                />
             )}
         </div>
     );

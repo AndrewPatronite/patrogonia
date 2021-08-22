@@ -8,10 +8,27 @@
     left: 5px;
 }
 
-.player > .fa-campground {
+.player > .fa-campground, .fa-info-circle, .info-prompt {
     position: absolute;
     top: 0;
     left: 5px;
+}
+
+@keyframes fade-out-opaque {
+    0% {
+        opacity: 50%;
+        visibility: visible;
+    }
+
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+.player > .info-prompt {
+    margin-left: 20px;
+    animation: fade-out-opaque 3s ease-in 0.2s forwards;
 }
 
 @keyframes hero-up {
@@ -242,7 +259,7 @@
     color: gold;
 }
 
-@keyframes saved-fade {
+@keyframes fade-out {
     0% {
         opacity: 1;
         visibility: visible;
@@ -254,12 +271,12 @@
     }
 }
 
-.saved {
+.fade {
     position: absolute;
     bottom: 10px;
     max-width: 100px;
     color: white;
     font-size: 13px;
-    animation: saved-fade 3s ease-in 0.2s forwards;
+    animation: fade-out 3s ease-in 0.2s forwards;
     text-align: center;
 }

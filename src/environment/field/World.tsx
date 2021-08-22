@@ -5,42 +5,74 @@ import './World.css';
 import { MapState } from '../../state/MapState';
 import { getLocationToPlayerMap } from './helper/getLocationToPlayerMap';
 import { subscribe } from '../../subscription/subscribe';
-import { playSound, pauseSound } from '../sound/sound';
+import { pauseSound, playSound } from '../sound/sound';
 import PlayerStatsModal from '../../player/PlayerStatsModal';
 import FieldMenu from '../../player/FieldMenu';
 import Player from '../../player/Player';
 import { Maps } from '../maps/Maps';
+import { useCharacterPositions, useModalState, useNpcs } from '../../hooks';
+import { ModalEnum } from '../../context/ModalStateContext';
+import DialogModal from '../../dialog/DialogModal';
+import { usePlayerNavigationEffect } from '../../navigation';
 
 const fieldMusic = require('../sound/crusaderp/BattleHighlands.mp3');
 const caveMusic = require('../sound/crusaderp/AcrosstheSandWIP2.mp3');
+const townMusic = require('../sound/crusaderp/IndoorsThree.mp3');
 
 const SHOW_PLAYER_STATS_DELAY = 5000;
 
 const World = ({
     currentPlayer,
-    playerUrl,
-    closeFieldMenu,
     castSpell,
+    updatePlayer,
 }: {
     currentPlayer: Player;
-    playerUrl: string;
-    closeFieldMenu: (event: React.MouseEvent | React.KeyboardEvent) => void;
     castSpell: (spellName: string, targetId: string) => void;
+    updatePlayer: (player: Player, updateToServer: boolean) => void;
 }) => {
-    const [playerLocationMessage, setPlayerLocationMessage] = useState({});
-    const [showPlayerStatsModal, setShowPlayerStatsModal] = useState(false);
+    const playerUrl = `${process.env.REACT_APP_WEBSOCKET_BASE_URL}/players`;
+    const {
+        canMoveToPosition,
+        setCharacterTalking,
+        updateCharacterPosition,
+    } = useCharacterPositions();
+    const {
+        closeModal,
+        getModalContent,
+        isModalOpen,
+        openModal,
+    } = useModalState();
     const {
         location: { mapName, rowIndex, columnIndex },
         stats,
-        showFieldMenu,
     } = currentPlayer;
+    const npcs = useNpcs(mapName);
+
+    usePlayerNavigationEffect(
+        currentPlayer,
+        updatePlayer,
+        canMoveToPosition,
+        updateCharacterPosition,
+        openModal,
+        npcs,
+        setCharacterTalking,
+        isModalOpen
+    );
+
+    const [playerLocationMessage, setPlayerLocationMessage] = useState({});
 
     useEffect(() => {
         if (Maps.isField(mapName)) {
             pauseSound('cave-music');
+            pauseSound('town-music');
             playSound('field-music');
+        } else if (Maps.isTown(mapName)) {
+            pauseSound('cave-music');
+            pauseSound('field-music');
+            playSound('town-music');
         } else {
             pauseSound('field-music');
+            pauseSound('town-music');
             playSound('cave-music');
         }
     }, [mapName]);
@@ -50,18 +82,20 @@ const World = ({
             playerUrl,
             setPlayerLocationMessage
         );
-        return () => playerLocationSubscription.close();
+        return () => {
+            playerLocationSubscription.close();
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
-        setShowPlayerStatsModal(false);
+        closeModal(ModalEnum.PlayerStats);
         const timer = setTimeout(
-            () => setShowPlayerStatsModal(true),
+            () => openModal(ModalEnum.PlayerStats),
             SHOW_PLAYER_STATS_DELAY
         );
         return () => clearTimeout(timer);
-    }, [rowIndex, columnIndex]);
+    }, [rowIndex, columnIndex, closeModal, openModal]);
 
     const [map, mapPlayers] = MapState(
         currentPlayer,
@@ -74,6 +108,9 @@ const World = ({
     );
     const displayIndexRange = getMapDisplayRange(currentPlayer, map);
     const { rowStartIndex, rowEndIndex } = displayIndexRange;
+    const isPlayerStatsOpen = isModalOpen(ModalEnum.PlayerStats);
+    const isFieldMenuOpen = isModalOpen(ModalEnum.FieldMenu);
+    const isDialogOpen = isModalOpen(ModalEnum.Dialog);
 
     return (
         <div className="world">
@@ -88,6 +125,7 @@ const World = ({
                         displayIndexRange={displayIndexRange}
                         mapLayout={map.layout}
                         currentPlayer={currentPlayer}
+                        npcs={npcs}
                     />
                 ))}
             <audio className="field-music" autoPlay loop>
@@ -96,16 +134,26 @@ const World = ({
             <audio className="cave-music" autoPlay loop>
                 <source src={caveMusic} />
             </audio>
+            <audio className="town-music" autoPlay loop>
+                <source src={townMusic} />
+            </audio>
             <PlayerStatsModal
-                showPlayerStats={showPlayerStatsModal && !showFieldMenu}
-                onClose={() => setShowPlayerStatsModal(false)}
+                showPlayerStats={
+                    isPlayerStatsOpen && !isFieldMenuOpen && !isDialogOpen
+                }
+                onClose={() => closeModal(ModalEnum.PlayerStats)}
                 stats={stats}
             />
             <FieldMenu
-                showFieldMenu={showFieldMenu}
-                closeFieldMenu={closeFieldMenu}
+                showFieldMenu={isFieldMenuOpen && !isDialogOpen}
+                closeFieldMenu={() => closeModal(ModalEnum.FieldMenu)}
                 currentPlayer={currentPlayer}
                 castSpell={castSpell}
+            />
+            <DialogModal
+                showDialog={isDialogOpen}
+                closeDialog={() => closeModal(ModalEnum.Dialog)}
+                getDialog={() => getModalContent(ModalEnum.Dialog)}
             />
         </div>
     );

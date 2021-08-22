@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Tile from './Tile';
-import Character from '../../player/Character'
+import Character from '../../player/Character';
 import { Legend } from '../maps/Legend';
 
 describe('Tile', () => {
@@ -50,6 +50,7 @@ describe('Tile', () => {
             },
             mapLayout: map.layout,
             currentPlayer,
+            npcs: [],
         };
         return shallow(<Tile {...props} />);
     };

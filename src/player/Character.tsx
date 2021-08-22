@@ -1,9 +1,13 @@
 import React from 'react';
 import { isEqual } from 'lodash';
 import './Character.css';
-import { faCampground, faDragon } from '@fortawesome/free-solid-svg-icons';
+import {
+    faCampground,
+    faDragon,
+    faInfoCircle,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Player from "./Player";
+import Player from './Player';
 
 const CAMPING_DURATION_MILLIS = 10000;
 
@@ -16,10 +20,12 @@ const Character = ({
     },
     isCurrentPlayer,
     isSaveLocation,
+    inDialogRange,
 }: {
-    player: Player,
-    isCurrentPlayer: boolean,
-    isSaveLocation: boolean,
+    player: Player;
+    isCurrentPlayer: boolean;
+    isSaveLocation: boolean;
+    inDialogRange: boolean;
 }) => {
     const playerClassName = `${
         isCurrentPlayer ? 'hero' : 'peer'
@@ -40,15 +46,18 @@ const Character = ({
                 )}
             </div>
             {isCurrentPlayer && isSaveLocation && (
-                <div className="saved">
+                <div className="fade">
                     <p>HP/MP restored</p>
                     <p>Game saved</p>
                 </div>
             )}
+            {inDialogRange && <span className="info-prompt">Spacebar</span>}
             {battleId ? (
                 <FontAwesomeIcon icon={faDragon} />
             ) : camping ? (
                 <FontAwesomeIcon icon={faCampground} />
+            ) : inDialogRange ? (
+                <FontAwesomeIcon icon={faInfoCircle} />
             ) : null}
         </div>
     );
