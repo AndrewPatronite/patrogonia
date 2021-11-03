@@ -86,7 +86,7 @@
 .water {
     height: 100px;
     width: 100px;
-    background-image: url('../terrain/water.gif');
+    background-image: url('../terrain/water-small.gif');
 }
 
 .water-above {
