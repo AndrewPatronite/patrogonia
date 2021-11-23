@@ -1,9 +1,20 @@
-import styled from 'styled-components';
-import { Theme } from './ThemeContext';
+import { Heading, HeadingProps, useColorMode } from '@chakra-ui/react'
+import React from 'react'
+import { HeadingColor } from '../../theme'
 
-const ThemedHeader = styled.h5`
-    color: ${(props: { theme: Theme }) => props.theme.headingColor};
-    margin: 0 0 12px 0;
-`;
+const ThemedHeader = ({ children, ...baseProps }: HeadingProps) => {
+  const { colorMode } = useColorMode()
+  return (
+    <Heading
+      as="h1"
+      size="md"
+      marginBottom="0.75rem"
+      color={HeadingColor[colorMode]}
+      {...baseProps}
+    >
+      {children}
+    </Heading>
+  )
+}
 
-export default ThemedHeader;
+export default ThemedHeader

@@ -1,43 +1,35 @@
-import React, { useEffect } from 'react';
-import Modal from 'react-modal';
-import Stats from './Stats';
-import PlayerStatsPanel from './PlayerStatsPanel';
-import './PlayerStatsModal.css';
+import React from 'react'
+import Stats from './Stats'
+import PlayerStatsPanel from './PlayerStatsPanel'
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerOverlay,
+} from '@chakra-ui/react'
 
 const PlayerStatsModal = ({
-    showPlayerStats,
-    onClose,
-    stats: playerStats,
+  isOpen,
+  onClose,
+  stats: playerStats,
 }: {
-    showPlayerStats: boolean;
-    onClose: (event: React.MouseEvent | React.KeyboardEvent) => void;
-    stats: Stats;
-}) => {
-    useEffect(() => {
-        Modal.setAppElement('body');
-    }, []);
+  isOpen: boolean
+  onClose: () => void
+  stats: Stats
+}) => (
+  <Drawer size="sm" placement="left" onClose={onClose} isOpen={isOpen}>
+    <DrawerOverlay />
+    <DrawerContent
+      background="transparent"
+      boxShadow={0}
+      paddingTop="1rem"
+      paddingLeft="1rem"
+    >
+      <DrawerBody padding={0}>
+        <PlayerStatsPanel playerStats={playerStats} />
+      </DrawerBody>
+    </DrawerContent>
+  </Drawer>
+)
 
-    const modalStyle = {
-        content: {
-            top: '30%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            transform: 'translate(5%, 5%)',
-        },
-    };
-    return (
-        <Modal
-            className="player-stats-modal"
-            isOpen={showPlayerStats}
-            onRequestClose={onClose}
-            style={modalStyle}
-            shouldFocusAfterRender={false}
-        >
-            <PlayerStatsPanel playerStats={playerStats} />
-        </Modal>
-    );
-};
-
-export default PlayerStatsModal;
+export default PlayerStatsModal

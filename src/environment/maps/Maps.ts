@@ -1,87 +1,107 @@
-import Map from './Map';
-import { Legend } from './Legend';
-import Entrance from './Entrance';
-import { Nigel, Tristan, Alastair, Barnaby } from '../../npcs';
-import { Finlay } from '../../npcs/Npcs';
+import Map from './Map'
+import { Legend } from './Legend'
+import Entrance from './Entrance'
+import { Alastair, Barnaby, Nigel, Tristan } from '../../npcs'
+import { Finlay } from '../../npcs/Npcs'
 
 const {
-    WATER: W,
-    GRASS: G,
-    MOUNTAIN: M,
-    DIRT: D,
-    ROCK: R,
-    LAVA: L,
-    FOREST: F,
-} = Legend.symbols;
+  WATER: W,
+  GRASS: G,
+  MOUNTAIN: M,
+  DIRT: D,
+  ROCK: R,
+  LAVA: L,
+  FOREST: F,
+} = Legend.symbols
+
+export enum Cave {
+  LavaGrotto = 'Lava Grotto',
+}
+
+export enum CaveExit {
+  Atoris = 'Atoris',
+  Grimes = 'Grimes',
+}
+
+export enum Continent {
+  Atoris = 'Atoris',
+  Grimes = 'Grimes',
+}
+
+export enum Town {
+  Dewhurst = 'Dewhurst',
+  Fernsworth = 'Fernsworth',
+  Easthaven = 'Easthaven',
+}
 
 export const Maps = {
-    canTraverse(nextPosition: string): boolean {
-        return [G, D, F].includes(nextPosition) || this.isTown(nextPosition);
-    },
+  canTraverse(nextPosition: string): boolean {
+    return [G, D, F].includes(nextPosition) || this.isTown(nextPosition)
+  },
 
-    isSaveLocation(position: string): boolean {
-        return ['Dewhurst', 'Fernsworth', 'Easthaven'].includes(position);
-    },
+  isSaveLocation(position: string): boolean {
+    return ['Dewhurst', 'Fernsworth', 'Easthaven'].includes(position)
+  },
 
-    isTravelDestination(name: string): boolean {
-        return [
-            'Dewhurst',
-            'Atoris',
-            'Lava Grotto',
-            'Grimes',
-            'Fernsworth',
-            'Easthaven',
-        ].includes(name);
-    },
+  isTravelDestination(name: string): boolean {
+    return [
+      'Dewhurst',
+      'Atoris',
+      'Lava Grotto',
+      'Grimes',
+      'Fernsworth',
+      'Easthaven',
+    ].includes(name)
+  },
 
-    isTown(name: string): boolean {
-        return ['Dewhurst', 'Fernsworth', 'Easthaven'].includes(name);
-    },
+  isTown(name: string): boolean {
+    return ['Dewhurst', 'Fernsworth', 'Easthaven'].includes(name)
+  },
 
-    isCave(name: string): boolean {
-        return ['Lava Grotto'].includes(name);
-    },
+  isCave(name: string): boolean {
+    return ['Lava Grotto'].includes(name)
+  },
 
-    isField(name: string): boolean {
-        return ['Atoris', 'Grimes'].includes(name);
-    },
+  isField(name: string): boolean {
+    return ['Atoris', 'Grimes'].includes(name)
+  },
 
-    Atoris(entranceName: string = 'start'): Map {
-        return {
-            name: 'Atoris',
-            layout: [
-                [W, W, W, W, W, W, W, W, W, W, W, W, W],
-                [W, W, W, W, W, W, W, W, W, W, W, W, W],
-                [W, W, W, W, W, G, G, W, W, W, W, W, W],
-                [W, W, W, W, G, G, G, G, G, G, W, W, W],
-                [W, W, W, G, G, G, W, W, G, G, G, W, W],
-                [W, W, W, M, F, G, W, W, G, G, G, W, W],
-                [W, W, M, M, M, G, W, 'Dewhurst', G, G, W, W, W],
-                [W, W, M, M, 'Lava Grotto', G, W, W, W, G, G, W, W],
-                [W, W, F, M, M, F, G, G, G, G, W, W, W],
-                [W, W, W, F, F, W, W, W, W, W, W, W, W],
-                [W, W, W, W, W, W, W, W, W, W, W, W, W],
-            ],
-            entrance: ((): Entrance => {
-                const entrances: Record<string, Entrance> = {
-                    start: {
-                        rowIndex: 6,
-                        columnIndex: 7,
-                    },
-                    'Lava Grotto': {
-                        rowIndex: 7,
-                        columnIndex: 4,
-                    },
-                };
-                return entrances[entranceName];
-            })(),
-            npcs: [],
-        };
-    },
+  Atoris(entranceName: string = 'start'): Map {
+    return {
+      name: 'Atoris',
+      layout: [
+        [W, W, W, W, W, W, W, W, W, W, W, W, W],
+        [W, W, W, W, W, W, W, W, W, W, W, W, W],
+        [W, W, W, W, W, G, G, W, W, W, W, W, W],
+        [W, W, W, W, G, G, G, G, G, G, W, W, W],
+        [W, W, W, G, G, G, W, W, G, G, G, W, W],
+        [W, W, W, M, F, G, W, W, G, G, G, W, W],
+        [W, W, M, M, M, G, W, 'Dewhurst', G, G, W, W, W],
+        [W, W, M, M, 'Lava Grotto', G, W, W, W, G, G, W, W],
+        [W, W, F, M, M, F, G, G, G, G, W, W, W],
+        [W, W, W, F, F, W, W, W, W, W, W, W, W],
+        [W, W, W, W, W, W, W, W, W, W, W, W, W],
+      ],
+      entrance: ((): Entrance => {
+        const entrances: Record<string, Entrance> = {
+          start: {
+            rowIndex: 6,
+            columnIndex: 7,
+          },
+          'Lava Grotto': {
+            rowIndex: 7,
+            columnIndex: 4,
+          },
+        }
+        return entrances[entranceName]
+      })(),
+      npcs: [],
+    }
+  },
 
-    Dewhurst(entranceName: string = 'Atoris'): Map {
-        // prettier-ignore
-        return {
+  Dewhurst(entranceName: string = 'Atoris'): Map {
+    // prettier-ignore
+    return {
             name: 'Dewhurst',
             layout: [
                 [W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W],
@@ -127,11 +147,11 @@ export const Maps = {
             },
             npcs: [Alastair, Barnaby]
         }
-    },
+  },
 
-    Fernsworth(entranceName = 'Grimes'): Map {
-        // prettier-ignore
-        return {
+  Fernsworth(entranceName = 'Grimes'): Map {
+    // prettier-ignore
+    return {
             name: 'Fernsworth',
             layout: [
                 [M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M],
@@ -166,11 +186,11 @@ export const Maps = {
             },
             npcs:[Finlay]
         }
-    },
+  },
 
-    Easthaven(entranceName = 'Grimes'): Map {
-        // prettier-ignore
-        return {
+  Easthaven(entranceName = 'Grimes'): Map {
+    // prettier-ignore
+    return {
             name: 'Easthaven',
             layout: [
                 [F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F],
@@ -212,11 +232,11 @@ export const Maps = {
             },
             npcs: [Nigel, Tristan]
         }
-    },
+  },
 
-    'Lava Grotto'(entranceName = 'Atoris'): Map {
-        // prettier-ignore
-        return {
+  'Lava Grotto'(entranceName = 'Atoris'): Map {
+    // prettier-ignore
+    return {
             name: 'Lava Grotto',
             layout: [
                 [L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L],
@@ -272,11 +292,11 @@ export const Maps = {
             return entrances[entranceName]})(),
             npcs: []
         };
-    },
+  },
 
-    Grimes(): Map {
-        // prettier-ignore
-        return {
+  Grimes(): Map {
+    // prettier-ignore
+    return {
             name: 'Grimes',
             layout: [
                 [W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W],
@@ -316,5 +336,5 @@ export const Maps = {
             },
             npcs: []
         };
-    },
-};
+  },
+}

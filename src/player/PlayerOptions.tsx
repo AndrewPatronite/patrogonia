@@ -1,43 +1,31 @@
-import React, { useEffect, useRef } from 'react';
-import ThemedPanel from '../components/theme/ThemedPanel';
-import ThemeSwitch from '../components/theme/ThemeSwitch';
-import LinkButton from '../control/LinkButton';
+import React from 'react'
+import ThemedPanel from '../components/theme/ThemedPanel'
+import { ColorModeToggle } from '../components/theme'
+import { Button, Stack } from '@chakra-ui/react'
+import InstructionsModal from '../tutorial/InstructionsModal'
 
 const PlayerOptions = () => {
-    const switchRef = useRef(null);
+  const logOut = () => {
+    const currentPlayerKey = 'currentPlayer'
+    const currentPlayer = JSON.parse(
+      localStorage.getItem(currentPlayerKey) || ''
+    )
+    currentPlayer.loggedIn = false
+    localStorage.setItem(currentPlayerKey, JSON.stringify(currentPlayer))
+    window.location.href = '/'
+  }
 
-    useEffect(() => {
-        // @ts-ignore
-        switchRef.current.firstChild.lastChild.lastChild.focus();
-    }, []);
+  return (
+    <ThemedPanel flexDirection="column" includeBorder={false}>
+      <Stack spacing="1.5rem">
+        <ColorModeToggle />
+        <InstructionsModal />
+        <Button variant="link" marginTop="1rem" onClick={logOut}>
+          Log out
+        </Button>
+      </Stack>
+    </ThemedPanel>
+  )
+}
 
-    const logOut = () => {
-        const currentPlayerKey = 'currentPlayer';
-        const currentPlayer = JSON.parse(
-            localStorage.getItem(currentPlayerKey) || ''
-        );
-        currentPlayer.loggedIn = false;
-        localStorage.setItem(currentPlayerKey, JSON.stringify(currentPlayer));
-        window.location.href = '/';
-    };
-
-    return (
-        <ThemedPanel
-            className="player-options"
-            heading="Options"
-            flexDirection="column"
-        >
-            <div ref={switchRef}>
-                <ThemeSwitch />
-            </div>
-            {
-                // @ts-ignore
-                <LinkButton className="logout-button" onClick={logOut}>
-                    Log out
-                </LinkButton>
-            }
-        </ThemedPanel>
-    );
-};
-
-export default PlayerOptions;
+export default PlayerOptions

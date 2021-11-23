@@ -1,3 +1,4 @@
-import { isAdjacentToCurrentPlayer } from './isAdjacentToCurrentPlayer';
+import { advanceFocus } from './advanceFocus'
+import { isAdjacentToCurrentPlayer } from './isAdjacentToCurrentPlayer'
 
-export { isAdjacentToCurrentPlayer };
+export { advanceFocus, isAdjacentToCurrentPlayer }

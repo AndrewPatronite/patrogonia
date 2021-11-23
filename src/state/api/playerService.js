@@ -19,7 +19,7 @@ export const createAccount = (player, onSuccess, onFailure) => {
 
 export const login = (username, password, onSuccess, onFailure) => {
     axiosInstance
-        .post(`/login?username=${username}&password=${password}`)
+        .post('/login', { username, password })
         .then((response) => {
             if (response.status === HttpStatus.OK) {
                 getPlayer(response.data, onSuccess, onFailure);
@@ -72,7 +72,13 @@ export const loadSave = (playerId, onSuccess, onFailure) => {
         .catch((error) => onFailure(error));
 };
 
-export const castSpell = (player, spellName, targetId, onSuccess, onFailure) => {
+export const castSpell = (
+    player,
+    spellName,
+    targetId,
+    onSuccess,
+    onFailure
+) => {
     return axiosInstance
         .put(`/castSpell/${spellName}/${targetId}`, player)
         .then((response) => {

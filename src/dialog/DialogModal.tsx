@@ -1,66 +1,52 @@
-import React, { useEffect, useRef } from 'react';
-import Modal from 'react-modal';
-import LinkButton from '../control/LinkButton';
-import ThemedPanel from '../components/theme/ThemedPanel';
-import './DialogModal.css';
+import React from 'react'
+import ThemedPanel from '../components/theme/ThemedPanel'
+import {
+  Button,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerOverlay,
+} from '@chakra-ui/react'
 
 const DialogModal = ({
-    closeDialog,
-    getDialog,
-    showDialog,
+  closeDialog,
+  getDialog,
+  showDialog,
 }: {
-    closeDialog: () => void;
-    getDialog: () => any;
-    showDialog: boolean;
+  closeDialog: () => void
+  getDialog: () => any
+  showDialog: boolean
 }) => {
-    const okButtonRef = useRef<HTMLButtonElement>(null);
+  const { content = '', onClose = () => {} } = getDialog()
+  const dismiss = () => {
+    closeDialog()
+    onClose()
+  }
+  return (
+    <Drawer size="sm" placement="left" onClose={onClose} isOpen={showDialog}>
+      <DrawerOverlay />
+      <DrawerContent
+        background="transparent"
+        boxShadow={0}
+        paddingTop="1rem"
+        paddingLeft="1rem"
+      >
+        <DrawerBody padding={0}>
+          <ThemedPanel flexDirection="column">
+            <span>{content}</span>
+            <Button
+              alignSelf="flex-end"
+              colorScheme="blue"
+              marginTop="1rem"
+              onClick={dismiss}
+            >
+              OK
+            </Button>
+          </ThemedPanel>
+        </DrawerBody>
+      </DrawerContent>
+    </Drawer>
+  )
+}
 
-    useEffect(() => {
-        Modal.setAppElement('body');
-    }, []);
-
-    const modalStyle = {
-        content: {
-            top: '30%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            transform: 'translate(5%, 5%)',
-        },
-    };
-    const { content = '', onClose = () => {} } = getDialog();
-    const dismiss = () => {
-        closeDialog();
-        onClose();
-    };
-    return (
-        <Modal
-            className="dialog-modal"
-            isOpen={showDialog}
-            onAfterOpen={() => okButtonRef.current?.focus()}
-            onRequestClose={() => {}}
-            style={modalStyle}
-        >
-            <ThemedPanel flexDirection="column" width="200px">
-                <span>{content}</span>
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <div style={{ marginTop: '10px', width: '30px' }}>
-                        {
-                            //@ts-ignore
-                            <LinkButton
-                                ref={okButtonRef}
-                                className="ok-button"
-                                onClick={dismiss}
-                            >
-                                OK
-                            </LinkButton>
-                        }
-                    </div>
-                </div>
-            </ThemedPanel>
-        </Modal>
-    );
-};
-
-export default DialogModal;
+export default DialogModal

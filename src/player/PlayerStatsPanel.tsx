@@ -1,74 +1,58 @@
-import React from 'react';
-import Stats from './Stats';
-import ThemedPanel from '../components/theme/ThemedPanel';
-import Row from "../components/Row";
+import React from 'react'
+import Stats from './Stats'
+import ThemedPanel from '../components/theme/ThemedPanel'
+import { Flex, Text } from '@chakra-ui/react'
+
+const PlayerStat = ({ name, value }: { name: string; value: any }) => (
+  <Flex justifyContent="space-between">
+    <label>{name}</label>
+    <Text>{value}</Text>
+  </Flex>
+)
 
 const PlayerStatsPanel = ({
-    playerStats: {
-        playerName,
-        level,
-        hp,
-        hpTotal,
-        mp,
-        mpTotal,
-        gold,
-        xp,
-        xpTillNextLevel,
-        attack,
-        defense,
-        agility,
-    },
+  playerStats: {
+    playerName,
+    level,
+    hp,
+    hpTotal,
+    mp,
+    mpTotal,
+    gold,
+    xp,
+    xpTillNextLevel,
+    attack,
+    defense,
+    agility,
+  },
+  showHeading = true,
+  includeBorder = true,
 }: {
-    playerStats: Stats;
+  playerStats: Stats
+  showHeading?: boolean
+  includeBorder?: boolean
 }) => (
-    <ThemedPanel className="player-stats-panel" width="175px" heading="Stats" flexDirection="column">
-        <Row className="player-stat">
-            <label>Player</label>
-            <span>{playerName}</span>
-        </Row>
-        <Row className="player-stat">
-            <label>Level</label>
-            <span>{level}</span>
-        </Row>
-        <Row className="player-stat">
-            <label>HP</label>
-            <span>
-                {hp}/{hpTotal}
-            </span>
-        </Row>
-        <Row className="player-stat">
-            <label>MP</label>
-            <span>
-                {mp}/{mpTotal}
-            </span>
-        </Row>
-        <Row className="player-stat">
-            <label>Gold</label>
-            <span>{gold}</span>
-        </Row>
-        <Row className="player-stat">
-            <label>XP</label>
-            <span>{xp}</span>
-        </Row>
-        {xpTillNextLevel > 0 && (
-            <Row className="player-stat">
-                <label>XP till next level</label>
-                <span>{xpTillNextLevel}</span>
-            </Row>
-        )}
-        <Row className="player-stat">
-            <label>Attack</label>
-            <span>{attack}</span>
-        </Row>
-        <Row className="player-stat">
-            <label>Defense</label>
-            <span>{defense}</span>
-        </Row>
-        <Row className="player-stat">
-            <label>Agility</label>
-            <span>{agility}</span>
-        </Row>
-    </ThemedPanel>
-);
+  <ThemedPanel
+    className="player-stats-panel"
+    width="14rem"
+    minHeight="23rem"
+    heading={showHeading ? 'Stats' : undefined}
+    flexDirection="column"
+    includeBorder={includeBorder}
+  >
+    <PlayerStat name="Player" value={playerName} />
+    <PlayerStat name="Level" value={level} />
+    <PlayerStat name="HP" value={`${hp}/${hpTotal}`} />
+    <PlayerStat name="MP" value={`${mp}/${mpTotal}`} />
+    <PlayerStat name="Gold" value={gold} />
+    <PlayerStat name="XP" value={xp} />
+    {xpTillNextLevel > 0 && (
+      <PlayerStat name="XP till next level" value={xpTillNextLevel} />
+    )}
+    <PlayerStat name="Attack" value={attack} />
+    <PlayerStat name="Defense" value={defense} />
+    <PlayerStat name="Agility" value={agility} />
+  </ThemedPanel>
+)
 
-export default PlayerStatsPanel;
+export default PlayerStatsPanel
