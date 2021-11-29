@@ -1,14 +1,13 @@
 import { throttle } from 'lodash'
 import { Cave, Maps } from '../environment/maps/Maps'
 import { DirectionKeyMapper } from './DirectionKeyMapper'
-import { MovementLesson, recordLesson, TownVisitLesson } from '../tutorial'
-import CaveExplorationLesson from '../tutorial/CaveExplorationLesson'
+import { LessonEnum, recordLesson } from '../tutorial'
 
 const moveDelay = 250
 
 const recordTownVisitLessonOnSave = (saveGame, player, updatePlayer) => {
   if (saveGame) {
-    recordLesson(player, TownVisitLesson.name, updatePlayer)
+    recordLesson(player, LessonEnum.TownVisitLesson, updatePlayer)
   }
 }
 
@@ -30,7 +29,11 @@ const updatePlayerLocation = (
     const { name: mapName, entrance } = nextMap
 
     if (mapName === Cave.LavaGrotto) {
-      recordLesson(currentPlayer, CaveExplorationLesson.name, updatePlayer)
+      recordLesson(
+        currentPlayer,
+        LessonEnum.CaveExplorationLesson,
+        updatePlayer
+      )
     }
 
     const saveGame = Maps.isSaveLocation(mapName)
@@ -105,7 +108,7 @@ export const movePlayer = throttle(
     canMoveToPosition,
     updateCharacterPosition
   ) => {
-    recordLesson(currentPlayer, MovementLesson.name, updatePlayer)
+    recordLesson(currentPlayer, LessonEnum.MovementLesson, updatePlayer)
     const currentMap = Maps[currentPlayer.location.mapName]()
     const { up, down, left, right } = DirectionKeyMapper
     const {

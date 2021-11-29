@@ -3,7 +3,7 @@ import { filter, upperFirst } from 'lodash'
 import CommandPanel from './CommandPanel'
 import EnemySelectionPanel from './EnemySelectionPanel'
 import PlayerSelectionPanel from './PlayerSelectionPanel'
-import { recordLesson } from '../tutorial'
+import { LessonEnum, recordLesson } from '../tutorial'
 
 const PlayerTurnWizard = ({
   currentPlayer,
@@ -26,7 +26,7 @@ const PlayerTurnWizard = ({
     setAction('command')
   }
   const handleCommand = (command) => {
-    recordLesson(currentPlayer, 'BattleCommandLesson', updatePlayer)
+    recordLesson(currentPlayer, LessonEnum.BattleCommandLesson, updatePlayer)
     switch (command) {
       case 'parry':
       case 'run':
@@ -75,7 +75,11 @@ const PlayerTurnWizard = ({
           action={action}
           handleBack={handleBack}
           handleNext={(targetId) => {
-            recordLesson(currentPlayer, 'BattleTargetLesson', updatePlayer)
+            recordLesson(
+              currentPlayer,
+              LessonEnum.BattleTargetLesson,
+              updatePlayer
+            )
             takeTurn(action, targetId)
           }}
           selectEnemy={selectEnemy}
@@ -92,7 +96,11 @@ const PlayerTurnWizard = ({
           action={formattedSpellName}
           handleBack={handleBack}
           handleNext={(targetId) => {
-            recordLesson(currentPlayer, 'BattleTargetLesson', updatePlayer)
+            recordLesson(
+              currentPlayer,
+              LessonEnum.BattleTargetLesson,
+              updatePlayer
+            )
             takeTurn(formattedSpellName, targetId)
           }}
           selectEnemy={selectEnemy}

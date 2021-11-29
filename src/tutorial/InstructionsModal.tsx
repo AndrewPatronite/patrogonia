@@ -20,6 +20,7 @@ import {
 } from '../tutorial'
 import NpcLesson from './NpcLesson'
 import IntroductionLesson from '../tutorial/introduction/Introduction'
+import CaveExplorationLesson from './CaveExplorationLesson'
 
 interface LessonEntry {
   name: string
@@ -65,6 +66,10 @@ const InstructionsModal = () => {
           subject="command"
         />
       ),
+    },
+    {
+      name: 'Caves',
+      lesson: CaveExplorationLesson,
     },
   ]
 

@@ -5,24 +5,25 @@ import {
   Flex,
   HStack,
 } from '@chakra-ui/react'
-import React, { FunctionComponent, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import ThemedPanel from '../components/theme/ThemedPanel'
 import Player from '../player/Player'
 import { hasCompletedLesson } from './lessonUtils'
 import { useModalState } from '../hooks'
 import { ModalEnum } from '../context/ModalStateContext'
 import Character from '../player/Character'
+import { Lesson } from './Lesson'
 
 interface TutorialModalProps {
   player: Player
-  lessons: FunctionComponent[]
+  lessons: Lesson[]
 }
 
 const TutorialModal = ({ player, lessons }: TutorialModalProps) => {
   const { isModalOpen, openModal, closeModal } = useModalState()
-  const NextLesson = lessons.find(
-    (lesson) => !hasCompletedLesson(player, lesson.name)
-  )
+  const NextLesson =
+    lessons.find((lesson) => !hasCompletedLesson(player, lesson.name))
+      ?.component || null
 
   useEffect(() => {
     if (NextLesson) {

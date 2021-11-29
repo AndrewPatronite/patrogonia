@@ -15,6 +15,7 @@ import { usePlayerNavigationEffect } from '../../navigation'
 import {
   FieldMenuLesson,
   Introduction as IntroductionLesson,
+  LessonEnum,
   MovementLesson,
   NpcLesson,
   TownVisitLesson,
@@ -200,11 +201,35 @@ const World = ({
       <TutorialModal
         player={currentPlayer}
         lessons={[
-          useCallback(Introduction, [currentPlayer, updatePlayer]),
-          MovementLesson,
-          Maps.isTown(mapName) ? NpcLesson : TownVisitLesson,
-          FieldMenuLesson,
-          ...(mapName === Continent.Atoris ? [CaveExplorationLesson] : []),
+          {
+            name: LessonEnum.Introduction,
+            component: useCallback(Introduction, [currentPlayer, updatePlayer]),
+          },
+          {
+            name: LessonEnum.MovementLesson,
+            component: MovementLesson,
+          },
+          Maps.isTown(mapName)
+            ? {
+                name: LessonEnum.NpcLesson,
+                component: NpcLesson,
+              }
+            : {
+                name: LessonEnum.TownVisitLesson,
+                component: TownVisitLesson,
+              },
+          {
+            name: LessonEnum.FieldMenuLesson,
+            component: FieldMenuLesson,
+          },
+          ...(mapName === Continent.Atoris
+            ? [
+                {
+                  name: LessonEnum.CaveExplorationLesson,
+                  component: CaveExplorationLesson,
+                },
+              ]
+            : []),
         ]}
       />
       <CaptionModal message={mapName} isOpen={isLocationCaptionModalOpen} />

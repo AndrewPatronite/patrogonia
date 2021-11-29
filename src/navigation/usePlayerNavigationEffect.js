@@ -4,7 +4,7 @@ import { movePlayer } from './movePlayer'
 import { OPEN_DIALOG, OPEN_FIELD_MENU } from './FieldMenuKeys'
 import { ModalEnum } from '../context/ModalStateContext'
 import { isAdjacentToCurrentPlayer } from '../utils'
-import { FieldMenuLesson, NpcLesson, recordLesson } from '../tutorial'
+import { LessonEnum, recordLesson } from '../tutorial'
 
 export const usePlayerNavigationEffect = (
   currentPlayer,
@@ -47,7 +47,7 @@ export const usePlayerNavigationEffect = (
                 )
               )
               if (firstAdjacentNpc) {
-                recordLesson(currentPlayer, NpcLesson.name, updatePlayer)
+                recordLesson(currentPlayer, LessonEnum.NpcLesson, updatePlayer)
                 setCharacterTalking(`npc-${firstAdjacentNpc.name}`, true)
                 let npcFacing
                 let playerFacing
@@ -94,7 +94,11 @@ export const usePlayerNavigationEffect = (
               }
               break
             case OPEN_FIELD_MENU:
-              recordLesson(currentPlayer, FieldMenuLesson.name, updatePlayer)
+              recordLesson(
+                currentPlayer,
+                LessonEnum.FieldMenuLesson,
+                updatePlayer
+              )
               openModal(ModalEnum.FieldMenu)
               break
             default:

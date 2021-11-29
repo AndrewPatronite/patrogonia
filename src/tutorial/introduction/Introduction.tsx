@@ -8,7 +8,7 @@ import Welcome from './Welcome'
 import PopIn from './PopIn'
 import ReviewAgain from './ReviewAgain'
 import Player from '../../player/Player'
-import { recordLesson } from '../index'
+import { LessonEnum, recordLesson } from '../index'
 
 interface IntroductionProps {
   currentPlayer?: Player
@@ -39,7 +39,7 @@ const Introduction = ({
     () =>
       currentPlayer &&
       updatePlayer &&
-      recordLesson(currentPlayer, Introduction.name, updatePlayer),
+      recordLesson(currentPlayer, LessonEnum.Introduction, updatePlayer),
     [currentPlayer, updatePlayer]
   )
 
