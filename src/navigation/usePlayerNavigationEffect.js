@@ -5,9 +5,9 @@ import { OPEN_DIALOG, OPEN_FIELD_MENU } from './FieldMenuKeys'
 import { ModalEnum } from '../context/ModalStateContext'
 import { isAdjacentToCurrentPlayer } from '../utils'
 import { LessonEnum, recordLesson } from '../tutorial'
+import { usePlayer } from '../hooks/usePlayer'
 
 export const usePlayerNavigationEffect = (
-  currentPlayer,
   updatePlayer,
   canMoveToPosition,
   updateCharacterPosition,
@@ -16,6 +16,7 @@ export const usePlayerNavigationEffect = (
   setCharacterTalking,
   isModalOpen
 ) => {
+  const { currentPlayer } = usePlayer()
   return useEffect(() => {
     const { isDirectionKey, getDirection } = DirectionKeyMapper
 
@@ -47,7 +48,6 @@ export const usePlayerNavigationEffect = (
                 )
               )
               if (firstAdjacentNpc) {
-                recordLesson(currentPlayer, LessonEnum.NpcLesson, updatePlayer)
                 setCharacterTalking(`npc-${firstAdjacentNpc.name}`, true)
                 let npcFacing
                 let playerFacing
@@ -74,7 +74,12 @@ export const usePlayerNavigationEffect = (
                   npcFacing = 'left'
                 }
                 movePlayer(
-                  currentPlayer,
+                  {
+                    ...currentPlayer,
+                    completedLessons: currentPlayer.completedLessons.concat(
+                      LessonEnum.NpcLesson
+                    ),
+                  },
                   playerFacing,
                   updatePlayer,
                   canMoveToPosition,

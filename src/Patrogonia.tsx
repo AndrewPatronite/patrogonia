@@ -1,24 +1,22 @@
 import React, { useEffect } from 'react'
 import { Route, Switch, useHistory } from 'react-router-dom'
-import { PlayerState } from './state/PlayerState'
 import World from './environment/field/World'
 import Battle from './battle/Battle'
 import PermissionRoute from './PermissionRoute'
 import { LandingPage } from './landing'
-import { useToast } from '@chakra-ui/react'
+import { usePlayer } from './hooks/usePlayer'
 
 const Patrogonia = () => {
-  const toast = useToast()
   const battleUrl = `${process.env.REACT_APP_WEBSOCKET_BASE_URL}/battles`
-  const [
-    currentPlayer,
-    login,
+  const {
+    castSpell,
     createAccount,
-    updatePlayer,
+    currentPlayer,
     loadPlayer,
     loadSave,
-    castSpell,
-  ] = PlayerState(toast)
+    login,
+    updatePlayer,
+  } = usePlayer()
   const history = useHistory()
 
   useEffect(() => {

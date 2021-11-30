@@ -1,14 +1,22 @@
-import { throttle } from 'lodash'
+import { throttle, uniq } from 'lodash'
 import { Cave, Maps } from '../environment/maps/Maps'
 import { DirectionKeyMapper } from './DirectionKeyMapper'
-import { LessonEnum, recordLesson } from '../tutorial'
+import { LessonEnum } from '../tutorial'
 
 const moveDelay = 250
 
-const recordTownVisitLessonOnSave = (saveGame, player, updatePlayer) => {
-  if (saveGame) {
-    recordLesson(player, LessonEnum.TownVisitLesson, updatePlayer)
+const getCompletedLessons = (saveGame, currentPlayer, mapName, playerMoved) => {
+  const completedLessons = saveGame
+    ? currentPlayer.completedLessons.concat(LessonEnum.TownVisitLesson)
+    : [...currentPlayer.completedLessons]
+
+  if (mapName === Cave.LavaGrotto) {
+    completedLessons.push(LessonEnum.CaveExplorationLesson)
   }
+  if (playerMoved) {
+    completedLessons.push(LessonEnum.MovementLesson)
+  }
+  return uniq(completedLessons)
 }
 
 const updatePlayerLocation = (
@@ -27,17 +35,7 @@ const updatePlayerLocation = (
   if (isTravelDestination) {
     const nextMap = Maps[nextPosition](currentMap.name)
     const { name: mapName, entrance } = nextMap
-
-    if (mapName === Cave.LavaGrotto) {
-      recordLesson(
-        currentPlayer,
-        LessonEnum.CaveExplorationLesson,
-        updatePlayer
-      )
-    }
-
     const saveGame = Maps.isSaveLocation(mapName)
-    recordTownVisitLessonOnSave(saveGame, currentPlayer, updatePlayer)
     updatePlayer({
       ...currentPlayer,
       location: {
@@ -46,6 +44,12 @@ const updatePlayerLocation = (
         facing: 'down',
       },
       saveGame,
+      completedLessons: getCompletedLessons(
+        saveGame,
+        currentPlayer,
+        mapName,
+        true
+      ),
     })
   } else if (
     canMoveToPosition({
@@ -66,11 +70,16 @@ const updatePlayerLocation = (
       nextLocation
     )
     const saveGame = Maps.isSaveLocation(nextPosition)
-    recordTownVisitLessonOnSave(saveGame, currentPlayer, updatePlayer)
     updatePlayer({
       ...currentPlayer,
       location: nextLocation,
       saveGame,
+      completedLessons: getCompletedLessons(
+        saveGame,
+        currentPlayer,
+        currentMap.name,
+        true
+      ),
     })
   } else {
     const nextLocation = {
@@ -82,11 +91,16 @@ const updatePlayerLocation = (
       nextLocation
     )
     const saveGame = Maps.isSaveLocation(nextPosition)
-    recordTownVisitLessonOnSave(saveGame, currentPlayer, updatePlayer)
     updatePlayer({
       ...currentPlayer,
       location: nextLocation,
       saveGame,
+      completedLessons: getCompletedLessons(
+        saveGame,
+        currentPlayer,
+        currentMap.name,
+        false
+      ),
     })
   }
 }
@@ -108,7 +122,6 @@ export const movePlayer = throttle(
     canMoveToPosition,
     updateCharacterPosition
   ) => {
-    recordLesson(currentPlayer, LessonEnum.MovementLesson, updatePlayer)
     const currentMap = Maps[currentPlayer.location.mapName]()
     const { up, down, left, right } = DirectionKeyMapper
     const {

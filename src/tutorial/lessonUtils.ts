@@ -12,7 +12,12 @@ export const recordLesson = (
   if (hasCompletedLesson(player, lesson)) {
     return player
   } else {
-    player.completedLessons = player.completedLessons.concat(lesson)
-    updatePlayer(player, false)
+    updatePlayer(
+      {
+        ...player,
+        completedLessons: player.completedLessons.concat(lesson),
+      },
+      false
+    )
   }
 }

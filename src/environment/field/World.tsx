@@ -59,7 +59,6 @@ const World = ({
   const npcs = useNpcs(mapName)
 
   usePlayerNavigationEffect(
-    currentPlayer,
     updatePlayer,
     canMoveToPosition,
     updateCharacterPosition,

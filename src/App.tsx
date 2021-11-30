@@ -4,6 +4,9 @@ import { BrowserRouter } from 'react-router-dom'
 import { CharacterPositionProvider, ModalStateProvider } from './context'
 import { ChakraProvider } from '@chakra-ui/react'
 import { theme } from './theme'
+import { PlayerProvider } from './providers'
+import { Provider } from 'react-redux'
+import { store } from './redux'
 
 function App() {
   return (
@@ -11,7 +14,11 @@ function App() {
       <CharacterPositionProvider>
         <ModalStateProvider>
           <BrowserRouter>
-            <Patrogonia />
+            <Provider store={store}>
+              <PlayerProvider>
+                <Patrogonia />
+              </PlayerProvider>
+            </Provider>
           </BrowserRouter>
         </ModalStateProvider>
       </CharacterPositionProvider>

@@ -1,38 +1,38 @@
-import axios from 'axios';
-import HttpStatus from './HttpStatus';
+import axios from 'axios'
+import HttpStatus from '../../api/HttpStatus'
 
 const axiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_BASE_URL}/battle`,
-    headers: { 'Content-Type': 'application/json' },
-});
+  baseURL: `${process.env.REACT_APP_BASE_URL}/battle`,
+  headers: { 'Content-Type': 'application/json' },
+})
 
 export const getBattle = (battleId, onSuccess, onFailure) => {
-    axiosInstance
-        .get(`/get/${battleId}`)
-        .then((response) => {
-            if (response.status === HttpStatus.OK) {
-                onSuccess(response.data);
-            }
-        })
-        .catch((error) => onFailure(error));
-};
+  axiosInstance
+    .get(`/get/${battleId}`)
+    .then((response) => {
+      if (response.status === HttpStatus.OK) {
+        onSuccess(response.data)
+      }
+    })
+    .catch((error) => onFailure(error))
+}
 
 export const takeTurn = (
-    battleId,
-    playerId,
-    playerAction,
-    targetId,
-    onSuccess,
-    onFailure
+  battleId,
+  playerId,
+  playerAction,
+  targetId,
+  onSuccess,
+  onFailure
 ) => {
-    axiosInstance
-        .post(
-            `/turn/${battleId}?playerId=${playerId}&playerAction=${playerAction}&targetId=${targetId}`
-        )
-        .then((response) => {
-            if (response.status === HttpStatus.OK) {
-                onSuccess(response.data);
-            }
-        })
-        .catch((error) => onFailure(error));
-};
+  axiosInstance
+    .post(
+      `/turn/${battleId}?playerId=${playerId}&playerAction=${playerAction}&targetId=${targetId}`
+    )
+    .then((response) => {
+      if (response.status === HttpStatus.OK) {
+        onSuccess(response.data)
+      }
+    })
+    .catch((error) => onFailure(error))
+}
