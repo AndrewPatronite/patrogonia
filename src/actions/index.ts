@@ -1,4 +1,10 @@
 import {
+  dismissBattle,
+  getBattle,
+  takeTurn,
+  updateBattle,
+} from './battleAction'
+import {
   castSpell,
   createAccount,
   loadPlayer,
@@ -7,4 +13,15 @@ import {
   updatePlayer,
 } from './playerAction'
 
-export { castSpell, createAccount, loadPlayer, loadSave, login, updatePlayer }
+export {
+  castSpell,
+  createAccount,
+  dismissBattle,
+  getBattle,
+  loadPlayer,
+  loadSave,
+  login,
+  takeTurn,
+  updateBattle,
+  updatePlayer,
+}

@@ -12,7 +12,7 @@ import {
   login,
   updatePlayer,
 } from '../actions'
-import HttpStatus from '../api/HttpStatus'
+import { HttpStatus } from '../api'
 
 const PlayerProvider = ({
   children,
@@ -27,13 +27,13 @@ const PlayerProvider = ({
       let errorMessage = 'An unknown error occurred.'
       if (error && error.response && error.response.status) {
         switch (error.response.status) {
-          case HttpStatus.UNAUTHORIZED:
+          case HttpStatus.Unauthorized:
             errorMessage = 'Invalid login.'
             break
-          case HttpStatus.CONFLICT:
+          case HttpStatus.Conflict:
             errorMessage = 'Username already exists.'
             break
-          case HttpStatus.INTERNAL_SERVER_ERROR:
+          case HttpStatus.InternalServerError:
             errorMessage = 'An internal server error occurred.'
             break
           default:

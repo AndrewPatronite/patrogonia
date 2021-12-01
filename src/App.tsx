@@ -7,6 +7,7 @@ import { theme } from './theme'
 import { PlayerProvider } from './providers'
 import { Provider } from 'react-redux'
 import { store } from './redux'
+import BattleProvider from './providers/BattleProvider'
 
 function App() {
   return (
@@ -16,7 +17,9 @@ function App() {
           <BrowserRouter>
             <Provider store={store}>
               <PlayerProvider>
-                <Patrogonia />
+                <BattleProvider>
+                  <Patrogonia />
+                </BattleProvider>
               </PlayerProvider>
             </Provider>
           </BrowserRouter>

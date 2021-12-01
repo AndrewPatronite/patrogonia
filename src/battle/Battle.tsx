@@ -4,50 +4,36 @@ import { getBattleStatusBorder } from './helper'
 import EnemyDisplay from './EnemyDisplay'
 import Log from './Log'
 import PlayerPanel from './PlayerPanel'
-import { BattleState } from '../state/BattleState'
-import { subscribe } from '../subscription/subscribe'
 import { pauseSound, playSound } from '../environment/sound/sound'
-import battleMusic from '../environment/sound/crusaderp/BattleNO3.mp3'
 import ThemedPanel from '../components/theme/ThemedPanel'
 import { Flex } from '@chakra-ui/react'
+import { usePlayer } from '../hooks/usePlayer'
+import { useBattle } from '../hooks'
+import { BattleMusic } from '../environment/sound'
+import { isBattleEnded } from './types'
 
-const Battle = ({
-  currentPlayer,
-  loadPlayer,
-  updatePlayer,
-  battleUrl,
-  loadSave,
-}) => {
-  const [battleMessage, setBattleMessage] = useState({})
-  useEffect(() => {
-    const battleSubscription = subscribe(battleUrl, setBattleMessage)
-    return () => battleSubscription.close()
-  }, [battleUrl])
+const Battle = () => {
+  const { currentPlayer, loadSave, updatePlayer } = usePlayer()
+  const { battle, dismissBattle, takeTurn } = useBattle()
+  const { enemies, log, playerStats, roundPlayerActions, status } = battle || {}
+
   useEffect(() => {
     playSound('battle-music')
   }, [])
-  const [battle, takeTurn, dismissBattle] = BattleState(
-    currentPlayer,
-    updatePlayer,
-    loadPlayer,
-    battleMessage,
-    setBattleMessage
-  )
   const {
     location: { mapName },
   } = currentPlayer
-  const { enemies, log, playerStats, roundPlayerActions, status } = battle
-  const [selectedEnemyId, selectEnemy] = useState()
+  const [selectedEnemyId, selectEnemy] = useState<string>()
   const [playerTurnEnabled, setPlayerTurnEnabled] = useState(true)
   const players = values(playerStats)
   const battleStatusStyle = getBattleStatusBorder(players)
-  const battleEnded = ['VICTORY', 'DEFEAT'].includes(status)
+  const battleEnded = !!status && isBattleEnded(status)
   //TODO clean this up after breaking battleMessage up into smaller pieces
   const deliveredLogEntries = useMemo(
     () => filter(log, (entry) => entry.delivered),
     [log]
   )
-  const allMessagesDelivered = log.length === deliveredLogEntries.length
+  const allMessagesDelivered = log?.length === deliveredLogEntries.length
 
   useEffect(() => {
     if (allMessagesDelivered) {
@@ -70,7 +56,7 @@ const Battle = ({
       sx={battleStatusStyle}
     >
       <audio className="battle-music" autoPlay loop>
-        <source src={battleMusic} />
+        <source src={BattleMusic} />
       </audio>
       <EnemyDisplay
         mapName={mapName}
@@ -80,7 +66,7 @@ const Battle = ({
       />
       <Log
         deliveredEntries={deliveredLogEntries}
-        onDismiss={() => dismissBattle(battle)}
+        onDismiss={() => battle && dismissBattle(battle)}
         showDismiss={battleEnded}
         battleStatusStyle={battleStatusStyle}
         allMessagesDelivered={allMessagesDelivered}
@@ -95,8 +81,8 @@ const Battle = ({
               players={players}
               battleStatusStyle={battleStatusStyle}
               enemies={enemies}
-              selectEnemy={(enemyId) => selectEnemy(enemyId)}
-              takeTurn={(action, targetId) => {
+              selectEnemy={(enemyId: string) => selectEnemy(enemyId)}
+              takeTurn={(action: string, targetId: string) => {
                 takeTurn(action, targetId)
                 setPlayerTurnEnabled(false)
                 selectEnemy(undefined)

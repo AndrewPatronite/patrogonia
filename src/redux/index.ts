@@ -1,7 +1,8 @@
+import battleSlice from './battleSlice'
 import playerSlice from './playerSlice'
 import { RootState, store } from './store'
 
-export { playerSlice }
+export { battleSlice, playerSlice }
 
 export { store }
 

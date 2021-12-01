@@ -1,19 +1,16 @@
 import React, { useEffect } from 'react'
 import { Route, Switch, useHistory } from 'react-router-dom'
 import World from './environment/field/World'
-import Battle from './battle/Battle'
 import PermissionRoute from './PermissionRoute'
 import { LandingPage } from './landing'
 import { usePlayer } from './hooks/usePlayer'
+import { Battle } from './battle'
 
 const Patrogonia = () => {
-  const battleUrl = `${process.env.REACT_APP_WEBSOCKET_BASE_URL}/battles`
   const {
     castSpell,
     createAccount,
     currentPlayer,
-    loadPlayer,
-    loadSave,
     login,
     updatePlayer,
   } = usePlayer()
@@ -28,9 +25,9 @@ const Patrogonia = () => {
     if (!currentPlayer.loggedIn) {
       nextPath = '/login'
     } else if (currentPlayer.battleId) {
-      nextPath = '/battle'
+      nextPath = `/battle/${currentPlayer.battleId}`
     } else {
-      nextPath = '/field'
+      nextPath = `/field/${currentPlayer.location.mapName}`
     }
     if (nextPath !== pathname) {
       history.replace(nextPath)
@@ -39,16 +36,16 @@ const Patrogonia = () => {
 
   return (
     <Switch>
-      <PermissionRoute hasPermission={currentPlayer.loggedIn} path="/battle">
-        <Battle
-          currentPlayer={currentPlayer}
-          loadPlayer={loadPlayer}
-          updatePlayer={updatePlayer}
-          battleUrl={battleUrl}
-          loadSave={loadSave}
-        />
+      <PermissionRoute
+        hasPermission={currentPlayer.loggedIn}
+        path="/battle/:battleId"
+      >
+        <Battle />
       </PermissionRoute>
-      <PermissionRoute hasPermission={currentPlayer.loggedIn} path="/field">
+      <PermissionRoute
+        hasPermission={currentPlayer.loggedIn}
+        path="/field/:mapName"
+      >
         <World
           currentPlayer={currentPlayer}
           castSpell={castSpell}

@@ -1,16 +1,21 @@
 import axios from 'axios'
-import HttpStatus from '../../api/HttpStatus'
+import { HttpStatus } from './index'
+import { Battle } from '../battle/types'
 
 const axiosInstance = axios.create({
   baseURL: `${process.env.REACT_APP_BASE_URL}/battle`,
   headers: { 'Content-Type': 'application/json' },
 })
 
-export const getBattle = (battleId, onSuccess, onFailure) => {
+export const getBattle = (
+  battleId: string,
+  onSuccess: (battle: Battle) => void,
+  onFailure: (error: any) => void
+) => {
   axiosInstance
     .get(`/get/${battleId}`)
     .then((response) => {
-      if (response.status === HttpStatus.OK) {
+      if (response.status === HttpStatus.Ok) {
         onSuccess(response.data)
       }
     })
@@ -18,19 +23,19 @@ export const getBattle = (battleId, onSuccess, onFailure) => {
 }
 
 export const takeTurn = (
-  battleId,
-  playerId,
-  playerAction,
-  targetId,
-  onSuccess,
-  onFailure
+  battleId: string,
+  playerId: number,
+  playerAction: string,
+  targetId: string,
+  onSuccess: (battle: Battle) => void,
+  onFailure: (error: any) => void
 ) => {
   axiosInstance
     .post(
       `/turn/${battleId}?playerId=${playerId}&playerAction=${playerAction}&targetId=${targetId}`
     )
     .then((response) => {
-      if (response.status === HttpStatus.OK) {
+      if (response.status === HttpStatus.Ok) {
         onSuccess(response.data)
       }
     })
