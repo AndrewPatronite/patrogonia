@@ -3,7 +3,8 @@ import {
   getBattle,
   takeTurn,
   updateBattle,
-} from './battleAction'
+} from './battleActions'
+import { getPlayers, updateNpc, updatePeerLocation } from './mapActions'
 import {
   castSpell,
   createAccount,
@@ -11,17 +12,20 @@ import {
   loadSave,
   login,
   updatePlayer,
-} from './playerAction'
+} from './playerActions'
 
 export {
   castSpell,
   createAccount,
   dismissBattle,
   getBattle,
+  getPlayers,
   loadPlayer,
   loadSave,
   login,
   takeTurn,
   updateBattle,
+  updateNpc,
+  updatePeerLocation,
   updatePlayer,
 }

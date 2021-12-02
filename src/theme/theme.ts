@@ -10,15 +10,6 @@ const config: ThemeConfig = {
   useSystemColorMode: false,
 }
 
-//TODO AP confirm colors and replace usages, consolidating here
-//#383838 -> gray.700
-//#e6e6e6 -> gray.200
-//#fafafa -> gray.100
-//#606060 -> gray.700
-//#333333 -> gray.800
-//#cccccc -> gray.300
-//navy: '#120c74' -> blue.900,
-
 const darkThemePanelStyle = {
   backgroundColor: 'gray.700',
   textColor: 'gray.200',
@@ -26,7 +17,6 @@ const darkThemePanelStyle = {
   label: {
     color: 'gray.300',
   },
-  //TODO AP the following may not be necessary
   span: {
     color: 'gray.200',
   },
@@ -39,7 +29,6 @@ const lightThemePanelStyle = {
   label: {
     color: 'gray.800',
   },
-  //TODO AP the following may not be necessary
   span: {
     color: 'gray.700',
   },

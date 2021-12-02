@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { PlayerContext } from '../context'
-import { useToast } from '@chakra-ui/react'
 import { RootState } from '../redux'
 import Player from '../player/Player'
 import {
@@ -12,45 +11,15 @@ import {
   login,
   updatePlayer,
 } from '../actions'
-import { HttpStatus } from '../api'
+import { useToastErrorHandler } from './useToastErrorHandler'
 
 const PlayerProvider = ({
   children,
 }: {
   children: JSX.Element | JSX.Element[]
 }) => {
-  const toast = useToast()
+  const displayError = useToastErrorHandler()
   const dispatch = useDispatch()
-
-  const displayError = useCallback(
-    (error) => {
-      let errorMessage = 'An unknown error occurred.'
-      if (error && error.response && error.response.status) {
-        switch (error.response.status) {
-          case HttpStatus.Unauthorized:
-            errorMessage = 'Invalid login.'
-            break
-          case HttpStatus.Conflict:
-            errorMessage = 'Username already exists.'
-            break
-          case HttpStatus.InternalServerError:
-            errorMessage = 'An internal server error occurred.'
-            break
-          default:
-            break
-        }
-      }
-      toast({
-        position: 'top',
-        variant: 'top-accent',
-        status: 'error',
-        duration: null,
-        isClosable: true,
-        description: errorMessage,
-      })
-    },
-    [toast]
-  )
 
   const currentPlayer = useSelector((state: RootState) => state.currentPlayer)
 

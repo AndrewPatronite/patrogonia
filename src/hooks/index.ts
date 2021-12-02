@@ -1,6 +1,7 @@
 import { useBattle } from './useBattle'
-import { useCharacterPositions } from './useCharacterPositions'
+import { useMap } from './useMap'
 import { useModalState } from './useModalState'
-import { useNpcs } from './useNpcs'
+import { useNpcMovementEffect } from './useNpcMovementEffect'
+import { usePlayer } from './usePlayer'
 
-export { useBattle, useCharacterPositions, useModalState, useNpcs }
+export { useBattle, useMap, useModalState, useNpcMovementEffect, usePlayer }

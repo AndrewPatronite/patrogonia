@@ -1,32 +1,26 @@
 import { useEffect } from 'react'
 import { DirectionKeyMapper } from './DirectionKeyMapper'
-import { movePlayer } from './movePlayer'
 import { OPEN_DIALOG, OPEN_FIELD_MENU } from './FieldMenuKeys'
-import { ModalEnum } from '../context/ModalStateContext'
+import { ModalEnum } from '../context'
 import { isAdjacentToCurrentPlayer } from '../utils'
 import { LessonEnum, recordLesson } from '../tutorial'
-import { usePlayer } from '../hooks/usePlayer'
+import { useMap, useModalState, usePlayer } from '../hooks'
+import { getDialog } from '../npcs'
+import { movePlayer } from './movePlayer'
 
-export const usePlayerNavigationEffect = (
-  updatePlayer,
-  canMoveToPosition,
-  updateCharacterPosition,
-  openModal,
-  npcs,
-  setCharacterTalking,
-  isModalOpen
-) => {
-  const { currentPlayer } = usePlayer()
+export const usePlayerNavigationEffect = () => {
+  const { isModalOpen, openModal } = useModalState()
+  const { currentPlayer, updatePlayer } = usePlayer()
+  const { npcs, canMoveToPosition, updateNpc } = useMap()
   return useEffect(() => {
     const { isDirectionKey, getDirection } = DirectionKeyMapper
 
-    const handleKeyDown = ({ key }) => {
+    const handleKeyDown = ({ key }: { key: string }) => {
       const isDialogOpen = isModalOpen(ModalEnum.Dialog)
       const isFieldMenuOpen = isModalOpen(ModalEnum.FieldMenu)
       const navigationEnabled =
         currentPlayer.loggedIn &&
         !currentPlayer.battleId &&
-        !currentPlayer.showFieldMenu &&
         !(isDialogOpen || isFieldMenuOpen)
       if (navigationEnabled) {
         if (isDirectionKey(key)) {
@@ -34,8 +28,7 @@ export const usePlayerNavigationEffect = (
             currentPlayer,
             getDirection(key),
             updatePlayer,
-            canMoveToPosition,
-            updateCharacterPosition
+            canMoveToPosition
           )
         } else {
           switch (key) {
@@ -48,7 +41,6 @@ export const usePlayerNavigationEffect = (
                 )
               )
               if (firstAdjacentNpc) {
-                setCharacterTalking(`npc-${firstAdjacentNpc.name}`, true)
                 let npcFacing
                 let playerFacing
                 if (
@@ -82,20 +74,14 @@ export const usePlayerNavigationEffect = (
                   },
                   playerFacing,
                   updatePlayer,
-                  canMoveToPosition,
-                  updateCharacterPosition
+                  canMoveToPosition
                 )
-                const nextLocation = {
-                  mapName: currentPlayer.location.mapName,
-                  rowIndex: firstAdjacentNpc.currentRowIndex,
-                  columnIndex: firstAdjacentNpc.currentColumnIndex,
-                  facing: npcFacing,
-                  entranceName: '',
-                }
-                updateCharacterPosition(
-                  `npc-${firstAdjacentNpc.name}`,
-                  nextLocation
-                )
+                updateNpc({
+                  ...firstAdjacentNpc,
+                  directionFacing: npcFacing,
+                  isTalking: true,
+                })
+                openModal(ModalEnum.Dialog, getDialog(firstAdjacentNpc.name))
               }
               break
             case OPEN_FIELD_MENU:
@@ -120,11 +106,10 @@ export const usePlayerNavigationEffect = (
   }, [
     canMoveToPosition,
     currentPlayer,
-    setCharacterTalking,
     isModalOpen,
     openModal,
     npcs,
-    updateCharacterPosition,
     updatePlayer,
+    updateNpc,
   ])
 }

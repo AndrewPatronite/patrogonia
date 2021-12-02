@@ -1,16 +1,17 @@
-import { NpcName } from './Npcs';
+import { NpcName } from './Npcs'
 
 export enum NpcType {
-    Knight,
+  Knight,
 }
 
 export interface Npc {
-    name: NpcName;
-    currentRowIndex: number;
-    currentColumnIndex: number;
-    movementRange: number;
-    startingRowIndex: number;
-    startingColumnIndex: number;
-    type: NpcType;
-    directionFacing: string;
+  name: NpcName
+  currentRowIndex: number
+  currentColumnIndex: number
+  movementRange: number
+  startingRowIndex: number
+  startingColumnIndex: number
+  type: NpcType
+  directionFacing: string
+  isTalking: boolean
 }

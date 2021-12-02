@@ -7,8 +7,7 @@ import PlayerPanel from './PlayerPanel'
 import { pauseSound, playSound } from '../environment/sound/sound'
 import ThemedPanel from '../components/theme/ThemedPanel'
 import { Flex } from '@chakra-ui/react'
-import { usePlayer } from '../hooks/usePlayer'
-import { useBattle } from '../hooks'
+import { useBattle, usePlayer } from '../hooks'
 import { BattleMusic } from '../environment/sound'
 import { isBattleEnded } from './types'
 
@@ -28,7 +27,7 @@ const Battle = () => {
   const players = values(playerStats)
   const battleStatusStyle = getBattleStatusBorder(players)
   const battleEnded = !!status && isBattleEnded(status)
-  //TODO clean this up after breaking battleMessage up into smaller pieces
+  //TODO AP clean this up after breaking battleMessage up into smaller pieces
   const deliveredLogEntries = useMemo(
     () => filter(log, (entry) => entry.delivered),
     [log]

@@ -1,12 +1,12 @@
-import BattleContext from '../context/BattleContext'
 import React, { useCallback, useEffect, useState } from 'react'
-import { usePlayer } from '../hooks/usePlayer'
+import { usePlayer } from '../hooks'
 import { isEmpty } from 'lodash'
 import { subscribe } from '../subscription/subscribe'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../redux'
 import { Battle, isBattleEnded } from '../battle/types'
 import { dismissBattle, getBattle, takeTurn, updateBattle } from '../actions'
+import { BattleContext } from '../context'
 
 const BattleProvider = ({
   children,

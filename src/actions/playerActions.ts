@@ -80,7 +80,7 @@ const getPlayerForServer = (player: Player) =>
 export const updatePlayer = (
   dispatch: Dispatch,
   player: Player,
-  updateToServer: boolean
+  updateToServer: boolean = true
 ) => {
   if (updateToServer) {
     updatePlayerRemote(

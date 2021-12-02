@@ -1,11 +1,18 @@
 import { throttle, uniq } from 'lodash'
+import { Map } from '../environment/maps'
 import { Cave, Maps } from '../environment/maps/Maps'
 import { DirectionKeyMapper } from './DirectionKeyMapper'
 import { LessonEnum } from '../tutorial'
+import Player from '../player/Player'
 
 const moveDelay = 250
 
-const getCompletedLessons = (saveGame, currentPlayer, mapName, playerMoved) => {
+const getCompletedLessons = (
+  saveGame: boolean,
+  currentPlayer: Player,
+  mapName: string,
+  playerMoved: boolean
+): string[] => {
   const completedLessons = saveGame
     ? currentPlayer.completedLessons.concat(LessonEnum.TownVisitLesson)
     : [...currentPlayer.completedLessons]
@@ -20,22 +27,23 @@ const getCompletedLessons = (saveGame, currentPlayer, mapName, playerMoved) => {
 }
 
 const updatePlayerLocation = (
-  currentMap,
-  nextRowIndex,
-  nextColumnIndex,
-  directionFacing,
-  currentPlayer,
-  updatePlayer,
-  canMoveToPosition,
-  updateCharacterPosition
+  currentMap: Map,
+  nextRowIndex: number,
+  nextColumnIndex: number,
+  directionFacing: string,
+  currentPlayer: Player,
+  updatePlayer: (player: Player, updateToServer?: boolean) => void,
+  canMoveToPosition: (rowIndex: number, columnIndex: number) => boolean
 ) => {
   const nextPosition = currentMap.layout[nextRowIndex][nextColumnIndex]
   const isTravelDestination = Maps.isTravelDestination(nextPosition)
 
   if (isTravelDestination) {
+    // @ts-ignore
     const nextMap = Maps[nextPosition](currentMap.name)
     const { name: mapName, entrance } = nextMap
     const saveGame = Maps.isSaveLocation(mapName)
+
     updatePlayer({
       ...currentPlayer,
       location: {
@@ -43,6 +51,7 @@ const updatePlayerLocation = (
         ...entrance,
         facing: 'down',
       },
+      // @ts-ignore
       saveGame,
       completedLessons: getCompletedLessons(
         saveGame,
@@ -51,13 +60,7 @@ const updatePlayerLocation = (
         true
       ),
     })
-  } else if (
-    canMoveToPosition({
-      mapName: currentMap.name,
-      rowIndex: nextRowIndex,
-      columnIndex: nextColumnIndex,
-    })
-  ) {
+  } else if (canMoveToPosition(nextRowIndex, nextColumnIndex)) {
     const nextLocation = {
       ...currentPlayer.location,
       mapName: currentMap.name,
@@ -65,14 +68,11 @@ const updatePlayerLocation = (
       columnIndex: nextColumnIndex,
       facing: directionFacing,
     }
-    updateCharacterPosition(
-      `${currentPlayer.name}-${currentPlayer.id}`,
-      nextLocation
-    )
     const saveGame = Maps.isSaveLocation(nextPosition)
     updatePlayer({
       ...currentPlayer,
       location: nextLocation,
+      // @ts-ignore
       saveGame,
       completedLessons: getCompletedLessons(
         saveGame,
@@ -86,14 +86,11 @@ const updatePlayerLocation = (
       ...currentPlayer.location,
       facing: directionFacing,
     }
-    updateCharacterPosition(
-      `${currentPlayer.name}-${currentPlayer.id}`,
-      nextLocation
-    )
     const saveGame = Maps.isSaveLocation(nextPosition)
     updatePlayer({
       ...currentPlayer,
       location: nextLocation,
+      // @ts-ignore
       saveGame,
       completedLessons: getCompletedLessons(
         saveGame,
@@ -105,7 +102,11 @@ const updatePlayerLocation = (
   }
 }
 
-const tryExit = (currentPlayer, { exit }, updatePlayer) => {
+const tryExit = (
+  currentPlayer: Player,
+  { exit }: Map,
+  updatePlayer: (player: Player, updateToServer?: boolean) => void
+) => {
   if (exit) {
     updatePlayer({
       ...currentPlayer,
@@ -116,12 +117,12 @@ const tryExit = (currentPlayer, { exit }, updatePlayer) => {
 
 export const movePlayer = throttle(
   (
-    currentPlayer,
-    direction,
-    updatePlayer,
-    canMoveToPosition,
-    updateCharacterPosition
+    currentPlayer: Player,
+    direction: string,
+    updatePlayer: (player: Player, updateToServer?: boolean) => void,
+    canMoveToPosition: (rowIndex: number, columnIndex: number) => boolean
   ) => {
+    // @ts-ignore
     const currentMap = Maps[currentPlayer.location.mapName]()
     const { up, down, left, right } = DirectionKeyMapper
     const {
@@ -139,8 +140,7 @@ export const movePlayer = throttle(
             up,
             currentPlayer,
             updatePlayer,
-            canMoveToPosition,
-            updateCharacterPosition
+            canMoveToPosition
           )
         } else {
           tryExit(currentPlayer, currentMap, updatePlayer)
@@ -155,8 +155,7 @@ export const movePlayer = throttle(
             down,
             currentPlayer,
             updatePlayer,
-            canMoveToPosition,
-            updateCharacterPosition
+            canMoveToPosition
           )
         } else {
           tryExit(currentPlayer, currentMap, updatePlayer)
@@ -171,8 +170,7 @@ export const movePlayer = throttle(
             left,
             currentPlayer,
             updatePlayer,
-            canMoveToPosition,
-            updateCharacterPosition
+            canMoveToPosition
           )
         } else {
           tryExit(currentPlayer, currentMap, updatePlayer)
@@ -190,8 +188,7 @@ export const movePlayer = throttle(
             right,
             currentPlayer,
             updatePlayer,
-            canMoveToPosition,
-            updateCharacterPosition
+            canMoveToPosition
           )
         } else {
           tryExit(currentPlayer, currentMap, updatePlayer)

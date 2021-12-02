@@ -1,14 +1,11 @@
-import Entrance from './Entrance';
-import { Npc } from '../../npcs';
+import Entrance from './Entrance'
+import { Npc } from '../../npcs'
+import Location from '../../player/Location'
 
 export default interface Map {
-    name: string;
-    layout: string[][];
-    entrance: Entrance;
-    exit?: {
-        mapName: string;
-        rowIndex: number;
-        columnIndex: number;
-    };
-    npcs: Npc[];
+  name: string
+  layout: string[][]
+  entrance: Entrance
+  exit?: Location
+  npcs: Npc[]
 }

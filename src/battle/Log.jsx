@@ -37,7 +37,7 @@ const Log = ({
       if (!logEntryMusicPlayed[lastDeliveredEntryIndex]) {
         const { content, targetId } = deliveredEntries[lastDeliveredEntryIndex]
         if (content.includes('attacks')) {
-          //TODO revisit:
+          //TODO AP revisit:
           const integerMaxStringLength = 11
           if (targetId && targetId.length > integerMaxStringLength) {
             playSound('player-attack')

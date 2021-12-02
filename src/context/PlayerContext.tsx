@@ -8,7 +8,7 @@ interface PlayerState {
   loadPlayer: (playerId: number) => void
   loadSave: (playerId: number) => void
   login: (username: string, password: string) => void
-  updatePlayer: (player: Player, updateToServer: boolean) => void
+  updatePlayer: (player: Player, updateToServer?: boolean) => void
 }
 
 const getInitialPlayer = () => {
