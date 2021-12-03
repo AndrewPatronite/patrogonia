@@ -5,8 +5,8 @@ import {
   ModalInterface,
   ModalStateContext,
 } from './ModalStateContext'
-
-import { PlayerContext } from './PlayerContext'
+import PlayerContext from './PlayerContext'
+import TutorialContext from './TutorialContext'
 
 export {
   BattleContext,
@@ -14,5 +14,7 @@ export {
   ModalEnum,
   ModalStateContext,
   PlayerContext,
+  TutorialContext,
 }
+
 export type { ModalInterface }

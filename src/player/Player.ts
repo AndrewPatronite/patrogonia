@@ -12,5 +12,5 @@ export default interface Player {
   location: Location
   lastUpdate: string
   visited: string[]
-  completedLessons: string[]
+  tutorialLessons: string[]
 }

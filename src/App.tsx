@@ -11,6 +11,7 @@ import {
 } from './providers'
 import { Provider } from 'react-redux'
 import { store } from './redux'
+import TutorialProvider from './providers/TutorialProvider'
 
 function App() {
   return (
@@ -21,7 +22,9 @@ function App() {
             <PlayerProvider>
               <BattleProvider>
                 <MapProvider>
-                  <Patrogonia />
+                  <TutorialProvider>
+                    <Patrogonia />
+                  </TutorialProvider>
                 </MapProvider>
               </BattleProvider>
             </PlayerProvider>

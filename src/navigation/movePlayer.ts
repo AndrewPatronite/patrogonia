@@ -14,8 +14,8 @@ const getCompletedLessons = (
   playerMoved: boolean
 ): string[] => {
   const completedLessons = saveGame
-    ? currentPlayer.completedLessons.concat(LessonEnum.TownVisitLesson)
-    : [...currentPlayer.completedLessons]
+    ? currentPlayer.tutorialLessons.concat(LessonEnum.TownVisitLesson)
+    : [...currentPlayer.tutorialLessons]
 
   if (mapName === Cave.LavaGrotto) {
     completedLessons.push(LessonEnum.CaveExplorationLesson)
@@ -32,7 +32,11 @@ const updatePlayerLocation = (
   nextColumnIndex: number,
   directionFacing: string,
   currentPlayer: Player,
-  updatePlayer: (player: Player, updateToServer?: boolean) => void,
+  updatePlayer: (
+    player: Player,
+    saveGame?: boolean,
+    updateToServer?: boolean
+  ) => void,
   canMoveToPosition: (rowIndex: number, columnIndex: number) => boolean
 ) => {
   const nextPosition = currentMap.layout[nextRowIndex][nextColumnIndex]
@@ -44,22 +48,23 @@ const updatePlayerLocation = (
     const { name: mapName, entrance } = nextMap
     const saveGame = Maps.isSaveLocation(mapName)
 
-    updatePlayer({
-      ...currentPlayer,
-      location: {
-        mapName,
-        ...entrance,
-        facing: 'down',
+    updatePlayer(
+      {
+        ...currentPlayer,
+        location: {
+          mapName,
+          ...entrance,
+          facing: 'down',
+        },
+        tutorialLessons: getCompletedLessons(
+          saveGame,
+          currentPlayer,
+          mapName,
+          true
+        ),
       },
-      // @ts-ignore
-      saveGame,
-      completedLessons: getCompletedLessons(
-        saveGame,
-        currentPlayer,
-        mapName,
-        true
-      ),
-    })
+      saveGame
+    )
   } else if (canMoveToPosition(nextRowIndex, nextColumnIndex)) {
     const nextLocation = {
       ...currentPlayer.location,
@@ -69,43 +74,49 @@ const updatePlayerLocation = (
       facing: directionFacing,
     }
     const saveGame = Maps.isSaveLocation(nextPosition)
-    updatePlayer({
-      ...currentPlayer,
-      location: nextLocation,
-      // @ts-ignore
-      saveGame,
-      completedLessons: getCompletedLessons(
-        saveGame,
-        currentPlayer,
-        currentMap.name,
-        true
-      ),
-    })
+    updatePlayer(
+      {
+        ...currentPlayer,
+        location: nextLocation,
+        tutorialLessons: getCompletedLessons(
+          saveGame,
+          currentPlayer,
+          currentMap.name,
+          true
+        ),
+      },
+      saveGame
+    )
   } else {
     const nextLocation = {
       ...currentPlayer.location,
       facing: directionFacing,
     }
     const saveGame = Maps.isSaveLocation(nextPosition)
-    updatePlayer({
-      ...currentPlayer,
-      location: nextLocation,
-      // @ts-ignore
-      saveGame,
-      completedLessons: getCompletedLessons(
-        saveGame,
-        currentPlayer,
-        currentMap.name,
-        false
-      ),
-    })
+    updatePlayer(
+      {
+        ...currentPlayer,
+        location: nextLocation,
+        tutorialLessons: getCompletedLessons(
+          saveGame,
+          currentPlayer,
+          currentMap.name,
+          false
+        ),
+      },
+      saveGame
+    )
   }
 }
 
 const tryExit = (
   currentPlayer: Player,
   { exit }: Map,
-  updatePlayer: (player: Player, updateToServer?: boolean) => void
+  updatePlayer: (
+    player: Player,
+    saveGame?: boolean,
+    updateToServer?: boolean
+  ) => void
 ) => {
   if (exit) {
     updatePlayer({
@@ -119,7 +130,11 @@ export const movePlayer = throttle(
   (
     currentPlayer: Player,
     direction: string,
-    updatePlayer: (player: Player, updateToServer?: boolean) => void,
+    updatePlayer: (
+      player: Player,
+      saveGame?: boolean,
+      updateToServer?: boolean
+    ) => void,
     canMoveToPosition: (rowIndex: number, columnIndex: number) => boolean
   ) => {
     // @ts-ignore

@@ -46,11 +46,7 @@ const Patrogonia = () => {
         hasPermission={currentPlayer.loggedIn}
         path="/field/:mapName"
       >
-        <World
-          currentPlayer={currentPlayer}
-          castSpell={castSpell}
-          updatePlayer={updatePlayer}
-        />
+        <World currentPlayer={currentPlayer} castSpell={castSpell} />
       </PermissionRoute>
       <Route path={['/', '/login']}>
         <LandingPage login={login} createAccount={createAccount} />

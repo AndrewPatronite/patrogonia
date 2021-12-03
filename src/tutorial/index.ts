@@ -1,9 +1,10 @@
-import BattleOptionLesson from './BattleOptionLesson'
+import BattleCommandLesson from './BattleCommandLesson'
 import FieldMenuLesson from './FieldMenuLesson'
+import { getLesson } from './getLesson'
 import InstructionsModal from './InstructionsModal'
 import Introduction from './introduction/Introduction'
-import { LessonEnum } from './introduction/LessonEnum'
 import { Lesson } from './Lesson'
+import { LessonEnum } from './LessonEnum'
 import { hasCompletedLesson, recordLesson } from './lessonUtils'
 import MovementLesson from './MovementLesson'
 import NpcLesson from './NpcLesson'
@@ -11,8 +12,9 @@ import TownVisitLesson from './TownVisitLesson'
 import TutorialModal from './TutorialModal'
 
 export {
-  BattleOptionLesson,
+  BattleCommandLesson,
   FieldMenuLesson,
+  getLesson,
   hasCompletedLesson,
   InstructionsModal,
   Introduction,

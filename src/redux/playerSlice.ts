@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 import Player from '../player/Player'
 
-const getInitialPlayer = (): Player => {
+export const getInitialPlayer = (): Player => {
   const storedPlayer = localStorage.getItem('currentPlayer')
   return storedPlayer
     ? JSON.parse(storedPlayer)
-    : { loggedIn: false, location: {}, completedLessons: [] }
+    : { loggedIn: false, location: {}, tutorialLessons: [] }
 }
 
 const playerSlice = createSlice({

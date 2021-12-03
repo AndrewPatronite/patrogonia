@@ -10,7 +10,7 @@ import { Battle } from '../battle/types'
 export const dismissBattle = (dispatch: Dispatch) =>
   dispatch(battleSlice.actions.dismissBattle())
 
-export const getBattle = (
+export const loadBattle = (
   dispatch: Dispatch,
   battleId: string,
   onBattleNotFound: () => void

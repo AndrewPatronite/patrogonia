@@ -3,10 +3,11 @@ import { DirectionKeyMapper } from './DirectionKeyMapper'
 import { OPEN_DIALOG, OPEN_FIELD_MENU } from './FieldMenuKeys'
 import { ModalEnum } from '../context'
 import { isAdjacentToCurrentPlayer } from '../utils'
-import { LessonEnum, recordLesson } from '../tutorial'
+import { hasCompletedLesson, LessonEnum, recordLesson } from '../tutorial'
 import { useMap, useModalState, usePlayer } from '../hooks'
 import { getDialog } from '../npcs'
 import { movePlayer } from './movePlayer'
+import { uniq } from 'lodash'
 
 export const usePlayerNavigationEffect = () => {
   const { isModalOpen, openModal } = useModalState()
@@ -21,7 +22,8 @@ export const usePlayerNavigationEffect = () => {
       const navigationEnabled =
         currentPlayer.loggedIn &&
         !currentPlayer.battleId &&
-        !(isDialogOpen || isFieldMenuOpen)
+        !(isDialogOpen || isFieldMenuOpen) &&
+        hasCompletedLesson(currentPlayer, LessonEnum.Introduction)
       if (navigationEnabled) {
         if (isDirectionKey(key)) {
           movePlayer(
@@ -68,8 +70,8 @@ export const usePlayerNavigationEffect = () => {
                 movePlayer(
                   {
                     ...currentPlayer,
-                    completedLessons: currentPlayer.completedLessons.concat(
-                      LessonEnum.NpcLesson
+                    tutorialLessons: uniq(
+                      currentPlayer.tutorialLessons.concat(LessonEnum.NpcLesson)
                     ),
                   },
                   playerFacing,

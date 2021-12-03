@@ -1,26 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TileRow from './TileRow'
 import { getLocationToPlayerMap, getMapDisplayRange } from './helper'
 import { pauseSound, playSound } from '../sound/sound'
 import PlayerStatsModal from '../../player/PlayerStatsModal'
 import FieldMenu from '../../player/FieldMenu'
 import Player from '../../player/Player'
-import { Continent, Maps } from '../maps/Maps'
+import { Maps } from '../maps/Maps'
 import { useMap, useModalState, useNpcMovementEffect } from '../../hooks'
 import DialogModal from '../../dialog/DialogModal'
 import { usePlayerNavigationEffect } from '../../navigation'
-import {
-  FieldMenuLesson,
-  Introduction as IntroductionLesson,
-  LessonEnum,
-  MovementLesson,
-  NpcLesson,
-  TownVisitLesson,
-  TutorialModal,
-} from '../../tutorial'
 import { Box, Text } from '@chakra-ui/react'
 import { CaptionModal } from '../../components'
-import CaveExplorationLesson from '../../tutorial/CaveExplorationLesson'
 import { ModalEnum } from '../../context'
 
 const fieldMusic = require('../sound/crusaderp/BattleHighlands.mp3')
@@ -32,11 +22,9 @@ const SHOW_PLAYER_STATS_DELAY = 5000
 const World = ({
   currentPlayer,
   castSpell,
-  updatePlayer,
 }: {
   currentPlayer: Player
   castSpell: (spellName: string, targetId: string) => void
-  updatePlayer: (player: Player, updateToServer: boolean) => void
 }) => {
   const {
     closeModal,
@@ -103,12 +91,6 @@ const World = ({
   const isDialogOpen = isModalOpen(ModalEnum.Dialog)
   const isTutorialOpen = isModalOpen(ModalEnum.Tutorial)
 
-  const Introduction = () => (
-    <IntroductionLesson
-      currentPlayer={currentPlayer}
-      updatePlayer={updatePlayer}
-    />
-  )
   return (
     <Box
       backgroundColor="#0055d4"
@@ -166,40 +148,6 @@ const World = ({
         showDialog={isDialogOpen}
         closeDialog={() => closeModal(ModalEnum.Dialog)}
         getDialog={() => getModalContent(ModalEnum.Dialog)}
-      />
-      <TutorialModal
-        player={currentPlayer}
-        lessons={[
-          {
-            name: LessonEnum.Introduction,
-            component: useCallback(Introduction, [currentPlayer, updatePlayer]),
-          },
-          {
-            name: LessonEnum.MovementLesson,
-            component: MovementLesson,
-          },
-          Maps.isTown(mapName)
-            ? {
-                name: LessonEnum.NpcLesson,
-                component: NpcLesson,
-              }
-            : {
-                name: LessonEnum.TownVisitLesson,
-                component: TownVisitLesson,
-              },
-          {
-            name: LessonEnum.FieldMenuLesson,
-            component: FieldMenuLesson,
-          },
-          ...(mapName === Continent.Atoris
-            ? [
-                {
-                  name: LessonEnum.CaveExplorationLesson,
-                  component: CaveExplorationLesson,
-                },
-              ]
-            : []),
-        ]}
       />
       <CaptionModal message={mapName} isOpen={isLocationCaptionModalOpen} />
       {Maps.isTown(mapName) && (

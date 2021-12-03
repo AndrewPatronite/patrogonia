@@ -1,7 +1,6 @@
-import { FunctionComponent } from 'react'
-import { LessonEnum } from './introduction/LessonEnum'
+import { LessonEnum } from './LessonEnum'
 
 export interface Lesson {
   name: LessonEnum
-  component: FunctionComponent
+  component: (lessonProps?: any) => JSX.Element
 }

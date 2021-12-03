@@ -19,7 +19,10 @@ const PlayerPanel = ({
   updatePlayer,
 }) => {
   const currentPlayerTurn =
-    currentPlayer.id === playerId && !has(roundPlayerActions, currentPlayer.id)
+    (currentPlayer.id === playerId &&
+      !has(roundPlayerActions, currentPlayer.id)) ||
+    //TODO AP corner case for deceased peer who loaded game, causing roundPlayerActions to fail:
+    players.length === 1
   return (
     <ThemedPanel className="player-panel" padding="1rem" sx={battleStatusStyle}>
       <Stack marginRight="2rem" spacing="1rem">

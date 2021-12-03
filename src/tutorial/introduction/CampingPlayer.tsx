@@ -9,11 +9,11 @@ interface CampingPlayerProps {
 
 const CampingPlayer = ({ isCompact }: CampingPlayerProps) => (
   <Flex>
-    <Stack marginTop={isCompact ? undefined : '2rem'}>
+    <Stack marginTop={isCompact ? undefined : '4rem'}>
       <Box>
-        Players with a <Icon as={FaCampground} height="1.5rem" width="1.5rem" />
+        Players with <Icon as={FaCampground} height="1.5rem" width="1.5rem" />
       </Box>
-      <Text>icon over their shoulder</Text>
+      <Text>over their shoulder</Text>
       <Text>aren't playing at the moment.</Text>
     </Stack>
     <Image

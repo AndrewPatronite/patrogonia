@@ -1,6 +1,6 @@
 import {
   dismissBattle,
-  getBattle,
+  loadBattle,
   takeTurn,
   updateBattle,
 } from './battleActions'
@@ -18,7 +18,7 @@ export {
   castSpell,
   createAccount,
   dismissBattle,
-  getBattle,
+  loadBattle,
   getPlayers,
   loadPlayer,
   loadSave,

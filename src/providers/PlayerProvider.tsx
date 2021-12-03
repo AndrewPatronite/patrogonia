@@ -35,20 +35,21 @@ const PlayerProvider = ({
     ),
     currentPlayer,
     loadPlayer: useCallback(
-      (playerId: number) => loadPlayer(dispatch, playerId),
-      [dispatch]
+      (playerId: number) => loadPlayer(dispatch, playerId, displayError),
+      [dispatch, displayError]
     ),
-    loadSave: useCallback((playerId: number) => loadSave(dispatch, playerId), [
-      dispatch,
-    ]),
+    loadSave: useCallback(
+      (playerId: number) => loadSave(dispatch, playerId, displayError),
+      [dispatch, displayError]
+    ),
     login: useCallback(
       (username: string, password: string) =>
         login(dispatch, username, password, displayError),
       [dispatch, displayError]
     ),
     updatePlayer: useCallback(
-      (updatedPlayer: Player, updateToServer = true) => {
-        updatePlayer(dispatch, updatedPlayer, updateToServer)
+      (updatedPlayer: Player, saveGame = false, updateToServer = true) => {
+        updatePlayer(dispatch, updatedPlayer, saveGame, updateToServer)
       },
       [dispatch]
     ),

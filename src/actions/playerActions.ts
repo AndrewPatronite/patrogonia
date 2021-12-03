@@ -26,10 +26,8 @@ export const login = (
         {
           ...loggedInPlayer,
           loggedIn: true,
-          completedLessons:
-            JSON.parse(localStorage.getItem('currentPlayer') || '{}')
-              ?.completedLessons || [],
         },
+        false,
         false
       ),
     onFailure
@@ -45,65 +43,79 @@ export const createAccount = (
     (createdPlayer: Player) =>
       updatePlayer(
         dispatch,
-        { ...createdPlayer, loggedIn: true, completedLessons: [] },
+        { ...createdPlayer, loggedIn: true },
+        false,
         false
       ),
     onFailure
   )
 
-export const loadPlayer = (dispatch: Dispatch, playerId: number) =>
-  getPlayer(playerId, (player: Player) => {
-    storeAndDispatchPlayerUpdate(player, dispatch)
-  })
+export const loadPlayer = (
+  dispatch: Dispatch,
+  playerId: number,
+  onFailure: (error: any) => void
+) =>
+  getPlayer(
+    playerId,
+    (player: Player) => storeAndDispatchPlayerUpdate(dispatch, player),
+    onFailure
+  )
 
-export const loadSave = (dispatch: Dispatch, playerId: number) => {
+export const loadSave = (
+  dispatch: Dispatch,
+  playerId: number,
+  onFailure: (error: any) => void
+) => {
   loadSaveRemote(
     playerId,
-    () => loadPlayer(dispatch, playerId),
+    () => loadPlayer(dispatch, playerId, onFailure),
     (error: any) => console.log(`Failed to load save ${JSON.stringify(error)}`)
   )
 }
 
-const getPlayerForServer = (player: Player) =>
+const assemblePlayerForServer = (player: Player) =>
   pick(
     player,
     'id',
+    'battleId',
     'name',
     'username',
     'location',
     'stats',
-    'saveGame',
     'visited',
-    'spells'
+    'spells',
+    'tutorialLessons'
   )
 
 export const updatePlayer = (
   dispatch: Dispatch,
   player: Player,
+  saveGame: boolean,
   updateToServer: boolean = true
 ) => {
   if (updateToServer) {
     updatePlayerRemote(
-      getPlayerForServer(player),
-      (playerResponse: Player) => {
-        const updatedPlayer = {
+      assemblePlayerForServer(player),
+      saveGame,
+      (updatedPlayer: Player) => {
+        const mergedPlayer = {
           ...player,
-          ...playerResponse,
+          ...updatedPlayer,
         }
-        storeAndDispatchPlayerUpdate(updatedPlayer, dispatch)
+        storeAndDispatchPlayerUpdate(dispatch, mergedPlayer)
       },
       (error: any) => {
         console.log('Failed to update player: ' + JSON.stringify(error))
       }
     )
   } else {
-    storeAndDispatchPlayerUpdate(player, dispatch)
+    storeAndDispatchPlayerUpdate(dispatch, player)
   }
 }
 
 const storeAndDispatchPlayerUpdate = (
-  updatedPlayer: Player,
-  dispatch: Dispatch
+  dispatch: Dispatch,
+  updatedPlayer: Player
 ) => {
   localStorage.setItem('currentPlayer', JSON.stringify(updatedPlayer))
   dispatch(playerSlice.actions.setPlayer(updatedPlayer))
@@ -116,15 +128,15 @@ export const castSpell = (
   targetId: string
 ) => {
   castSpellRemote(
-    getPlayerForServer(currentPlayer),
+    assemblePlayerForServer(currentPlayer),
     spellName,
     targetId,
-    (playerResponse: Player) => {
-      const updatedPlayer = {
+    (updatedPlayer: Player) => {
+      const mergedPlayer = {
         ...currentPlayer,
-        ...playerResponse,
+        ...updatedPlayer,
       }
-      storeAndDispatchPlayerUpdate(updatedPlayer, dispatch)
+      storeAndDispatchPlayerUpdate(dispatch, mergedPlayer)
     },
     (error: any) => {
       console.log('Failed to cast spell: ' + JSON.stringify(error))

@@ -3,11 +3,7 @@ import { filter, isEmpty, upperFirst } from 'lodash'
 import OptionPanel from './OptionPanel'
 import ThemedHeader from '../components/theme/ThemedHeader'
 import { Stack } from '@chakra-ui/react'
-import {
-  BattleOptionLesson as CommandLesson,
-  LessonEnum,
-  TutorialModal,
-} from '../tutorial'
+import { getLesson, LessonEnum, TutorialModal } from '../tutorial'
 
 const CommandPanel = ({ currentPlayer, handleCommand, mp }) => {
   const actionLabel = 'Command'
@@ -27,10 +23,6 @@ const CommandPanel = ({ currentPlayer, handleCommand, mp }) => {
   options.push({ value: 'parry', display: 'Parry' })
   options.push({ value: 'run', display: 'Run' })
 
-  const BattleCommandLesson = () => (
-    <CommandLesson options={options} subject="command" />
-  )
-
   return (
     <Stack spacing={0}>
       <ThemedHeader>{actionLabel}</ThemedHeader>
@@ -41,12 +33,8 @@ const CommandPanel = ({ currentPlayer, handleCommand, mp }) => {
       />
       <TutorialModal
         player={currentPlayer}
-        lessons={[
-          {
-            name: LessonEnum.BattleCommandLesson,
-            component: BattleCommandLesson,
-          },
-        ]}
+        lesson={getLesson(LessonEnum.BattleCommandLesson)}
+        lessonProps={{ options }}
       />
     </Stack>
   )

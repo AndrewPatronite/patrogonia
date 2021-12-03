@@ -2,11 +2,7 @@ import React, { useEffect } from 'react'
 import { upperFirst } from 'lodash'
 import OptionPanel from './OptionPanel'
 import ThemedHeader from '../components/theme/ThemedHeader'
-import {
-  BattleOptionLesson as CommandLesson,
-  LessonEnum,
-  TutorialModal,
-} from '../tutorial'
+import { getLesson, LessonEnum, TutorialModal } from '../tutorial'
 import { Stack } from '@chakra-ui/react'
 
 const EnemySelectionPanel = ({
@@ -30,10 +26,6 @@ const EnemySelectionPanel = ({
     }
   }, [enemies, playerTurnEnabled, selectEnemy, selectedEnemyId])
 
-  const BattleTargetLesson = () => (
-    <CommandLesson options={options} subject="target" />
-  )
-
   return (
     <Stack spacing={0}>
       <ThemedHeader>{upperFirst(action)}</ThemedHeader>
@@ -46,12 +38,8 @@ const EnemySelectionPanel = ({
       />
       <TutorialModal
         player={currentPlayer}
-        lessons={[
-          {
-            name: LessonEnum.BattleTargetLesson,
-            component: BattleTargetLesson,
-          },
-        ]}
+        lesson={getLesson(LessonEnum.BattleTargetLesson)}
+        lessonProps={{ options }}
       />
     </Stack>
   )

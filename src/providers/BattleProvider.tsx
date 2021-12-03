@@ -5,7 +5,7 @@ import { subscribe } from '../subscription/subscribe'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../redux'
 import { Battle, isBattleEnded } from '../battle/types'
-import { dismissBattle, getBattle, takeTurn, updateBattle } from '../actions'
+import { dismissBattle, loadBattle, takeTurn, updateBattle } from '../actions'
 import { BattleContext } from '../context'
 
 const BattleProvider = ({
@@ -14,7 +14,7 @@ const BattleProvider = ({
   children: JSX.Element | JSX.Element[]
 }) => {
   const battleUrl = `${process.env.REACT_APP_WEBSOCKET_BASE_URL}/battles`
-  const { currentPlayer, loadPlayer, updatePlayer } = usePlayer()
+  const { currentPlayer, loadPlayer } = usePlayer()
   const { id: currentPlayerId, battleId } = currentPlayer
   const [battleMessage, setBattleMessage] = useState<Battle | undefined>(
     undefined
@@ -29,10 +29,6 @@ const BattleProvider = ({
     }
   }, [battleUrl, battleId])
 
-  const onBattleNotFound = useCallback(() => {
-    updatePlayer({ ...currentPlayer, battleId: undefined }, false)
-  }, [updatePlayer, currentPlayer])
-
   useEffect(() => {
     if (battle) {
       const isBattleMessagePresent = !isEmpty(battleMessage)
@@ -41,9 +37,9 @@ const BattleProvider = ({
         setBattleMessage(undefined)
       }
     } else if (battleId) {
-      getBattle(dispatch, battleId, onBattleNotFound)
+      loadBattle(dispatch, battleId, () => loadPlayer(currentPlayerId))
     }
-  }, [dispatch, battleId, battle, battleMessage, onBattleNotFound])
+  }, [dispatch, battleId, battle, battleMessage, loadPlayer, currentPlayerId])
 
   const battleState = {
     battle,

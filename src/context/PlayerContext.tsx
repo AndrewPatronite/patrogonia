@@ -1,5 +1,6 @@
 import Player from '../player/Player'
 import { createContext } from 'react'
+import { getInitialPlayer } from '../redux'
 
 interface PlayerState {
   castSpell: (spellName: string, targetId: string) => void
@@ -8,17 +9,14 @@ interface PlayerState {
   loadPlayer: (playerId: number) => void
   loadSave: (playerId: number) => void
   login: (username: string, password: string) => void
-  updatePlayer: (player: Player, updateToServer?: boolean) => void
+  updatePlayer: (
+    player: Player,
+    saveGame?: boolean,
+    updateToServer?: boolean
+  ) => void
 }
 
-const getInitialPlayer = () => {
-  const storedPlayer = localStorage.getItem('currentPlayer')
-  return storedPlayer
-    ? JSON.parse(storedPlayer)
-    : { loggedIn: false, location: {}, completedLessons: [] }
-}
-
-export const PlayerContext = createContext<PlayerState>({
+const PlayerContext = createContext<PlayerState>({
   castSpell: () => {},
   createAccount: () => {},
   currentPlayer: getInitialPlayer(),
@@ -27,3 +25,5 @@ export const PlayerContext = createContext<PlayerState>({
   login: () => {},
   updatePlayer: () => {},
 })
+
+export default PlayerContext

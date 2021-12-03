@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 import ThemedPanel from '../components/theme/ThemedPanel'
 import {
-  BattleOptionLesson as CommandLesson,
+  BattleCommandLesson,
   FieldMenuLesson,
   MovementLesson,
   TownVisitLesson,
@@ -55,7 +55,7 @@ const InstructionsModal = () => {
     {
       name: 'Battle commands',
       lesson: () => (
-        <CommandLesson
+        <BattleCommandLesson
           options={[
             { value: 'ATTACK', display: 'Attack' },
             { value: 'HEAL', display: 'Heal' },
@@ -63,7 +63,6 @@ const InstructionsModal = () => {
             { value: 'PARRY', display: 'Parry' },
             { value: 'RUN', display: 'run' },
           ]}
-          subject="command"
         />
       ),
     },

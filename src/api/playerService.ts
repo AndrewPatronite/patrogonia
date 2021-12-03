@@ -1,12 +1,17 @@
 import axios from 'axios'
 import { HttpStatus } from './HttpStatus'
+import Player from '../player/Player'
 
 const axiosInstance = axios.create({
   baseURL: `${process.env.REACT_APP_BASE_URL}/player`,
   headers: { 'Content-Type': 'application/json' },
 })
 
-export const createAccount = (player, onSuccess, onFailure) => {
+export const createAccount = (
+  player: Player,
+  onSuccess: (createdPlayer: Player) => void,
+  onFailure: (error: any) => void
+) => {
   return axiosInstance
     .post('/create', player)
     .then((response) => {
@@ -17,7 +22,12 @@ export const createAccount = (player, onSuccess, onFailure) => {
     .catch((error) => onFailure(error))
 }
 
-export const login = (username, password, onSuccess, onFailure) => {
+export const login = (
+  username: string,
+  password: string,
+  onSuccess: (loggedInPlayer: Player) => void,
+  onFailure: (error: any) => void
+) => {
   axiosInstance
     .post('/login', { username, password })
     .then((response) => {
@@ -28,7 +38,11 @@ export const login = (username, password, onSuccess, onFailure) => {
     .catch((error) => onFailure(error))
 }
 
-export const getPlayer = (playerId, onSuccess, onFailure) => {
+export const getPlayer = (
+  playerId: number,
+  onSuccess: (player: Player) => void,
+  onFailure: (error: any) => void
+) => {
   axiosInstance
     .get(`/get/${playerId}`)
     .then((response) => {
@@ -39,7 +53,11 @@ export const getPlayer = (playerId, onSuccess, onFailure) => {
     .catch((error) => onFailure(error))
 }
 
-export const getPlayers = (mapName, onSuccess, onFailure) => {
+export const getPlayers = (
+  mapName: string,
+  onSuccess: (players: Player[]) => void,
+  onFailure: (error: any) => void
+) => {
   axiosInstance
     .get(`/getPlayers/${mapName}`)
     .then((response) => {
@@ -50,9 +68,14 @@ export const getPlayers = (mapName, onSuccess, onFailure) => {
     .catch((error) => onFailure(error))
 }
 
-export const updatePlayer = (player, onSuccess, onFailure) => {
+export const updatePlayer = (
+  player: Partial<Player>,
+  saveGame: boolean,
+  onSuccess: (updatedPlayer: Player) => void,
+  onFailure: (error: any) => void
+) => {
   axiosInstance
-    .put('/update', player)
+    .put(`/update/${saveGame}`, player)
     .then((response) => {
       if (response.status === HttpStatus.Ok) {
         onSuccess(response.data)
@@ -61,7 +84,11 @@ export const updatePlayer = (player, onSuccess, onFailure) => {
     .catch((error) => onFailure(error))
 }
 
-export const loadSave = (playerId, onSuccess, onFailure) => {
+export const loadSave = (
+  playerId: number,
+  onSuccess: () => void,
+  onFailure: (error: any) => void
+) => {
   return axiosInstance
     .put(`/loadSave/${playerId}`)
     .then((response) => {
@@ -73,11 +100,11 @@ export const loadSave = (playerId, onSuccess, onFailure) => {
 }
 
 export const castSpell = (
-  player,
-  spellName,
-  targetId,
-  onSuccess,
-  onFailure
+  player: Partial<Player>,
+  spellName: string,
+  targetId: string,
+  onSuccess: (updatedPlayer: Player) => void,
+  onFailure: (error: any) => void
 ) => {
   return axiosInstance
     .put(`/castSpell/${spellName}/${targetId}`, player)

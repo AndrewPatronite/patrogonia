@@ -10,20 +10,27 @@ import ThemedPanel from '../components/theme/ThemedPanel'
 import Player from '../player/Player'
 import { hasCompletedLesson } from './lessonUtils'
 import { useModalState } from '../hooks'
-import { ModalEnum } from '../context/ModalStateContext'
 import Character from '../player/Character'
 import { Lesson } from './Lesson'
+import { ModalEnum } from '../context'
 
 interface TutorialModalProps {
   player: Player
-  lessons: Lesson[]
+  lesson: Lesson
+  lessonProps?: any
+  focusModal?: boolean
 }
 
-const TutorialModal = ({ player, lessons }: TutorialModalProps) => {
+const TutorialModal = ({
+  player,
+  lesson,
+  lessonProps,
+  focusModal = false,
+}: TutorialModalProps) => {
   const { isModalOpen, openModal, closeModal } = useModalState()
-  const NextLesson =
-    lessons.find((lesson) => !hasCompletedLesson(player, lesson.name))
-      ?.component || null
+  const NextLesson = hasCompletedLesson(player, lesson.name)
+    ? null
+    : lesson.component
 
   useEffect(() => {
     if (NextLesson) {
@@ -41,21 +48,22 @@ const TutorialModal = ({ player, lessons }: TutorialModalProps) => {
     <Drawer
       size="sm"
       placement="top"
-      trapFocus={false}
-      variant="noFocus"
+      trapFocus={focusModal}
+      variant={focusModal ? undefined : 'noFocus'}
       isOpen={isModalOpen(ModalEnum.Tutorial)}
       onClose={() => {}}
     >
-      <DrawerContent
-        background="transparent"
-        boxShadow={0}
-        paddingTop="1rem"
-        paddingLeft="1rem"
-      >
+      <DrawerContent background="transparent" boxShadow={0}>
         <DrawerBody padding={0}>
-          <Flex width="62.5rem" justifyContent="flex-end">
+          <Flex
+            width="62.5rem"
+            paddingTop="1rem"
+            paddingLeft="1rem"
+            paddingRight="1rem"
+            justifyContent="flex-end"
+          >
             {NextLesson && (
-              <ThemedPanel marginRight="2rem">
+              <ThemedPanel>
                 <HStack spacing="1rem">
                   <Character
                     player={{
@@ -65,7 +73,7 @@ const TutorialModal = ({ player, lessons }: TutorialModalProps) => {
                       isCurrentPlayer: false,
                     }}
                   />
-                  <NextLesson />
+                  <NextLesson {...lessonProps} />
                 </HStack>
               </ThemedPanel>
             )}
