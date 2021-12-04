@@ -1,16 +1,16 @@
-import Player from '../player/Player';
+import { Player } from '../player'
 
 export const isAdjacentToCurrentPlayer = (
-    {
-        location: {
-            columnIndex: currentPlayerColumnIndex,
-            rowIndex: currentPlayerRowIndex,
-        },
-    }: Player,
-    targetRowIndex: number,
-    targetColumnIndex: number
+  {
+    location: {
+      columnIndex: currentPlayerColumnIndex,
+      rowIndex: currentPlayerRowIndex,
+    },
+  }: Player,
+  targetRowIndex: number,
+  targetColumnIndex: number
 ) =>
-    (currentPlayerRowIndex === targetRowIndex ||
-        currentPlayerColumnIndex === targetColumnIndex) &&
-    Math.abs(currentPlayerRowIndex - targetRowIndex) <= 1 &&
-    Math.abs(currentPlayerColumnIndex - targetColumnIndex) <= 1;
+  (currentPlayerRowIndex === targetRowIndex ||
+    currentPlayerColumnIndex === targetColumnIndex) &&
+  Math.abs(currentPlayerRowIndex - targetRowIndex) <= 1 &&
+  Math.abs(currentPlayerColumnIndex - targetColumnIndex) <= 1

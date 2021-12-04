@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 import { Map } from '../environment/maps'
-import Player from '../player/Player'
 import { Npc } from '../npcs'
+import { Player } from '../player'
 
 interface MapState {
   map?: Map

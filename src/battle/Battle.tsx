@@ -1,20 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { filter, values } from 'lodash'
-import { getBattleStatusBorder } from './helper'
-import EnemyDisplay from './EnemyDisplay'
+import { getBattleStatusStyle } from './helper'
 import Log from './Log'
 import PlayerPanel from './PlayerPanel'
-import { pauseSound, playSound } from '../environment/sound/sound'
+import { BattleMusic, pauseSound, playSound } from '../environment/sound'
 import ThemedPanel from '../components/theme/ThemedPanel'
 import { Flex } from '@chakra-ui/react'
 import { useBattle, usePlayer } from '../hooks'
-import { BattleMusic } from '../environment/sound'
 import { isBattleEnded } from './types'
+import EnemyDisplay from './EnemyDisplay'
 
 const Battle = () => {
   const { currentPlayer, loadSave, updatePlayer } = usePlayer()
   const { battle, dismissBattle, takeTurn } = useBattle()
-  const { enemies, log, playerStats, roundPlayerActions, status } = battle || {}
+  const { enemies = [], log, playerStats, roundPlayerActions = {}, status } =
+    battle || {}
 
   useEffect(() => {
     playSound('battle-music')
@@ -25,7 +25,7 @@ const Battle = () => {
   const [selectedEnemyId, selectEnemy] = useState<string>()
   const [playerTurnEnabled, setPlayerTurnEnabled] = useState(true)
   const players = values(playerStats)
-  const battleStatusStyle = getBattleStatusBorder(players)
+  const battleStatusStyle = getBattleStatusStyle(players)
   const battleEnded = !!status && isBattleEnded(status)
   //TODO AP clean this up after breaking battleMessage up into smaller pieces
   const deliveredLogEntries = useMemo(
@@ -44,7 +44,7 @@ const Battle = () => {
     }
   }, [allMessagesDelivered, battleEnded])
 
-  return (
+  return battle ? (
     <ThemedPanel
       flexDirection="column"
       padding="0"
@@ -80,8 +80,8 @@ const Battle = () => {
               players={players}
               battleStatusStyle={battleStatusStyle}
               enemies={enemies}
-              selectEnemy={(enemyId: string) => selectEnemy(enemyId)}
-              takeTurn={(action: string, targetId: string) => {
+              selectEnemy={selectEnemy}
+              takeTurn={(action: string, targetId?: string | number) => {
                 takeTurn(action, targetId)
                 setPlayerTurnEnabled(false)
                 selectEnemy(undefined)
@@ -96,7 +96,7 @@ const Battle = () => {
         </Flex>
       )}
     </ThemedPanel>
-  )
+  ) : null
 }
 
 export default Battle

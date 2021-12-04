@@ -7,8 +7,8 @@ import { Credits } from '../credits'
 import { Heading, Text, useColorMode, VStack } from '@chakra-ui/react'
 import { HeadingColor } from '../theme'
 import AccountSelector from './AccountSelector'
-import Player from '../player/Player'
 import { InstructionsModal } from '../tutorial'
+import { Player } from '../player'
 
 interface LandingPageProps {
   login: (username: string, password: string) => void
@@ -34,7 +34,6 @@ const LandingPage = ({ login, createAccount }: LandingPageProps) => {
         Chronicles of Patrogonia
       </Heading>
       <AccountSelector createAccount={createAccount} login={login} />
-      <div className="spacer" />
       <VStack>
         <FaDragon size="1.5rem" />
         <Text>Last update: {lastUpdate}</Text>

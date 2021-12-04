@@ -13,7 +13,8 @@ export const dismissBattle = (dispatch: Dispatch) =>
 export const loadBattle = (
   dispatch: Dispatch,
   battleId: string,
-  onBattleNotFound: () => void
+  onBattleNotFound: () => void,
+  onFailure: (error: any) => void
 ) => {
   const onSuccess = (battle: Battle) => {
     if (isEmpty(battle)) {
@@ -22,10 +23,9 @@ export const loadBattle = (
       dispatch(battleSlice.actions.loadBattle(battle))
     }
   }
-  const onFailure = (error: any) => {
-    console.log('Failed to get battle: ' + JSON.stringify(error))
-  }
-  getBattleRemote(battleId, onSuccess, onFailure)
+  getBattleRemote(battleId, onSuccess, () =>
+    onFailure('Failed to get battle. Try again or refresh the page.')
+  )
 }
 
 export const takeTurn = (
@@ -33,18 +33,17 @@ export const takeTurn = (
   battleId: string,
   playerId: number,
   playerAction: string,
-  targetId: string
+  onFailure: (error: any) => void,
+  targetId?: string | number
 ) => {
   const onSuccess = () => {}
-  const onFailure = (error: any) =>
-    console.log('Failed to take turn: ' + JSON.stringify(error))
   takeTurnRemote(
     battleId,
     playerId,
     playerAction,
-    targetId,
     onSuccess,
-    onFailure
+    () => onFailure('Failed to take turn. Try again or refresh the page.'),
+    targetId
   )
 }
 

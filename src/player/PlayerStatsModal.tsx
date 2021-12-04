@@ -1,5 +1,4 @@
 import React from 'react'
-import Stats from './Stats'
 import PlayerStatsPanel from './PlayerStatsPanel'
 import {
   Drawer,
@@ -7,6 +6,7 @@ import {
   DrawerContent,
   DrawerOverlay,
 } from '@chakra-ui/react'
+import { Stats } from './types'
 
 const PlayerStatsModal = ({
   isOpen,

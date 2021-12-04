@@ -6,10 +6,10 @@ import { advanceFocus } from '../utils'
 
 interface OptionPanelProps {
   options: ListOption[]
-  onBack: () => void
-  onChange: (selectedOption: any) => void
+  onBack?: () => void
+  onChange?: (selectedOption: any) => void
   onNext: (selectedOption: any) => void
-  showBackButton: boolean
+  isBackEnabled: boolean
   initialValue?: any
 }
 
@@ -18,7 +18,7 @@ const OptionPanel = ({
   onBack = () => {},
   onChange = () => {},
   onNext,
-  showBackButton,
+  isBackEnabled,
   initialValue = null,
 }: OptionPanelProps) => {
   const listRef = useRef<HTMLDivElement>(null)
@@ -39,7 +39,7 @@ const OptionPanel = ({
       case 'Escape':
       case 'Backspace':
       case 'Delete':
-        showBackButton && onBack()
+        isBackEnabled && onBack()
         break
       case 'Enter':
         selectedValue && onNext(selectedValue)

@@ -1,14 +1,10 @@
 import React, { useState } from 'react'
 import { upperFirst } from 'lodash'
-import Player from './Player'
-import Spell from './Spell'
 import ThemedPanel, { ThemedPanelProps } from '../components/theme/ThemedPanel'
 import { Button, Flex, Stack, Text } from '@chakra-ui/react'
-import { playSound } from '../environment/sound/sound'
+import { HealingSound, playSound, WarpSound } from '../environment/sound'
 import List from '../control/List'
-
-const healingSound = require('../environment/sound/zapsplat/zapsplat_fantasy_magic_mystery_glissando_bell_43990.mp3')
-const warpSound = require('../environment/sound/zapsplat/magic_spell_ascending_metallic_pad.mp3')
+import { Player, Spell } from './types'
 
 const spellSounds: { [index: string]: string } = {
   HEAL: 'heal',
@@ -118,10 +114,10 @@ const PlayerSpells = ({
         </Stack>
       )}
       <audio className="heal">
-        <source src={healingSound} />
+        <source src={HealingSound} />
       </audio>
       <audio className="warp">
-        <source src={warpSound} />
+        <source src={WarpSound} />
       </audio>
     </ThemedPanel>
   )

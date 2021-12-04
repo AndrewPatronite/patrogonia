@@ -1,6 +1,5 @@
 import React from 'react'
 import { isEqual } from 'lodash'
-import Player from './Player'
 import { Box, Flex, Icon, Text } from '@chakra-ui/react'
 import { FaCampground, FaDragon, FaInfoCircle } from 'react-icons/fa'
 import { IconType } from 'react-icons/lib'
@@ -11,37 +10,40 @@ import { Direction } from '../navigation'
 const CAMPING_DURATION_MILLIS = 10000
 
 const getCharacterImage = (
-  isCurrentPlayer: boolean,
-  directionFacing: string
+  directionFacing: Direction,
+  isCurrentPlayer?: boolean
 ) => {
   switch (directionFacing) {
-    case Direction.up:
+    case Direction.Up:
       return isCurrentPlayer ? HeroUp : PeerUp
-    case Direction.left:
+    case Direction.Left:
       return isCurrentPlayer ? HeroLeft : PeerLeft
-    case Direction.right:
+    case Direction.Right:
       return isCurrentPlayer ? HeroRight : PeerRight
-    case Direction.down:
+    case Direction.Down:
     default:
       return isCurrentPlayer ? HeroDown : PeerDown
   }
 }
 
+interface CharacterProps {
+  name: string
+  directionFacing: Direction
+  battleId?: string
+  isCurrentPlayer?: boolean
+  lastUpdate?: string
+  isSaveLocation?: boolean
+  inDialogRange?: boolean
+}
+
 const Character = ({
-  player: {
-    name: playerName,
-    location: { facing: directionFacing },
-    battleId,
-    lastUpdate,
-  },
+  name,
+  directionFacing,
+  battleId,
+  lastUpdate,
   isCurrentPlayer,
   inDialogRange,
-}: {
-  player: Player
-  isCurrentPlayer: boolean
-  isSaveLocation: boolean
-  inDialogRange: boolean
-}) => {
+}: CharacterProps) => {
   const lastUpdateDate = lastUpdate && new Date(lastUpdate)
   const now = new Date()
   const camping =
@@ -62,29 +64,29 @@ const Character = ({
   return (
     <Box position="relative">
       <Flex
-        backgroundImage={getCharacterImage(isCurrentPlayer, directionFacing)}
+        backgroundImage={getCharacterImage(directionFacing, isCurrentPlayer)}
         height="6.25rem"
         justifyContent="center"
         width="6.25rem"
       >
-        {isEqual(directionFacing, 'up') && (
+        {isEqual(directionFacing, Direction.Up) && (
           <Text
             color="gold"
             fontSize="12px"
             marginLeft="0.3125rem"
             marginTop="1.5625rem"
           >
-            {playerName}
+            {name}
           </Text>
         )}
-        {isEqual(directionFacing, 'down') && (
+        {isEqual(directionFacing, Direction.Down) && (
           <Text
             color="gold"
             fontSize="7px"
             marginLeft="0.625rem"
             marginTop="1.5625rem"
           >
-            {playerName}
+            {name}
           </Text>
         )}
       </Flex>

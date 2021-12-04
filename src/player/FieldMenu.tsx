@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { filter, isEmpty } from 'lodash'
-import Player from './Player'
 import PlayerStatsPanel from './PlayerStatsPanel'
 import PlayerSpells from './PlayerSpells'
 import { Maps } from '../environment/maps/Maps'
@@ -18,6 +17,7 @@ import {
   Tabs,
 } from '@chakra-ui/react'
 import { advanceFocus } from '../utils'
+import { Player } from './types'
 
 const FieldMenu = ({
   showFieldMenu,

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import Player from '../player/Player'
+import { Player } from '../player'
 
 export const getInitialPlayer = (): Player => {
   const storedPlayer = localStorage.getItem('currentPlayer')

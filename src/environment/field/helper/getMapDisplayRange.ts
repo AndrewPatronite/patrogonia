@@ -1,7 +1,11 @@
-import Player from '../../../player/Player'
 import { Map } from '../../maps'
+import { MapDisplayRange } from '../types'
+import { Player } from '../../../player'
 
-export const getMapDisplayRange = (currentPlayer: Player, map?: Map) => {
+export const getMapDisplayRange = (
+  currentPlayer: Player,
+  map?: Map
+): MapDisplayRange | undefined => {
   if (map) {
     const {
       location: { rowIndex, columnIndex },

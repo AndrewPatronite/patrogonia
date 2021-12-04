@@ -1,9 +1,9 @@
 import { throttle, uniq } from 'lodash'
 import { Map } from '../environment/maps'
 import { Cave, Maps } from '../environment/maps/Maps'
-import { DirectionKeyMapper } from './DirectionKeyMapper'
+import { Player } from '../player'
 import { LessonEnum } from '../tutorial'
-import Player from '../player/Player'
+import { Direction } from './Direction'
 
 const moveDelay = 250
 
@@ -30,7 +30,7 @@ const updatePlayerLocation = (
   currentMap: Map,
   nextRowIndex: number,
   nextColumnIndex: number,
-  directionFacing: string,
+  directionFacing: Direction,
   currentPlayer: Player,
   updatePlayer: (
     player: Player,
@@ -139,20 +139,19 @@ export const movePlayer = throttle(
   ) => {
     // @ts-ignore
     const currentMap = Maps[currentPlayer.location.mapName]()
-    const { up, down, left, right } = DirectionKeyMapper
     const {
       rowIndex: currentRowIndex,
       columnIndex: currentColumnIndex,
     } = currentPlayer.location
 
     switch (direction) {
-      case up:
+      case Direction.Up:
         if (currentRowIndex > 0) {
           updatePlayerLocation(
             currentMap,
             currentRowIndex - 1,
             currentColumnIndex,
-            up,
+            Direction.Up,
             currentPlayer,
             updatePlayer,
             canMoveToPosition
@@ -161,13 +160,13 @@ export const movePlayer = throttle(
           tryExit(currentPlayer, currentMap, updatePlayer)
         }
         break
-      case down:
+      case Direction.Down:
         if (currentRowIndex < currentMap.layout.length - 1) {
           updatePlayerLocation(
             currentMap,
             currentRowIndex + 1,
             currentColumnIndex,
-            down,
+            Direction.Down,
             currentPlayer,
             updatePlayer,
             canMoveToPosition
@@ -176,13 +175,13 @@ export const movePlayer = throttle(
           tryExit(currentPlayer, currentMap, updatePlayer)
         }
         break
-      case left:
+      case Direction.Left:
         if (currentColumnIndex > 0) {
           updatePlayerLocation(
             currentMap,
             currentRowIndex,
             currentColumnIndex - 1,
-            left,
+            Direction.Left,
             currentPlayer,
             updatePlayer,
             canMoveToPosition
@@ -191,7 +190,7 @@ export const movePlayer = throttle(
           tryExit(currentPlayer, currentMap, updatePlayer)
         }
         break
-      case right:
+      case Direction.Right:
         if (
           currentColumnIndex <
           currentMap.layout[currentRowIndex].length - 1
@@ -200,7 +199,7 @@ export const movePlayer = throttle(
             currentMap,
             currentRowIndex,
             currentColumnIndex + 1,
-            right,
+            Direction.Right,
             currentPlayer,
             updatePlayer,
             canMoveToPosition

@@ -1,11 +1,12 @@
 import { filter, forEach, isEmpty, isEqual } from 'lodash'
-import Player from '../../../player/Player'
+import { LocationToPlayersMap } from '../types'
+import { Player } from '../../../player'
 
 export const getLocationToPlayerMap = (
   playersOnMap: Player[],
   currentPlayer: Player
 ) => {
-  const locationToPlayers: { [rowColumnIndices: string]: Player[] } = {}
+  const locationToPlayers: LocationToPlayersMap = {}
   const { location: currentPlayerLocation } = currentPlayer
   if (!isEmpty(playersOnMap) && !isEmpty(currentPlayerLocation)) {
     const otherPlayers = filter(

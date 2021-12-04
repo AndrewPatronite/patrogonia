@@ -7,12 +7,13 @@ import {
 } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
 import ThemedPanel from '../components/theme/ThemedPanel'
-import Player from '../player/Player'
 import { hasCompletedLesson } from './lessonUtils'
 import { useModalState } from '../hooks'
 import Character from '../player/Character'
 import { Lesson } from './Lesson'
 import { ModalEnum } from '../context'
+import { Direction } from '../navigation'
+import { Player } from '../player'
 
 interface TutorialModalProps {
   player: Player
@@ -65,14 +66,7 @@ const TutorialModal = ({
             {NextLesson && (
               <ThemedPanel>
                 <HStack spacing="1rem">
-                  <Character
-                    player={{
-                      name: 'Redwan',
-                      //@ts-ignore
-                      location: { facing: 'down' },
-                      isCurrentPlayer: false,
-                    }}
-                  />
+                  <Character name="Redwan" directionFacing={Direction.Down} />
                   <NextLesson {...lessonProps} />
                 </HStack>
               </ThemedPanel>

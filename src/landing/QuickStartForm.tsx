@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Button, Stack, Text } from '@chakra-ui/react'
-import Player from '../player/Player'
 import words from 'an-array-of-english-words'
 import { random } from 'lodash'
 import { characterNames, encrypt } from './helper'
 import { startingLocation } from './startingLocation'
 import { CredentialedPlayer } from './CredentialedPlayer'
+import { Player } from '../player'
 
 interface QuickStartFormProps {
   createAccount: (player: Player) => void

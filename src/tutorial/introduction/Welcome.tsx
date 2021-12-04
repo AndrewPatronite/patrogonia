@@ -1,6 +1,6 @@
 import { Stack, Text } from '@chakra-ui/react'
 import React from 'react'
-import Player from '../../player/Player'
+import { Player } from '../../player'
 
 interface WelcomeProps {
   currentPlayer?: Player

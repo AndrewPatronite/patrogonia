@@ -1,10 +1,11 @@
 import { Npc } from '../../npcs'
+import { Direction } from '../../navigation'
 
 export const updateNpcPosition = (
   npc: Npc,
   rowIndex: number,
   columnIndex: number,
-  directionFacing: string,
+  directionFacing: Direction,
   mapName: string,
   canMoveToPosition: (rowIndex: number, columnIndex: number) => boolean,
   updateNpc: (npc: Npc) => void

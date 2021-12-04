@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import { Route, Switch, useHistory } from 'react-router-dom'
-import World from './environment/field/World'
 import PermissionRoute from './PermissionRoute'
 import { LandingPage } from './landing'
 import { usePlayer } from './hooks'
 import { Battle } from './battle'
+import { World } from './environment/field'
 
 const Patrogonia = () => {
   const {

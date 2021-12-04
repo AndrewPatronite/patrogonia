@@ -1,14 +1,14 @@
 import MapContext from '../context/MapContext'
 import React, { useCallback, useEffect, useState } from 'react'
 import { usePlayer } from '../hooks'
-import { subscribe } from '../subscription/subscribe'
-import Player from '../player/Player'
+import { subscribe } from '../subscription'
 import { useToastErrorHandler } from './useToastErrorHandler'
 import { getPlayers, updateNpc, updatePeerLocation } from '../actions'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../redux'
 import { Maps } from '../environment/maps/Maps'
 import { Npc } from '../npcs'
+import { Player } from '../player'
 
 const MapProvider = ({
   children,

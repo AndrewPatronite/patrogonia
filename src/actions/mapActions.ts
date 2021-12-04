@@ -1,9 +1,9 @@
 import { getPlayers as getPlayersRemote } from '../api'
 import { Dispatch } from '@reduxjs/toolkit'
-import Player from '../player/Player'
 import { mapSlice } from '../redux'
 import { Maps } from '../environment/maps/Maps'
 import { Npc } from '../npcs'
+import { Player } from '../player'
 
 export const getPlayers = (
   dispatch: Dispatch,

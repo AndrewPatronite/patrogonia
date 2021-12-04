@@ -1,6 +1,6 @@
-import Player from '../player/Player'
 import { createContext } from 'react'
 import { getInitialPlayer } from '../redux'
+import { Player } from '../player'
 
 interface PlayerState {
   castSpell: (spellName: string, targetId: string) => void

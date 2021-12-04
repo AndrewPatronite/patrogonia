@@ -1,5 +1,7 @@
 import { Npc, NpcType } from './Npc'
 import React from 'react'
+import { Text } from '@chakra-ui/react'
+import { Direction } from '../navigation'
 
 export enum NpcName {
   Alastair = 'Alastair',
@@ -17,7 +19,7 @@ export const Alastair: Npc = {
   movementRange: 10,
   startingRowIndex: 17,
   startingColumnIndex: 6,
-  directionFacing: 'right',
+  directionFacing: Direction.Right,
   isTalking: false,
 }
 
@@ -29,7 +31,7 @@ export const Barnaby: Npc = {
   movementRange: 10,
   startingRowIndex: 21,
   startingColumnIndex: 12,
-  directionFacing: 'up',
+  directionFacing: Direction.Up,
   isTalking: false,
 }
 
@@ -41,7 +43,7 @@ export const Finlay: Npc = {
   movementRange: 10,
   startingRowIndex: 9,
   startingColumnIndex: 11,
-  directionFacing: 'down',
+  directionFacing: Direction.Down,
   isTalking: false,
 }
 
@@ -53,7 +55,7 @@ export const Nigel: Npc = {
   movementRange: 10,
   startingRowIndex: 7,
   startingColumnIndex: 17,
-  directionFacing: 'down',
+  directionFacing: Direction.Down,
   isTalking: false,
 }
 
@@ -65,13 +67,13 @@ export const Tristan: Npc = {
   movementRange: 10,
   startingRowIndex: 19,
   startingColumnIndex: 7,
-  directionFacing: 'down',
+  directionFacing: Direction.Down,
   isTalking: false,
 }
 
 const NPC_DIALOG: { [index in NpcName]: string | JSX.Element } = {
   [NpcName.Alastair]: (
-    <p>
+    <Text>
       The marketplace and hostel are vacant and the villagers seem to have
       vanished.
       <br />
@@ -80,10 +82,10 @@ const NPC_DIALOG: { [index in NpcName]: string | JSX.Element } = {
       <br />
       <br />
       Beware, fierce monsters lurk there.
-    </p>
+    </Text>
   ),
   [NpcName.Barnaby]: (
-    <p>
+    <Text>
       You should visit towns often to restore your health and save your game.
       <br />
       <br />
@@ -91,14 +93,14 @@ const NPC_DIALOG: { [index in NpcName]: string | JSX.Element } = {
       <br />
       <br />
       View stats, cast spells, change settings, or log out.
-    </p>
+    </Text>
   ),
   [NpcName.Finlay]: (
-    <p>
+    <Text>
       Where is everyone?
       <br />
       <br />I stopped here on my way to Easthaven and nary a soul to be found.
-    </p>
+    </Text>
   ),
   [NpcName.Nigel]: 'Morning guv!',
   [NpcName.Tristan]: 'Hallo hallo!',

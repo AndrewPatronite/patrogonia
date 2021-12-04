@@ -1,6 +1,7 @@
 import { Flex, Kbd, Stack, Text } from '@chakra-ui/react'
 import React from 'react'
 import Character from '../../player/Character'
+import { Direction } from '../../navigation'
 
 const PopIn = ({ isCompact }: { isCompact: boolean }) => (
   <Stack>
@@ -10,14 +11,7 @@ const PopIn = ({ isCompact }: { isCompact: boolean }) => (
           <Text>Redwan will pop in from</Text>
           <Text>time to time with instructions.</Text>
         </Stack>
-        <Character
-          player={{
-            name: 'Redwan',
-            //@ts-ignore
-            location: { facing: 'down' },
-            isCurrentPlayer: false,
-          }}
-        />
+        <Character name="Redwan" directionFacing={Direction.Down} />
       </Flex>
     ) : (
       <Text>I'll pop in from time to time with instructions.</Text>

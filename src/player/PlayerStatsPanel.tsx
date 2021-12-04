@@ -1,7 +1,7 @@
 import React from 'react'
-import Stats from './Stats'
 import ThemedPanel from '../components/theme/ThemedPanel'
 import { Flex, Text } from '@chakra-ui/react'
+import { Stats } from './types'
 
 const PlayerStat = ({ name, value }: { name: string; value: any }) => (
   <Flex justifyContent="space-between">

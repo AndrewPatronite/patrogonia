@@ -1,4 +1,4 @@
-import Player from '../player/Player'
+import { Player } from '../player'
 
 export const hasCompletedLesson = (player: Player, lesson: string) =>
   player.tutorialLessons.includes(lesson)

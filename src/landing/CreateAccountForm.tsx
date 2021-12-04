@@ -1,6 +1,5 @@
 import React from 'react'
 import { encrypt, validatePassword } from './helper'
-import Player from '../player/Player'
 import { Button, Stack } from '@chakra-ui/react'
 import PasswordInput from './PasswordInput'
 import { Input } from '../control'
@@ -9,6 +8,7 @@ import * as Yup from 'yup'
 import { isEmpty } from 'lodash'
 import { startingLocation } from './startingLocation'
 import { CredentialedPlayer } from './CredentialedPlayer'
+import { Player } from '../player'
 
 interface CreateAccountFormProps {
   createAccount: (player: Player) => void

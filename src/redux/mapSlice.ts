@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
-import Player from '../player/Player'
 import { Map } from '../environment/maps'
 import { Npc } from '../npcs'
+import { Player } from '../player'
 
 const INITIAL_STATE: { map?: Map; players: Player[]; npcs: Npc[] } = {
   map: undefined,

@@ -3,7 +3,7 @@ import { Battle } from '../battle/types'
 
 interface BattleState {
   battle?: Battle
-  takeTurn: (playerAction: string, targetId: string) => void
+  takeTurn: (playerAction: string, targetId?: string | number) => void
   dismissBattle: (dismissedBattle: Battle) => void
 }
 

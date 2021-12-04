@@ -1,3 +1,5 @@
-import { getBattleStatusBorder } from './getBattleStatusBorder'
+import { BattleStatusStyle } from './BattleStatusStyle'
+import { getBattleStatusStyle } from './getBattleStatusStyle'
 
-export { getBattleStatusBorder }
+export { getBattleStatusStyle }
+export type { BattleStatusStyle }

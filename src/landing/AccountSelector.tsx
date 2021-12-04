@@ -9,10 +9,10 @@ import {
 } from '@chakra-ui/react'
 import React from 'react'
 import LoginForm from './LoginForm'
-import Player from '../player/Player'
 import CreateAccountForm from './CreateAccountForm'
 import QuickStartForm from './QuickStartForm'
 import { advanceFocus } from '../utils'
+import { Player } from '../player'
 
 interface AccountSelectorProps {
   login: (username: string, password: string) => void

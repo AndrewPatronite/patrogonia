@@ -1,6 +1,6 @@
 import { Map } from '../../environment/maps'
 import { Npc } from '../../npcs'
-import { Direction, DirectionKeyMapper } from '../../navigation'
+import { Direction } from '../../navigation'
 import { updateNpcPosition } from './updateNpcPosition'
 
 export const moveNpc = (
@@ -10,7 +10,6 @@ export const moveNpc = (
   canMoveToPosition: (rowIndex: number, columnIndex: number) => boolean,
   updateNpc: (npc: Npc) => void
 ) => {
-  const { up, down, left, right } = DirectionKeyMapper
   const {
     currentRowIndex,
     currentColumnIndex,
@@ -20,7 +19,7 @@ export const moveNpc = (
   } = npc
 
   switch (direction) {
-    case Direction.up:
+    case Direction.Up:
       if (
         currentRowIndex > 0 &&
         startingRowIndex - currentRowIndex < movementRange
@@ -29,14 +28,14 @@ export const moveNpc = (
           npc,
           currentRowIndex - 1,
           currentColumnIndex,
-          up,
+          Direction.Up,
           mapName,
           canMoveToPosition,
           updateNpc
         )
       }
       break
-    case Direction.down:
+    case Direction.Down:
       if (
         currentRowIndex < layout.length - 1 &&
         currentRowIndex - startingRowIndex < movementRange
@@ -45,14 +44,14 @@ export const moveNpc = (
           npc,
           currentRowIndex + 1,
           currentColumnIndex,
-          down,
+          Direction.Down,
           mapName,
           canMoveToPosition,
           updateNpc
         )
       }
       break
-    case Direction.left:
+    case Direction.Left:
       if (
         currentColumnIndex > 0 &&
         startingColumnIndex - currentColumnIndex < movementRange
@@ -61,14 +60,14 @@ export const moveNpc = (
           npc,
           currentRowIndex,
           currentColumnIndex - 1,
-          left,
+          Direction.Left,
           mapName,
           canMoveToPosition,
           updateNpc
         )
       }
       break
-    case Direction.right:
+    case Direction.Right:
       if (
         currentColumnIndex < layout[currentRowIndex].length - 1 &&
         currentColumnIndex - startingColumnIndex < movementRange
@@ -77,7 +76,7 @@ export const moveNpc = (
           npc,
           currentRowIndex,
           currentColumnIndex + 1,
-          right,
+          Direction.Right,
           mapName,
           canMoveToPosition,
           updateNpc

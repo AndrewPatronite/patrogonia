@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import TileRow from './TileRow'
 import { getLocationToPlayerMap, getMapDisplayRange } from './helper'
-import { pauseSound, playSound } from '../sound/sound'
+import {
+  CaveMusic,
+  FieldMusic,
+  pauseSound,
+  playSound,
+  TownMusic,
+} from '../sound'
 import PlayerStatsModal from '../../player/PlayerStatsModal'
 import FieldMenu from '../../player/FieldMenu'
-import Player from '../../player/Player'
 import { Maps } from '../maps/Maps'
 import { useMap, useModalState, useNpcMovementEffect } from '../../hooks'
 import DialogModal from '../../dialog/DialogModal'
@@ -12,10 +17,7 @@ import { usePlayerNavigationEffect } from '../../navigation'
 import { Box, Text } from '@chakra-ui/react'
 import { CaptionModal } from '../../components'
 import { ModalEnum } from '../../context'
-
-const fieldMusic = require('../sound/crusaderp/BattleHighlands.mp3')
-const caveMusic = require('../sound/crusaderp/AcrosstheSandWIP2.mp3')
-const townMusic = require('../sound/crusaderp/IndoorsThree.mp3')
+import { Player } from '../../player'
 
 const SHOW_PLAYER_STATS_DELAY = 5000
 
@@ -120,13 +122,13 @@ const World = ({
             />
           ))}
       <audio className="field-music" autoPlay loop>
-        <source src={fieldMusic} />
+        <source src={FieldMusic} />
       </audio>
       <audio className="cave-music" autoPlay loop>
-        <source src={caveMusic} />
+        <source src={CaveMusic} />
       </audio>
       <audio className="town-music" autoPlay loop>
-        <source src={townMusic} />
+        <source src={TownMusic} />
       </audio>
       <PlayerStatsModal
         isOpen={

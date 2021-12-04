@@ -8,8 +8,8 @@ import {
   updatePlayer as updatePlayerRemote,
 } from '../api'
 import { Dispatch } from '@reduxjs/toolkit'
-import Player from '../player/Player'
 import { playerSlice } from '../redux'
+import { Player } from '../player'
 
 export const login = (
   dispatch: Dispatch,
@@ -28,7 +28,8 @@ export const login = (
           loggedIn: true,
         },
         false,
-        false
+        false,
+        onFailure
       ),
     onFailure
   )
@@ -45,7 +46,8 @@ export const createAccount = (
         dispatch,
         { ...createdPlayer, loggedIn: true },
         false,
-        false
+        false,
+        onFailure
       ),
     onFailure
   )
@@ -69,7 +71,7 @@ export const loadSave = (
   loadSaveRemote(
     playerId,
     () => loadPlayer(dispatch, playerId, onFailure),
-    (error: any) => console.log(`Failed to load save ${JSON.stringify(error)}`)
+    () => onFailure('Failed to load save. Try again or refresh the page.')
   )
 }
 
@@ -91,7 +93,8 @@ export const updatePlayer = (
   dispatch: Dispatch,
   player: Player,
   saveGame: boolean,
-  updateToServer: boolean = true
+  updateToServer: boolean,
+  onFailure: (error: any) => void
 ) => {
   if (updateToServer) {
     updatePlayerRemote(
@@ -104,9 +107,7 @@ export const updatePlayer = (
         }
         storeAndDispatchPlayerUpdate(dispatch, mergedPlayer)
       },
-      (error: any) => {
-        console.log('Failed to update player: ' + JSON.stringify(error))
-      }
+      () => onFailure('Failed to update player. Try again or refresh the page.')
     )
   } else {
     storeAndDispatchPlayerUpdate(dispatch, player)
@@ -125,7 +126,8 @@ export const castSpell = (
   dispatch: Dispatch,
   currentPlayer: Player,
   spellName: string,
-  targetId: string
+  targetId: string,
+  onFailure: (error: any) => void
 ) => {
   castSpellRemote(
     assemblePlayerForServer(currentPlayer),
@@ -138,8 +140,6 @@ export const castSpell = (
       }
       storeAndDispatchPlayerUpdate(dispatch, mergedPlayer)
     },
-    (error: any) => {
-      console.log('Failed to cast spell: ' + JSON.stringify(error))
-    }
+    () => onFailure('Failed to cast spell. Try again or refresh the page.')
   )
 }

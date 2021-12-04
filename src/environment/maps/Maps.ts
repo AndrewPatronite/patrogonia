@@ -1,8 +1,8 @@
-import Map from './Map'
 import { Legend } from './Legend'
-import Entrance from './Entrance'
+import { Entrance, Map } from './types'
 import { Alastair, Barnaby, Nigel, Tristan } from '../../npcs'
 import { Finlay } from '../../npcs/Npcs'
+import { Direction } from '../../navigation'
 
 const {
   WATER: W,
@@ -147,7 +147,7 @@ export const Maps = {
         mapName: 'Atoris',
         rowIndex: 6,
         columnIndex: 7,
-        facing: 'down',
+        facing: Direction.Down,
         entranceName: 'Dewhurst',
       },
       npcs: [Alastair, Barnaby],
@@ -188,7 +188,7 @@ export const Maps = {
         mapName: 'Grimes',
         rowIndex: 8,
         columnIndex: 16,
-        facing: 'down',
+        facing: Direction.Down,
         entranceName: 'Fernsworth',
       },
       npcs: [Finlay],
@@ -236,7 +236,7 @@ export const Maps = {
         mapName: 'Grimes',
         rowIndex: 12,
         columnIndex: 42,
-        facing: 'down',
+        facing: Direction.Down,
         entranceName: 'Easthaven',
       },
       npcs: [Nigel, Tristan],

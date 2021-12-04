@@ -1,4 +1,5 @@
 import { NpcName } from './Npcs'
+import { Direction } from '../navigation'
 
 export enum NpcType {
   Knight,
@@ -12,6 +13,6 @@ export interface Npc {
   startingRowIndex: number
   startingColumnIndex: number
   type: NpcType
-  directionFacing: string
+  directionFacing: Direction
   isTalking: boolean
 }

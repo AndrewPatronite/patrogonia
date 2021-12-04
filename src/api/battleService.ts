@@ -26,9 +26,9 @@ export const takeTurn = (
   battleId: string,
   playerId: number,
   playerAction: string,
-  targetId: string,
   onSuccess: (battle: Battle) => void,
-  onFailure: (error: any) => void
+  onFailure: (error: any) => void,
+  targetId?: string | number
 ) => {
   axiosInstance
     .post(

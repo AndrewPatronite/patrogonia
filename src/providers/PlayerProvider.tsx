@@ -2,7 +2,6 @@ import React, { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { PlayerContext } from '../context'
 import { RootState } from '../redux'
-import Player from '../player/Player'
 import {
   castSpell,
   createAccount,
@@ -12,6 +11,7 @@ import {
   updatePlayer,
 } from '../actions'
 import { useToastErrorHandler } from './useToastErrorHandler'
+import { Player } from '../player'
 
 const PlayerProvider = ({
   children,
@@ -26,8 +26,8 @@ const PlayerProvider = ({
   const playerState = {
     castSpell: useCallback(
       (spellName: string, targetId: string) =>
-        castSpell(dispatch, currentPlayer, spellName, targetId),
-      [dispatch, currentPlayer]
+        castSpell(dispatch, currentPlayer, spellName, targetId, displayError),
+      [dispatch, currentPlayer, displayError]
     ),
     createAccount: useCallback(
       (player: Player) => createAccount(dispatch, player, displayError),
@@ -49,9 +49,15 @@ const PlayerProvider = ({
     ),
     updatePlayer: useCallback(
       (updatedPlayer: Player, saveGame = false, updateToServer = true) => {
-        updatePlayer(dispatch, updatedPlayer, saveGame, updateToServer)
+        updatePlayer(
+          dispatch,
+          updatedPlayer,
+          saveGame,
+          updateToServer,
+          displayError
+        )
       },
-      [dispatch]
+      [dispatch, displayError]
     ),
   }
   return (

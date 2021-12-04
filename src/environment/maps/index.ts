@@ -1,3 +1,3 @@
-import Map from './Map'
+import { Map, MapLayout } from './types'
 
-export type { Map }
+export type { Map, MapLayout }
