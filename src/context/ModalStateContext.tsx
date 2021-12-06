@@ -14,9 +14,11 @@ export interface ModalInterface {
   openModal: (modalEnum: ModalEnum, content?: any, onClose?: () => void) => void
 }
 
-export const ModalStateContext = createContext<ModalInterface>({
+const ModalStateContext = createContext<ModalInterface>({
   closeModal: () => {},
   getModalContent: () => {},
   isModalOpen: () => false,
   openModal: () => {},
 })
+
+export default ModalStateContext

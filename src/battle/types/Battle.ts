@@ -1,10 +1,10 @@
-import { Enemy } from './Enemy'
-import { LogEntry } from './LogEntry'
+import Enemy from './Enemy'
+import LogEntry from './LogEntry'
 import { BattleStatus } from './BattleStatus'
-import { RoundPlayerActions } from './RoundPlayerActions'
+import RoundPlayerActions from './RoundPlayerActions'
 import { Stats } from '../../player'
 
-export interface Battle {
+export default interface Battle {
   id: string
   enemies: Enemy[]
   log: LogEntry[]

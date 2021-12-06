@@ -1,5 +1,5 @@
-import { PlayerAction } from './PlayerAction'
+import PlayerAction from './PlayerAction'
 
-export interface RoundPlayerActions {
+export default interface RoundPlayerActions {
   [playerId: number]: PlayerAction
 }

@@ -1,9 +1,9 @@
 import { throttle, uniq } from 'lodash'
+import { Direction } from './types'
 import { Map } from '../environment/maps'
 import { Cave, Maps } from '../environment/maps/Maps'
 import { Player } from '../player'
 import { LessonEnum } from '../tutorial'
-import { Direction } from './Direction'
 
 const moveDelay = 250
 

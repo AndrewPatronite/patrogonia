@@ -7,8 +7,8 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { isEmpty } from 'lodash'
 import { startingLocation } from './startingLocation'
-import { CredentialedPlayer } from './CredentialedPlayer'
 import { Player } from '../player'
+import { CredentialedPlayer } from '../player/types'
 
 interface CreateAccountFormProps {
   createAccount: (player: Player) => void

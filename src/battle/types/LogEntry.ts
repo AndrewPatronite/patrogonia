@@ -1,4 +1,4 @@
-export interface LogEntry {
+export default interface LogEntry {
   round: number
   content: string
   targetId: string

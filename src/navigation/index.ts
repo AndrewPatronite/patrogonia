@@ -1,4 +1,4 @@
-import { Direction } from './Direction'
+import { Direction } from './types'
 import { DirectionKeyMap, isDirectionKey } from './DirectionKeyMapper'
 import { FieldMenuKeys } from './FieldMenuKeys'
 import { movePlayer } from './movePlayer'

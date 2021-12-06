@@ -8,7 +8,7 @@ import {
   MovementLesson,
   NpcLesson,
   TownVisitLesson,
-} from './index'
+} from '.'
 import BattleCommandLesson from './BattleCommandLesson'
 
 export const getLesson = (lesson: LessonEnum) => {

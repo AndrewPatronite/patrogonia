@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { isEmpty } from 'lodash'
 import { Map } from '../environment/maps'
-import { useMap } from './index'
+import { useMap } from '.'
 import { getRandomDirection, moveNpc } from './helpers'
 
 export const useNpcMovementEffect = (map?: Map) => {

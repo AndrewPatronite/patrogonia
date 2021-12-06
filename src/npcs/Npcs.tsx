@@ -1,7 +1,7 @@
-import { Npc, NpcType } from './Npc'
+import { Direction } from '../navigation'
+import Npc, { NpcType } from './Npc'
 import React from 'react'
 import { Text } from '@chakra-ui/react'
-import { Direction } from '../navigation'
 
 export enum NpcName {
   Alastair = 'Alastair',

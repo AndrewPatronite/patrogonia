@@ -12,7 +12,7 @@ import {
   Stairs,
   Town,
   Water,
-} from './index'
+} from '.'
 
 export const getTile = (mapSymbol: string) => {
   switch (mapSymbol) {

@@ -5,7 +5,7 @@ import TeamUp from './TeamUp'
 import CampingPlayer from './CampingPlayer'
 import Welcome from './Welcome'
 import PopIn from './PopIn'
-import { LessonEnum, recordLesson } from '../index'
+import { LessonEnum, recordLesson } from '..'
 import { Button, Flex, Stack } from '@chakra-ui/react'
 import { Player } from '../../player'
 

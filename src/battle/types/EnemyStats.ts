@@ -1,3 +1,3 @@
-export interface EnemyStats {
+export default interface EnemyStats {
   hp: number
 }

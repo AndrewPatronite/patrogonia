@@ -3,8 +3,7 @@ import { has } from 'lodash'
 import ThemedPanel from '../components/theme/ThemedPanel'
 import { Button, Stack } from '@chakra-ui/react'
 import PlayerTurnWizard from './PlayerTurnWizard'
-import { BattleStatusStyle } from './helper'
-import { Enemy, RoundPlayerActions } from './types'
+import { BattleStatusStyle, Enemy, RoundPlayerActions } from './types'
 import { Player, Stats } from '../player'
 
 interface PlayerPanelProps {

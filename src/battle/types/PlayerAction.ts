@@ -1,4 +1,4 @@
-export interface PlayerAction {
+export default interface PlayerAction {
   action: string
   targetId: string
 }

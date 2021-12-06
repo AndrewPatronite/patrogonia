@@ -4,8 +4,8 @@ import words from 'an-array-of-english-words'
 import { random } from 'lodash'
 import { characterNames, encrypt } from './helper'
 import { startingLocation } from './startingLocation'
-import { CredentialedPlayer } from './CredentialedPlayer'
 import { Player } from '../player'
+import { CredentialedPlayer } from '../player/types'
 
 interface QuickStartFormProps {
   createAccount: (player: Player) => void

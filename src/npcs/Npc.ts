@@ -5,7 +5,7 @@ export enum NpcType {
   Knight,
 }
 
-export interface Npc {
+export default interface Npc {
   name: NpcName
   currentRowIndex: number
   currentColumnIndex: number

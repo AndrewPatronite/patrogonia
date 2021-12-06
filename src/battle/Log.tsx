@@ -8,7 +8,7 @@ import React, {
 import { isEmpty } from 'lodash'
 import ThemedPanel from '../components/theme/ThemedPanel'
 import { Box, Button, Stack, Text } from '@chakra-ui/react'
-import { LogEntry } from './types'
+import { BattleStatusStyle, LogEntry } from './types'
 import {
   EnemyAttackSound,
   HealingSound,
@@ -19,7 +19,6 @@ import {
   PlayerAttackSound,
   playSound,
 } from '../environment/sound'
-import { BattleStatusStyle } from './helper'
 
 interface LogProps {
   deliveredEntries: LogEntry[]

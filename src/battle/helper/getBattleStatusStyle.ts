@@ -1,4 +1,4 @@
-import { BattleStatusStyle } from './BattleStatusStyle'
+import { BattleStatusStyle } from '../types'
 
 export const getBattleStatusStyle = (
   playerStats: { hp: number; hpTotal: number }[]

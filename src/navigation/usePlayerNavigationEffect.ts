@@ -8,7 +8,7 @@ import { getDialog } from '../npcs'
 import { movePlayer } from './movePlayer'
 import { uniq } from 'lodash'
 import { DirectionKeyMap, isDirectionKey } from './DirectionKeyMapper'
-import { Direction } from './index'
+import { Direction } from './types'
 
 export const usePlayerNavigationEffect = () => {
   const { isModalOpen, openModal } = useModalState()
