@@ -19,13 +19,18 @@ import {
   PlayerAttackSound,
   playSound,
 } from '../environment/sound'
+import { isEnemyTarget } from './helper'
 
-interface LogProps {
+export interface LogProps {
   deliveredEntries: LogEntry[]
   onDismiss: MouseEventHandler
   showDismiss: boolean
   battleStatusStyle: BattleStatusStyle
   allMessagesDelivered: boolean
+}
+
+export interface DeliveredLogEntries {
+  [lastDeliveredEntryIndex: number]: boolean
 }
 
 const Log = ({
@@ -35,9 +40,9 @@ const Log = ({
   battleStatusStyle,
   allMessagesDelivered,
 }: LogProps) => {
-  const [logEntryMusicPlayed, setLogEntryMusicPlayed] = useState<{
-    [lastDeliveredEntryIndex: number]: boolean
-  }>({})
+  const [logEntryMusicPlayed, setLogEntryMusicPlayed] = useState<
+    DeliveredLogEntries
+  >({})
   const scrollTo = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -57,12 +62,10 @@ const Log = ({
       if (!logEntryMusicPlayed[lastDeliveredEntryIndex]) {
         const { content, targetId } = deliveredEntries[lastDeliveredEntryIndex]
         if (content.includes('attacks')) {
-          //TODO AP revisit:
-          const integerMaxStringLength = 11
-          if (targetId && targetId.length > integerMaxStringLength) {
-            playSound('player-attack')
-          } else {
-            playSound('enemy-attack')
+          if (targetId) {
+            playSound(
+              isEnemyTarget(targetId) ? 'player-attack' : 'enemy-attack'
+            )
           }
           setEntryPlayed(lastDeliveredEntryIndex)
         } else if (content.includes('casts Heal')) {
@@ -93,7 +96,7 @@ const Log = ({
       padding="1rem"
       sx={battleStatusStyle}
     >
-      <Stack spacing="0.5rem">
+      <Stack spacing="0.5rem" data-testid="battle-log">
         {!isEmpty(deliveredEntries) &&
           deliveredEntries.map((entry, index) => (
             <Text key={index}>{entry.content}</Text>
@@ -114,22 +117,22 @@ const Log = ({
         )}
       </Stack>
       <Box className="scroll-to" ref={scrollTo} />
-      <audio className="player-attack">
+      <audio className="player-attack" data-testid="player-attack">
         <source src={PlayerAttackSound} />
       </audio>
-      <audio className="enemy-attack">
+      <audio className="enemy-attack" data-testid="enemy-attack">
         <source src={EnemyAttackSound} />
       </audio>
-      <audio className="level-up">
+      <audio className="level-up" data-testid="level-up">
         <source src={LevelUpSound} />
       </audio>
-      <audio className="party-destroyed">
+      <audio className="party-destroyed" data-testid="party-destroyed">
         <source src={PartyDestroyedSound} />
       </audio>
-      <audio className="heal">
+      <audio className="heal" data-testid="heal">
         <source src={HealingSound} />
       </audio>
-      <audio className="ice">
+      <audio className="ice" data-testid="ice">
         <source src={IceSound} />
       </audio>
     </ThemedPanel>

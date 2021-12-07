@@ -23,7 +23,7 @@ export const useToastErrorHandler = () => {
               break
           }
         } else {
-          errorMessage = error
+          errorMessage = `${error}`
         }
       }
       toast({
