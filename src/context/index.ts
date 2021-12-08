@@ -5,6 +5,7 @@ import ModalStateContext, {
   ModalInterface,
 } from './ModalStateContext'
 import PlayerContext from './PlayerContext'
+import SoundContext from './SoundContext'
 import TutorialContext from './TutorialContext'
 
 export {
@@ -13,6 +14,7 @@ export {
   ModalEnum,
   ModalStateContext,
   PlayerContext,
+  SoundContext,
   TutorialContext,
 }
 

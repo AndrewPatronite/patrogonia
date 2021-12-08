@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import TileRow from './TileRow'
 import { getLocationToPlayerMap, getMapDisplayRange } from './helper'
-import {
-  CaveMusic,
-  FieldMusic,
-  pauseSound,
-  playSound,
-  TownMusic,
-} from '../sound'
+import { Sound } from '../sound'
 import PlayerStatsModal from '../../player/PlayerStatsModal'
 import FieldMenu from '../../player/FieldMenu'
 import { Maps } from '../maps/Maps'
-import { useMap, useModalState, useNpcMovementEffect } from '../../hooks'
+import {
+  useMap,
+  useModalState,
+  useNpcMovementEffect,
+  useSound,
+} from '../../hooks'
 import DialogModal from '../../dialog/DialogModal'
 import { usePlayerNavigationEffect } from '../../navigation'
 import { Box, Text } from '@chakra-ui/react'
@@ -28,6 +27,7 @@ const World = ({
   currentPlayer: Player
   castSpell: (spellName: string, targetId: string) => void
 }) => {
+  const { playSound } = useSound()
   const {
     closeModal,
     getModalContent,
@@ -49,19 +49,13 @@ const World = ({
   useEffect(() => {
     setSaveCaptionModalOpen(false)
     if (Maps.isField(mapName)) {
-      pauseSound('cave-music')
-      pauseSound('town-music')
-      playSound('field-music')
+      playSound(Sound.FieldMusic, [Sound.CaveMusic, Sound.TownMusic])
       setLocationCaptionModalOpen(false)
     } else if (Maps.isTown(mapName)) {
-      pauseSound('cave-music')
-      pauseSound('field-music')
-      playSound('town-music')
+      playSound(Sound.TownMusic, [Sound.CaveMusic, Sound.FieldMusic])
       setLocationCaptionModalOpen(true)
     } else {
-      pauseSound('field-music')
-      pauseSound('town-music')
-      playSound('cave-music')
+      playSound(Sound.CaveMusic, [Sound.FieldMusic, Sound.TownMusic])
       setLocationCaptionModalOpen(true)
     }
     const timeout = setTimeout(() => {
@@ -75,7 +69,7 @@ const World = ({
       clearTimeout(timeout)
       clearTimeout(timeout2)
     }
-  }, [mapName])
+  }, [mapName, playSound])
 
   useEffect(() => {
     closeModal(ModalEnum.PlayerStats)
@@ -121,15 +115,6 @@ const World = ({
               npcs={npcs}
             />
           ))}
-      <audio className="field-music" autoPlay loop>
-        <source src={FieldMusic} />
-      </audio>
-      <audio className="cave-music" autoPlay loop>
-        <source src={CaveMusic} />
-      </audio>
-      <audio className="town-music" autoPlay loop>
-        <source src={TownMusic} />
-      </audio>
       <PlayerStatsModal
         isOpen={
           isPlayerStatsOpen &&

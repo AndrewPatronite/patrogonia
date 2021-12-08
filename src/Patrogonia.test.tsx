@@ -1,39 +1,49 @@
 import React from 'react'
-import { mount, shallow } from 'enzyme'
 import Patrogonia from './Patrogonia'
-import Battle from './battle/Battle'
-import LandingPage from './landing/LandingPage'
-import HowToPlay from './instructions/HowToPlay'
-import * as PlayerStateAlias from './state/PlayerState'
-import Player from './player/Player'
-import { MemoryRouter, Route, Switch } from 'react-router-dom'
-import PermissionRoute from './PermissionRoute'
-import { Direction } from './navigation'
+import { MemoryRouter } from 'react-router-dom'
+import { Player } from './player'
+import { startingLocation } from './landing/startingLocation'
+import {
+  fireEvent,
+  render,
+  RenderResult,
+  screen,
+  waitFor,
+} from '@testing-library/react'
+import { useBattle, useMap, useModalState, usePlayer, useSound } from './hooks'
+import { encrypt } from './landing/helper'
+import { EnemyName } from './battle/types'
+import { BattleStatus } from './battle/types/BattleStatus'
+import { Sound } from './environment/sound'
+
+jest.mock('./hooks', () => ({
+  usePlayer: jest.fn(),
+  useSound: jest.fn(),
+  useNpcMovementEffect: jest.fn(),
+  useBattle: jest.fn(),
+  useModalState: jest.fn(),
+  useMap: jest.fn(),
+}))
 
 describe('Patrogonia', () => {
-  let currentPlayer: Player
-  let login: jasmine.Spy
-  let createAccount: jasmine.Spy
-  let updatePlayer: jasmine.Spy
-  let loadPlayer: jasmine.Spy
-  let loadSave: jasmine.Spy
-  let castSpell: jasmine.Spy
-  const originalProcess = window.process
+  let castSpell: jest.Mock
+  let createAccount: jest.Mock
+  let currentPlayer: Partial<Player>
+  let login: jest.Mock
+  let updatePlayer: jest.Mock
+  let renderResult: RenderResult
+  let playSound: jest.Mock
 
-  beforeEach(() => {
+  const setup = (loggedIn = false, battleId?: string) => {
     currentPlayer = {
-      id: 0,
+      id: 1,
       lastUpdate: '',
-      location: {
-        mapName: 'Atoris',
-        rowIndex: 6,
-        columnIndex: 7,
-        facing: Direction.Down,
-      },
-      loggedIn: false,
+      location: startingLocation,
+      loggedIn,
       name: '',
       spells: [],
       stats: {
+        playerId: 1,
         playerName: 'Redwan',
         level: 1,
         hp: 10,
@@ -47,141 +57,117 @@ describe('Patrogonia', () => {
         defense: 5,
         agility: 5,
       },
+      battleId,
     }
-    login = jasmine.createSpy('login')
-    createAccount = jasmine.createSpy('createAccount')
-    updatePlayer = jasmine.createSpy('updatePlayer')
-    loadPlayer = jasmine.createSpy('loadPlayer')
-    loadSave = jasmine.createSpy('loadSave')
-    castSpell = jasmine.createSpy('castSpell')
-
-    window.process = {
-      // @ts-ignore
-      env: {
-        REACT_APP_WEBSOCKET_BASE_URL: 'wss://localhost:8443',
-      },
-    }
-  })
-
-  afterEach(() => {
-    window.process = originalProcess
-  })
-
-  const getSubject = () => {
-    spyOn(PlayerStateAlias, 'PlayerState').and.returnValue([
+    castSpell = jest.fn()
+    createAccount = jest.fn()
+    login = jest.fn()
+    updatePlayer = jest.fn()
+    ;(usePlayer as jest.Mock).mockReturnValue({
+      castSpell,
+      createAccount,
       currentPlayer,
       login,
-      createAccount,
       updatePlayer,
-      loadPlayer,
-      loadSave,
-      castSpell,
-    ])
-    return shallow(<Patrogonia />)
-  }
-
-  it('is a Switch of Routes', () => {
-    const subject = getSubject()
-    expect(subject.type()).toEqual(Switch)
-
-    const howToPlayRoute = subject.childAt(0)
-    expect(howToPlayRoute.type()).toEqual(Route)
-    expect(howToPlayRoute.prop('path')).toEqual('/how-to-play')
-    expect(howToPlayRoute.childAt(0).type()).toEqual(HowToPlay)
-
-    const battleRoute = subject.childAt(1)
-    expect(battleRoute.type()).toEqual(PermissionRoute)
-    expect(battleRoute.prop('path')).toEqual('/battle')
-    expect(battleRoute.childAt(0).type()).toEqual(Battle)
-
-    const worldRoute = subject.childAt(2)
-    expect(worldRoute.type()).toEqual(PermissionRoute)
-    expect(worldRoute.prop('path')).toEqual('/field')
-    expect(worldRoute.childAt(0).childAt(0).type()).toEqual(World)
-
-    const landingRoute = subject.childAt(3)
-    expect(landingRoute.type()).toEqual(Route)
-    expect(landingRoute.prop('path')).toEqual(['/', '/login'])
-    expect(landingRoute.childAt(0).type()).toEqual(LandingPage)
-  })
-
-  it('shows the landing page by default', () => {
-    const subject = getSubject()
-    const landing = subject.find(LandingPage)
-    expect(landing.props()).toEqual({
-      login,
-      createAccount,
     })
-  })
-
-  it('shows instructions once the user has logged in', () => {
-    currentPlayer.loggedIn = true
-    const subject = getSubject()
-    const howToPlay = subject.find(HowToPlay)
-    expect(howToPlay.exists()).toEqual(true)
-  })
-
-  it('updates player to skip instructions once dismissed', () => {
-    currentPlayer.loggedIn = true
-    spyOn(PlayerStateAlias, 'PlayerState').and.returnValue([
-      currentPlayer,
-      login,
-      createAccount,
-      updatePlayer,
-      loadPlayer,
-      loadSave,
-      castSpell,
-    ])
-    mount(
-      <MemoryRouter>
+    playSound = jest.fn()
+    ;(useSound as jest.Mock).mockReturnValue({
+      playSound,
+      pauseSound: jest.fn(),
+    })
+    ;(useBattle as jest.Mock).mockReturnValue({
+      battle: {
+        status: BattleStatus.InProgress,
+        enemies: [
+          {
+            id: '67dbaadd-5326-4dd6-b5d6-d51bea13ed6f',
+            name: EnemyName.Knight,
+            stats: {
+              hp: 25,
+            },
+          },
+        ],
+      },
+    })
+    ;(useModalState as jest.Mock).mockReturnValue({
+      isModalOpen: () => false,
+      getModalContent: () => ({
+        content: '',
+      }),
+      closeModal: jest.fn(),
+    })
+    ;(useMap as jest.Mock).mockReturnValue({})
+    renderResult = render(
+      <MemoryRouter initialEntries={['/login']}>
         <Patrogonia />
       </MemoryRouter>
     )
+  }
 
-    expect(updatePlayer).toHaveBeenCalledWith(
-      {
-        ...currentPlayer,
-        loggedIn: true,
-      },
-      false
-    )
-  })
+  describe('LandingPage', () => {
+    it('shows the landing page by default', () => {
+      setup()
+      expect(screen.getByRole('heading').textContent).toEqual(
+        'Chronicles of Patrogonia'
+      )
+    })
 
-  it('sets nextPath on HowToPlay to login initially', () => {
-    const subject = getSubject()
-    const howToPlay = subject.find(HowToPlay)
-    expect(howToPlay.prop('nextPath')).toEqual('/login')
-  })
+    it('creates an account via Quick start', () => {
+      setup()
+      fireEvent.click(screen.getByText('Start', { selector: 'button' }))
+      expect(createAccount).toHaveBeenCalledWith({
+        location: startingLocation,
+        name: expect.anything(),
+        password: expect.anything(),
+        username: expect.anything(),
+      })
+    })
 
-  it('sets nextPath on HowToPlay to field if player is logged in', () => {
-    currentPlayer.loggedIn = true
-    const subject = getSubject()
-    const howToPlay = subject.find(HowToPlay)
-    expect(howToPlay.prop('nextPath')).toEqual('/field')
-  })
-
-  it("returns World when the player has logged in, already viewed instructions, and isn't in battle", () => {
-    currentPlayer.loggedIn = true
-    const subject = getSubject()
-    const world = subject.find(World)
-    expect(world.props()).toEqual({
-      currentPlayer,
-      castSpell,
-      updatePlayer: jasmine.any(Function),
+    it('logs user in', async () => {
+      setup()
+      fireEvent.click(screen.getByText('Login', { selector: 'button' }))
+      fireEvent.change(screen.getByRole('textbox', { name: 'Username' }), {
+        target: { value: 'Redwan' },
+      })
+      fireEvent.click(screen.getByText('Show', { selector: 'button' }))
+      fireEvent.change(screen.getByRole('textbox', { name: 'Password' }), {
+        target: { value: 'OpenSesame!' },
+      })
+      fireEvent.click(screen.getAllByText('Login', { selector: 'button' })[1])
+      await waitFor(() =>
+        expect(login).toHaveBeenCalledWith('Redwan', encrypt('OpenSesame!'))
+      )
     })
   })
 
-  it('returns Battle when the player has logged in, already viewed instructions, and is in battle', () => {
-    currentPlayer.loggedIn = true
-    currentPlayer.battleId = 'abcdef12345'
-    const subject = getSubject()
-    const battle = subject.find(Battle)
-    expect(battle.props()).toEqual({
-      currentPlayer,
-      loadPlayer,
-      updatePlayer,
-      battleUrl: 'wss://localhost:8443/battles',
-      loadSave,
+  describe('Battle', () => {
+    const originalScrollIntoView = window.HTMLElement.prototype.scrollIntoView
+
+    beforeEach(() => {
+      window.HTMLElement.prototype.scrollIntoView = jest.fn()
+    })
+
+    afterEach(() => {
+      window.HTMLElement.prototype.scrollIntoView = originalScrollIntoView
+    })
+
+    it('routes to the Battle if user is logged in and battleId is set', () => {
+      setup(true, 'abcdef1234')
+      expect(playSound).toHaveBeenCalledWith(Sound.BattleMusic, [
+        Sound.FieldMusic,
+        Sound.CaveMusic,
+      ])
+      expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalled()
+    })
+  })
+
+  describe('World', () => {
+    it('routes the user to the World if user is logged in and not in battle', () => {
+      setup(true)
+      expect(playSound).toHaveBeenCalledWith(Sound.FieldMusic, [
+        Sound.CaveMusic,
+        Sound.TownMusic,
+      ])
     })
   })
 })

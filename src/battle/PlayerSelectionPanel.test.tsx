@@ -14,7 +14,7 @@ describe('PlayerSelectionPanel', () => {
         { playerId: 1, playerName: 'Redwan' },
         { playerId: 2, playerName: 'Orfeo' },
       ],
-      action: 'heal',
+      action: Sound.Heal,
       handleBack: jasmine.createSpy('handleBack'),
       handleNext: jasmine.createSpy('handleNext'),
       isBackEnabled: true,

@@ -32,8 +32,8 @@ const AccountSelector = ({ login, createAccount }: AccountSelectorProps) => {
       <Box borderWidth={1}>
         <Tabs isLazy onKeyDown={handleKeyPress}>
           <TabList>
-            <Tab>Quick Start</Tab>
-            <Tab>Create Account</Tab>
+            <Tab>Quick start</Tab>
+            <Tab>Create account</Tab>
             <Tab>Login</Tab>
           </TabList>
 

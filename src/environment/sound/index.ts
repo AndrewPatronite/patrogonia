@@ -1,6 +1,6 @@
+import { Sound } from './types'
 import { BattleMusic, CaveMusic, FieldMusic, TownMusic } from './crusaderp'
 import { EnemyAttackSound, PlayerAttackSound } from './FXhome.com'
-import { pauseSound, playSound } from './sound'
 import {
   HealingSound,
   IceSound,
@@ -8,6 +8,7 @@ import {
   PartyDestroyedSound,
   WarpSound,
 } from './zapsplat'
+import { SoundAudio } from './SoundAudio'
 
 export {
   BattleMusic,
@@ -19,8 +20,8 @@ export {
   LevelUpSound,
   PartyDestroyedSound,
   PlayerAttackSound,
-  pauseSound,
-  playSound,
+  Sound,
+  SoundAudio,
   TownMusic,
   WarpSound,
 }

@@ -12,26 +12,29 @@ import {
 import { Provider } from 'react-redux'
 import { store } from './redux'
 import TutorialProvider from './providers/TutorialProvider'
+import SoundProvider from './providers/SoundProvider'
 
 function App() {
   return (
-    <ChakraProvider theme={theme}>
-      <ModalStateProvider>
-        <BrowserRouter>
-          <Provider store={store}>
-            <PlayerProvider>
-              <BattleProvider>
-                <MapProvider>
-                  <TutorialProvider>
-                    <Patrogonia />
-                  </TutorialProvider>
-                </MapProvider>
-              </BattleProvider>
-            </PlayerProvider>
-          </Provider>
-        </BrowserRouter>
-      </ModalStateProvider>
-    </ChakraProvider>
+    <SoundProvider>
+      <ChakraProvider theme={theme}>
+        <ModalStateProvider>
+          <BrowserRouter>
+            <Provider store={store}>
+              <PlayerProvider>
+                <BattleProvider>
+                  <MapProvider>
+                    <TutorialProvider>
+                      <Patrogonia />
+                    </TutorialProvider>
+                  </MapProvider>
+                </BattleProvider>
+              </PlayerProvider>
+            </Provider>
+          </BrowserRouter>
+        </ModalStateProvider>
+      </ChakraProvider>
+    </SoundProvider>
   )
 }
 

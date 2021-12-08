@@ -3,22 +3,19 @@ import { filter, values } from 'lodash'
 import { getBattleStatusStyle } from './helper'
 import Log from './Log'
 import PlayerPanel from './PlayerPanel'
-import { BattleMusic, pauseSound, playSound } from '../environment/sound'
 import ThemedPanel from '../components/theme/ThemedPanel'
 import { Flex } from '@chakra-ui/react'
-import { useBattle, usePlayer } from '../hooks'
+import { useBattle, usePlayer, useSound } from '../hooks'
 import { isBattleEnded } from './types'
 import EnemyDisplay from './EnemyDisplay'
+import { Sound } from '../environment/sound'
 
 const Battle = () => {
+  const { playSound, pauseSound } = useSound()
   const { currentPlayer, loadSave, updatePlayer } = usePlayer()
   const { battle, dismissBattle, takeTurn } = useBattle()
   const { enemies = [], log, playerStats, roundPlayerActions = {}, status } =
     battle || {}
-
-  useEffect(() => {
-    playSound('battle-music')
-  }, [])
   const {
     location: { mapName },
   } = currentPlayer
@@ -35,14 +32,18 @@ const Battle = () => {
   const allMessagesDelivered = log?.length === deliveredLogEntries.length
 
   useEffect(() => {
+    playSound(Sound.BattleMusic, [Sound.FieldMusic, Sound.CaveMusic])
+  }, [playSound])
+
+  useEffect(() => {
     if (allMessagesDelivered) {
       if (battleEnded) {
-        pauseSound('battle-music')
+        pauseSound(Sound.BattleMusic)
       } else {
         setPlayerTurnEnabled(true)
       }
     }
-  }, [allMessagesDelivered, battleEnded])
+  }, [allMessagesDelivered, battleEnded, pauseSound])
 
   return battle ? (
     <ThemedPanel
@@ -54,9 +55,6 @@ const Battle = () => {
       maxWidth="62.5rem"
       sx={battleStatusStyle}
     >
-      <audio className="battle-music" autoPlay loop>
-        <source src={BattleMusic} />
-      </audio>
       <EnemyDisplay
         mapName={mapName}
         enemies={enemies}

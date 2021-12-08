@@ -9,17 +9,9 @@ import { isEmpty } from 'lodash'
 import ThemedPanel from '../components/theme/ThemedPanel'
 import { Box, Button, Stack, Text } from '@chakra-ui/react'
 import { BattleStatusStyle, LogEntry } from './types'
-import {
-  EnemyAttackSound,
-  HealingSound,
-  IceSound,
-  LevelUpSound,
-  PartyDestroyedSound,
-  pauseSound,
-  PlayerAttackSound,
-  playSound,
-} from '../environment/sound'
+import { Sound } from '../environment/sound'
 import { isEnemyTarget } from './helper'
+import { useSound } from '../hooks'
 
 export interface LogProps {
   deliveredEntries: LogEntry[]
@@ -40,6 +32,7 @@ const Log = ({
   battleStatusStyle,
   allMessagesDelivered,
 }: LogProps) => {
+  const { playSound, pauseSound } = useSound()
   const [logEntryMusicPlayed, setLogEntryMusicPlayed] = useState<
     DeliveredLogEntries
   >({})
@@ -64,26 +57,26 @@ const Log = ({
         if (content.includes('attacks')) {
           if (targetId) {
             playSound(
-              isEnemyTarget(targetId) ? 'player-attack' : 'enemy-attack'
+              isEnemyTarget(targetId) ? Sound.PlayerAttack : Sound.EnemyAttack
             )
           }
           setEntryPlayed(lastDeliveredEntryIndex)
         } else if (content.includes('casts Heal')) {
-          playSound('heal')
+          playSound(Sound.Heal)
         } else if (content.includes('casts Ice')) {
-          playSound('ice')
+          playSound(Sound.Ice)
         } else if (content.includes('level')) {
-          pauseSound('battle-music')
-          playSound('level-up')
+          pauseSound(Sound.BattleMusic)
+          playSound(Sound.LevelUp)
           setEntryPlayed(lastDeliveredEntryIndex)
         } else if (content.includes('destroyed')) {
-          pauseSound('battle-music')
-          playSound('party-destroyed')
+          pauseSound(Sound.BattleMusic)
+          playSound(Sound.PartyDestroyed)
           setEntryPlayed(lastDeliveredEntryIndex)
         }
       }
     }
-  }, [deliveredEntries, logEntryMusicPlayed])
+  }, [deliveredEntries, logEntryMusicPlayed, playSound, pauseSound])
 
   return (
     <ThemedPanel
@@ -117,24 +110,6 @@ const Log = ({
         )}
       </Stack>
       <Box className="scroll-to" ref={scrollTo} />
-      <audio className="player-attack" data-testid="player-attack">
-        <source src={PlayerAttackSound} />
-      </audio>
-      <audio className="enemy-attack" data-testid="enemy-attack">
-        <source src={EnemyAttackSound} />
-      </audio>
-      <audio className="level-up" data-testid="level-up">
-        <source src={LevelUpSound} />
-      </audio>
-      <audio className="party-destroyed" data-testid="party-destroyed">
-        <source src={PartyDestroyedSound} />
-      </audio>
-      <audio className="heal" data-testid="heal">
-        <source src={HealingSound} />
-      </audio>
-      <audio className="ice" data-testid="ice">
-        <source src={IceSound} />
-      </audio>
     </ThemedPanel>
   )
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Icon, Kbd, Stack, Text } from '@chakra-ui/react'
-import { FaInfoCircle } from 'react-icons/all'
+import { FaInfoCircle } from 'react-icons/fa'
 
 const NpcLesson = () => {
   return (

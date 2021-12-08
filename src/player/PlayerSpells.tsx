@@ -2,14 +2,15 @@ import React, { useState } from 'react'
 import { upperFirst } from 'lodash'
 import ThemedPanel, { ThemedPanelProps } from '../components/theme/ThemedPanel'
 import { Button, Flex, Stack, Text } from '@chakra-ui/react'
-import { HealingSound, playSound, WarpSound } from '../environment/sound'
+import { Sound } from '../environment/sound'
 import List from '../control/List'
 import { Player, Spell } from './types'
+import { useSound } from '../hooks'
 
-const spellSounds: { [index: string]: string } = {
-  HEAL: 'heal',
-  OUTSIDE: 'warp',
-  RETURN: 'warp',
+const spellSounds: { [index: string]: Sound } = {
+  HEAL: Sound.Heal,
+  OUTSIDE: Sound.Warp,
+  RETURN: Sound.Warp,
 }
 
 interface PlayerSpellsProps extends ThemedPanelProps {
@@ -31,6 +32,7 @@ const PlayerSpells = ({
   castSpell,
   onSpellCast,
 }: PlayerSpellsProps) => {
+  const { playSound } = useSound()
   const [spell, setSpell] = useState<Spell>()
   const [town, setTown] = useState(visited[0])
   const [castSpellMessage, setSpellCastMessage] = useState('')
@@ -113,12 +115,6 @@ const PlayerSpells = ({
           </Flex>
         </Stack>
       )}
-      <audio className="heal">
-        <source src={HealingSound} />
-      </audio>
-      <audio className="warp">
-        <source src={WarpSound} />
-      </audio>
     </ThemedPanel>
   )
 }

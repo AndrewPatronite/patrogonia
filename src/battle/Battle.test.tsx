@@ -9,6 +9,7 @@ import PlayerPanel from './PlayerPanel'
 import * as Subscriptions from '../subscription/subscribe'
 import * as Player from '../environment/sound/sound'
 import ThemedPanel from '../components/theme/ThemedPanel'
+import { Sound } from '../environment/sound'
 
 describe('Battle', () => {
   const currentPlayerId = 1
@@ -85,7 +86,7 @@ describe('Battle', () => {
     const audio = subject.find('.battle-music')
     expect(audio.type()).toEqual('audio')
     expect(audio.props()).toEqual({
-      className: 'battle-music',
+      className: Sound.BattleMusic,
       autoPlay: true,
       loop: true,
       children: jasmine.anything(),
@@ -212,7 +213,7 @@ describe('Battle', () => {
   })
 
   it('plays battle music via useEffect', () => {
-    expect(Player.playSound).toHaveBeenCalledWith('battle-music')
+    expect(Player.playSound).toHaveBeenCalledWith(Sound.BattleMusic)
   })
 
   it('enables next player turn after all log messages have been delivered, via useEffect', () => {
@@ -238,6 +239,6 @@ describe('Battle', () => {
     battle.status = 'VICTORY'
     battle.log[1].delivered = true
     subject = shallow(<Battle {...props} />)
-    expect(Player.pauseSound).toHaveBeenCalledWith('battle-music')
+    expect(Player.pauseSound).toHaveBeenCalledWith(Sound.BattleMusic)
   })
 })

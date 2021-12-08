@@ -7,7 +7,6 @@
         "@emotion/react": "^11.5.0",
         "@emotion/styled": "^11.3.0",
         "@reduxjs/toolkit": "^1.6.2",
-        "@testing-library/jest-dom": "^4.2.4",
         "@testing-library/user-event": "^7.2.1",
         "@types/enzyme": "^3.10.5",
         "@types/jest": "^26.0.3",
@@ -36,7 +35,7 @@
         "react-redux": "^7.2.6",
         "react-router": "^5.2.0",
         "react-router-dom": "^5.2.0",
-        "react-scripts": "^3.4.1",
+        "react-scripts": "^4.0.3",
         "react-test-renderer": "^16.13.1",
         "react-typing-animation": "^1.6.2",
         "react-typist": "^2.0.5",
@@ -69,7 +68,8 @@
         ]
     },
     "devDependencies": {
-        "@testing-library/react": "^9.5.0",
+        "@testing-library/jest-dom": "^5.16.1",
+        "@testing-library/react": "^12.1.2",
         "@types/bcryptjs": "^2.4.2",
         "@types/enzyme-adapter-react-16": "^1.0.6",
         "@types/preval.macro": "^3.0.0",

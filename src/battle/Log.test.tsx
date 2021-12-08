@@ -1,27 +1,28 @@
 import React from 'react'
 import Log, { LogProps } from './Log'
-import * as Player from '../environment/sound/sound'
-import {
-  EnemyAttackSound,
-  HealingSound,
-  IceSound,
-  LevelUpSound,
-  PartyDestroyedSound,
-  pauseSound,
-  PlayerAttackSound,
-  playSound,
-} from '../environment/sound'
+import { Sound } from '../environment/sound'
 import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
+import { useSound } from '../hooks'
+
+jest.mock('../hooks', () => ({
+  useSound: jest.fn(),
+}))
 
 describe('Log', () => {
   const originalScrollIntoView = window.HTMLElement.prototype.scrollIntoView
   let props: LogProps
   let renderResult: RenderResult
+  let playSound: jest.Mock
+  let pauseSound: jest.Mock
 
   beforeEach(() => {
     window.HTMLElement.prototype.scrollIntoView = jest.fn()
-    spyOn(Player, 'pauseSound')
-    spyOn(Player, 'playSound')
+    playSound = jest.fn()
+    pauseSound = jest.fn()
+    ;(useSound as jest.Mock).mockReturnValue({
+      playSound,
+      pauseSound,
+    })
 
     props = {
       deliveredEntries: [],
@@ -100,44 +101,6 @@ describe('Log', () => {
 
   it('has a scroll to div that gets scrolled into view', () => {
     expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalled()
-  })
-
-  it('has a player attack sound', () => {
-    expect(
-      screen.getByTestId('player-attack').firstElementChild?.getAttribute('src')
-    ).toEqual(PlayerAttackSound)
-  })
-
-  it('has an enemy attack sound', () => {
-    expect(
-      screen.getByTestId('enemy-attack').firstElementChild?.getAttribute('src')
-    ).toEqual(EnemyAttackSound)
-  })
-
-  it('has a level up sound', () => {
-    expect(
-      screen.getByTestId('level-up').firstElementChild?.getAttribute('src')
-    ).toEqual(LevelUpSound)
-  })
-
-  it('has a party destroyed sound', () => {
-    expect(
-      screen
-        .getByTestId('party-destroyed')
-        .firstElementChild?.getAttribute('src')
-    ).toEqual(PartyDestroyedSound)
-  })
-
-  it('has a heal sound', () => {
-    expect(
-      screen.getByTestId('heal').firstElementChild?.getAttribute('src')
-    ).toEqual(HealingSound)
-  })
-
-  it('has an ice sound', () => {
-    expect(
-      screen.getByTestId('ice').firstElementChild?.getAttribute('src')
-    ).toEqual(IceSound)
   })
 
   describe('sound effects', () => {
@@ -248,16 +211,16 @@ describe('Log', () => {
       props.deliveredEntries = completeBattleLog
       renderResult.rerender(<Log {...props} />)
 
-      expect(Player.playSound).toHaveBeenNthCalledWith(1, 'player-attack')
-      expect(Player.playSound).toHaveBeenNthCalledWith(2, 'enemy-attack')
-      expect(Player.playSound).toHaveBeenNthCalledWith(3, 'enemy-attack')
-      expect(Player.playSound).toHaveBeenNthCalledWith(4, 'ice')
-      expect(Player.playSound).toHaveBeenNthCalledWith(5, 'enemy-attack')
-      expect(Player.playSound).toHaveBeenNthCalledWith(6, 'heal')
-      expect(Player.playSound).toHaveBeenNthCalledWith(7, 'enemy-attack')
-      expect(Player.playSound).toHaveBeenNthCalledWith(8, 'player-attack')
-      expect(Player.playSound).toHaveBeenNthCalledWith(9, 'level-up')
-      expect(Player.pauseSound).toHaveBeenCalledWith('battle-music')
+      expect(playSound).toHaveBeenNthCalledWith(1, Sound.PlayerAttack)
+      expect(playSound).toHaveBeenNthCalledWith(2, Sound.EnemyAttack)
+      expect(playSound).toHaveBeenNthCalledWith(3, Sound.EnemyAttack)
+      expect(playSound).toHaveBeenNthCalledWith(4, Sound.Ice)
+      expect(playSound).toHaveBeenNthCalledWith(5, Sound.EnemyAttack)
+      expect(playSound).toHaveBeenNthCalledWith(6, Sound.Heal)
+      expect(playSound).toHaveBeenNthCalledWith(7, Sound.EnemyAttack)
+      expect(playSound).toHaveBeenNthCalledWith(8, Sound.PlayerAttack)
+      expect(playSound).toHaveBeenNthCalledWith(9, Sound.LevelUp)
+      expect(pauseSound).toHaveBeenCalledWith(Sound.BattleMusic)
     })
 
     it('plays appropriate sounds through a party defeat', () => {
@@ -277,7 +240,7 @@ describe('Log', () => {
       ]
 
       renderResult.rerender(<Log {...props} />)
-      expect(Player.playSound).toHaveBeenCalledWith('enemy-attack')
+      expect(playSound).toHaveBeenCalledWith(Sound.EnemyAttack)
 
       props.deliveredEntries = getDeliveredEntries([
         'Enemies approach.',
@@ -287,8 +250,8 @@ describe('Log', () => {
       ])
       renderResult.rerender(<Log {...props} />)
 
-      expect(Player.pauseSound).toHaveBeenCalledWith('battle-music')
-      expect(Player.playSound).toHaveBeenCalledWith('party-destroyed')
+      expect(pauseSound).toHaveBeenCalledWith(Sound.BattleMusic)
+      expect(playSound).toHaveBeenCalledWith(Sound.PartyDestroyed)
     })
   })
 })

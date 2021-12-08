@@ -8,6 +8,7 @@ import {
   MapProvider,
   ModalStateProvider,
   PlayerProvider,
+  SoundProvider,
 } from './providers'
 import { ChakraProvider } from '@chakra-ui/react'
 import { Provider } from 'react-redux'
@@ -15,7 +16,8 @@ import { Provider } from 'react-redux'
 describe('App', () => {
   it('is a collection of Providers wrapping a BrowserRouter to Patrogonia', () => {
     const subject = shallow(<App />)
-    const chakraProvider = subject.find(ChakraProvider)
+    const soundProvider = subject.find(SoundProvider)
+    const chakraProvider = soundProvider.find(ChakraProvider)
     const modalStateProvider = chakraProvider.find(ModalStateProvider)
     const browserRouter = modalStateProvider.find(BrowserRouter)
     const reduxProvider = browserRouter.find(Provider)

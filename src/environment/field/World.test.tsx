@@ -158,7 +158,7 @@ describe('World', () => {
   it('has music for field maps', () => {
     const fieldMusic = subject.find('audio').at(0)
     expect(fieldMusic.props()).toEqual({
-      className: 'field-music',
+      className: Sound.FieldMusic,
       autoPlay: true,
       loop: true,
       children: jasmine.anything(),
@@ -169,7 +169,7 @@ describe('World', () => {
   it('has music for cave maps', () => {
     const caveMusic = subject.find('audio').at(1)
     expect(caveMusic.props()).toEqual({
-      className: 'cave-music',
+      className: Sound.CaveMusic,
       autoPlay: true,
       loop: true,
       children: jasmine.anything(),
@@ -198,13 +198,13 @@ describe('World', () => {
     props.currentPlayer = anotherPlayer
     subject = shallow(<World {...props} />)
 
-    expect(Sounds.pauseSound).toHaveBeenCalledWith('cave-music')
-    expect(Sounds.playSound).toHaveBeenCalledWith('field-music')
+    expect(Sounds.pauseSound).toHaveBeenCalledWith(Sound.CaveMusic)
+    expect(Sounds.playSound).toHaveBeenCalledWith(Sound.FieldMusic)
   })
 
   it('plays cave music for cave maps', () => {
-    expect(Sounds.pauseSound).toHaveBeenCalledWith('field-music')
-    expect(Sounds.playSound).toHaveBeenCalledWith('cave-music')
+    expect(Sounds.pauseSound).toHaveBeenCalledWith(Sound.FieldMusic)
+    expect(Sounds.playSound).toHaveBeenCalledWith(Sound.CaveMusic)
   })
 
   it('subscribes to player location notifications and closes the connection during unmounting', () => {
