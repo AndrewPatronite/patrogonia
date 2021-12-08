@@ -1,18 +1,21 @@
-import React, * as ReactAlias from 'react'
-import { shallow, ShallowWrapper } from 'enzyme'
+import React from 'react'
 import World from './World'
 import { Legend } from '../maps/Legend'
-import TileRow from './TileRow'
 import * as DisplayRangeHelper from './helper/getMapDisplayRange'
-import * as MapStateAlias from '../../state/MapState'
 import * as LocationToPlayerHelper from './helper/getLocationToPlayerMap'
-import * as Subscriptions from '../../subscription/subscribe'
-import * as Sounds from '../sound/sound'
-import PlayerStatsModal from '../../player/PlayerStatsModal'
-import Player from '../../player/Player'
-
-import { ModalEnum } from '../../context/ModalStateContext'
-import { useModalState } from '../../hooks'
+import { ModalEnum, ModalInterface } from '../../context'
+import { useMap, useModalState, usePlayer, useSound } from '../../hooks'
+import { Player } from '../../player'
+import { Direction } from '../../navigation'
+import {
+  act,
+  fireEvent,
+  render,
+  RenderResult,
+  screen,
+} from '@testing-library/react'
+import { Sound } from '../sound'
+import { Cave, Continent, Town } from '../maps/Maps'
 
 jest.mock('../../hooks', () => ({
   useCharacterPositions: jest.fn().mockReturnValue({
@@ -22,6 +25,10 @@ jest.mock('../../hooks', () => ({
   }),
   useModalState: jest.fn(),
   useNpcs: jest.fn(),
+  useSound: jest.fn(),
+  useMap: jest.fn(),
+  usePlayer: jest.fn(),
+  useNpcMovementEffect: jest.fn(),
 }))
 
 describe('World', () => {
@@ -30,200 +37,160 @@ describe('World', () => {
     layout: [
       [W, W, W, W, W],
       [W, W, G, W, W],
-      [W, G, 'Dewhurst', G, W],
+      [W, G, Town.Dewhurst, G, W],
       [W, W, G, W, W],
       [W, W, W, W, W],
     ],
   }
-  const currentPlayer: Player = {
-    id: 1,
-    location: { mapName: 'Lava Grotto', rowIndex: 1, columnIndex: 2 },
-    stats: { hp: 9 },
-  }
-  const anotherPlayer: Player = {
-    id: 2,
-    location: { mapName: 'Atoris', rowIndex: 3, columnIndex: 4 },
-    stats: { hp: 10 },
-  }
-  const mapPlayers = {
-    ['Atoris']: [anotherPlayer],
-    ['Lava Grotto']: [currentPlayer],
-  }
-  const locationToPlayersMap = {
-    '1-2': [currentPlayer],
-  }
+  let modalState: ModalInterface
+  let playSound: jest.Mock
+  let pauseSound: jest.Mock
+  let renderResult: RenderResult
 
-  let props: {
-    currentPlayer: Player
-    castSpell: (spellName: string, targetId: string) => void
-    updatePlayer: (player: Player, updateToServer: boolean) => void
-  }
-  let subject: ShallowWrapper
-  let playerLocationSubscription: { close: any }
-  let modalState: {
-    closeModal: (modalEnum: ModalEnum) => void
-    isModalOpen: (modalEnum: ModalEnum) => boolean
-    openModal: (
-      modalEnum: ModalEnum,
-      content?: any,
-      onClose?: () => void
-    ) => void
-  }
-
-  beforeEach(() => {
+  const setup = (
+    isModalOpen: (modal: ModalEnum) => boolean = () => false,
+    mapName: string = Cave.LavaGrotto,
+    content: string = ''
+  ) => {
+    const currentPlayer: Player = {
+      id: 1,
+      location: {
+        mapName,
+        rowIndex: 1,
+        columnIndex: 2,
+        entranceName: Continent.Atoris,
+        facing: Direction.Down,
+      },
+      //@ts-ignore missing fields
+      stats: { hp: 9, hpTotal: 10, mp: 4, mpTotal: 5 },
+    }
+    const locationToPlayersMap = {
+      '1-2': [currentPlayer],
+    }
     modalState = {
       closeModal: jest.fn(),
-      isModalOpen: jest.fn().mockReturnValue(false),
+      isModalOpen,
       openModal: jest.fn(),
+      getModalContent: () => ({
+        content,
+      }),
     }
     ;(useModalState as jest.Mock).mockReturnValue(modalState)
-
-    jest.spyOn(ReactAlias, 'useEffect').mockImplementation((effect) => effect())
-    spyOn(Sounds, 'playSound')
-    spyOn(Sounds, 'pauseSound')
-    playerLocationSubscription = {
-      close: jasmine.createSpy('close'),
-    }
-    spyOn(Subscriptions, 'subscribe').and.returnValue(
-      playerLocationSubscription
-    )
-    spyOn(MapStateAlias, 'MapState').and.returnValue([map, mapPlayers])
-    spyOn(LocationToPlayerHelper, 'getLocationToPlayerMap').and.returnValue(
-      locationToPlayersMap
-    )
-    spyOn(DisplayRangeHelper, 'getMapDisplayRange').and.returnValue({
+    playSound = jest.fn()
+    pauseSound = jest.fn()
+    ;(useSound as jest.Mock).mockReturnValue({
+      playSound,
+      pauseSound,
+    })
+    ;(usePlayer as jest.Mock).mockReturnValue({
+      currentPlayer,
+      updatePlayer: jest.fn(),
+    })
+    ;(useMap as jest.Mock).mockReturnValue({
+      map,
+      players: [currentPlayer],
+      npcs: [],
+    })
+    jest
+      .spyOn(LocationToPlayerHelper, 'getLocationToPlayerMap')
+      .mockReturnValue(locationToPlayersMap)
+    jest.spyOn(DisplayRangeHelper, 'getMapDisplayRange').mockReturnValue({
       rowStartIndex: 1,
       rowEndIndex: 3,
       columnStartIndex: 1,
       columnEndIndex: 3,
     })
     jest.useFakeTimers()
-    props = {
-      // @ts-ignore omitted props
-      currentPlayer,
-      playerUrl: 'wss://localhost:8443/players',
-    }
-    subject = shallow(<World {...props} />)
-  })
-
-  it('is a div with the expected className', () => {
-    expect(subject.type()).toEqual('div')
-    expect(subject.prop('className')).toEqual('world')
-  })
+    renderResult = render(
+      <World currentPlayer={currentPlayer} castSpell={jest.fn()} />
+    )
+  }
 
   it('has TileRows for a subset of the map based on the display range', () => {
-    const tileRows = subject.find(TileRow)
+    const verifyTile = (
+      tile: Element,
+      expectedTileClassId: string,
+      expectedMapSymbol: string
+    ) => {
+      expect((tile.getAttribute('class') || '').includes(expectedTileClassId))
+      expect(tile.getAttribute('mapsymbol')).toEqual(expectedMapSymbol)
+    }
+
+    setup()
+    const tileRows = screen.getAllByTestId('tile-row')
     expect(tileRows.length).toEqual(3)
-    expect(tileRows.at(0).props()).toEqual({
-      rowSymbols: map.layout[1],
-      rowIndex: 1,
-      locationToPlayersMap,
-      displayIndexRange: {
-        rowStartIndex: 1,
-        rowEndIndex: 3,
-        columnStartIndex: 1,
-        columnEndIndex: 3,
-      },
-      mapLayout: map.layout,
-      currentPlayer,
-    })
-    expect(tileRows.at(1).props()).toEqual({
-      rowSymbols: map.layout[2],
-      rowIndex: 2,
-      locationToPlayersMap,
-      displayIndexRange: {
-        rowStartIndex: 1,
-        rowEndIndex: 3,
-        columnStartIndex: 1,
-        columnEndIndex: 3,
-      },
-      mapLayout: map.layout,
-      currentPlayer,
-    })
-    expect(tileRows.at(2).props()).toEqual({
-      rowSymbols: map.layout[3],
-      rowIndex: 3,
-      locationToPlayersMap,
-      displayIndexRange: {
-        rowStartIndex: 1,
-        rowEndIndex: 3,
-        columnStartIndex: 1,
-        columnEndIndex: 3,
-      },
-      mapLayout: map.layout,
-      currentPlayer,
-    })
+    verifyTile(tileRows[0].children[0], 'rc1-1', W)
+    verifyTile(tileRows[0].children[1], 'rc1-2', G)
+    verifyTile(tileRows[0].children[2], 'rc1-3', W)
+    verifyTile(tileRows[1].children[0], 'rc2-1', G)
+    verifyTile(tileRows[1].children[1], 'rc2-2', Town.Dewhurst)
+    verifyTile(tileRows[1].children[2], 'rc2-3', G)
+    verifyTile(tileRows[2].children[0], 'rc3-1', W)
+    verifyTile(tileRows[2].children[1], 'rc3-2', G)
+    verifyTile(tileRows[2].children[2], 'rc3-3', W)
   })
 
-  it('has music for field maps', () => {
-    const fieldMusic = subject.find('audio').at(0)
-    expect(fieldMusic.props()).toEqual({
-      className: Sound.FieldMusic,
-      autoPlay: true,
-      loop: true,
-      children: jasmine.anything(),
-    })
-    expect(fieldMusic.childAt(0).prop('src')).toEqual('BattleHighlands.mp3')
+  it('displays player stats', () => {
+    setup((modal) => modal === ModalEnum.PlayerStats)
+    expect(screen.getByRole('heading').textContent).toEqual('Stats')
+    expect(screen.getByText('9/10')).toBeInTheDocument()
+    expect(screen.getByText('4/5')).toBeInTheDocument()
   })
 
-  it('has music for cave maps', () => {
-    const caveMusic = subject.find('audio').at(1)
-    expect(caveMusic.props()).toEqual({
-      className: Sound.CaveMusic,
-      autoPlay: true,
-      loop: true,
-      children: jasmine.anything(),
-    })
-    expect(caveMusic.childAt(0).prop('src')).toEqual('AcrosstheSandWIP2.mp3')
+  it('displays a field menu', () => {
+    setup((modal) => modal === ModalEnum.FieldMenu)
+    const menuSections = screen.getAllByRole('tab')
+    expect(menuSections.length).toEqual(3)
+    expect(menuSections[0].textContent).toEqual('Stats')
+    expect(menuSections[1].textContent).toEqual('Spells')
+    expect(menuSections[2].textContent).toEqual('Options')
   })
 
-  describe('PlayerStatsModal', () => {
-    it('has the expected props', () => {
-      const playerStatsModal = subject.find(PlayerStatsModal)
-      expect(playerStatsModal.props()).toEqual({
-        showPlayerStats: false,
-        onClose: jasmine.any(Function),
-        stats: currentPlayer.stats,
-      })
-    })
-
-    it('toggles the modal to be invisible onClose', () => {
-      const playerStatsModal = subject.find(PlayerStatsModal)
-      playerStatsModal.simulate('close')
-      expect(modalState.closeModal).toHaveBeenCalledWith(ModalEnum.PlayerStats)
-    })
+  it('displays dialogue', () => {
+    setup(
+      (modal) => modal === ModalEnum.Dialog,
+      Town.Dewhurst,
+      "Important stuff n' things"
+    )
+    expect(screen.getByText("Important stuff n' things")).toBeInTheDocument()
+    const okButton = screen.getByRole('button', { name: 'OK' })
+    fireEvent.click(okButton)
+    expect(modalState.closeModal).toHaveBeenCalledWith(ModalEnum.Dialog)
   })
 
   it('plays field music for field maps', () => {
-    props.currentPlayer = anotherPlayer
-    subject = shallow(<World {...props} />)
-
-    expect(Sounds.pauseSound).toHaveBeenCalledWith(Sound.CaveMusic)
-    expect(Sounds.playSound).toHaveBeenCalledWith(Sound.FieldMusic)
+    setup(() => false, Continent.Atoris)
+    expect(playSound).toHaveBeenCalledWith(Sound.FieldMusic, [
+      Sound.CaveMusic,
+      Sound.TownMusic,
+    ])
   })
 
   it('plays cave music for cave maps', () => {
-    expect(Sounds.pauseSound).toHaveBeenCalledWith(Sound.FieldMusic)
-    expect(Sounds.playSound).toHaveBeenCalledWith(Sound.CaveMusic)
+    setup()
+    expect(playSound).toHaveBeenCalledWith(Sound.CaveMusic, [
+      Sound.FieldMusic,
+      Sound.TownMusic,
+    ])
   })
 
-  it('subscribes to player location notifications and closes the connection during unmounting', () => {
-    expect(Subscriptions.subscribe).toHaveBeenCalledWith(
-      props.playerUrl,
-      jasmine.any(Function)
-    )
-    ReactAlias.useEffect.mock.calls[1][0]()()
-    expect(playerLocationSubscription.close).toHaveBeenCalled()
+  it('plays town music for town maps', () => {
+    setup(() => false, Town.Dewhurst)
+    expect(playSound).toHaveBeenCalledWith(Sound.TownMusic, [
+      Sound.CaveMusic,
+      Sound.FieldMusic,
+    ])
   })
 
   it('sets show player stats modal via 5 second timer that it clears ', () => {
+    setup()
     expect(modalState.closeModal).toHaveBeenCalledWith(ModalEnum.PlayerStats)
-
-    jest.runAllTimers()
-    expect(setTimeout).toHaveBeenCalledWith(jasmine.any(Function), 5000)
-    expect(modalState.openModal).toHaveBeenCalledWith(ModalEnum.PlayerStats)
-
-    ReactAlias.useEffect.mock.calls[2][0]()()
-    expect(clearTimeout).toHaveBeenCalled()
+    act(() => {
+      jest.runAllTimers()
+      expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 5000)
+      expect(modalState.openModal).toHaveBeenCalledWith(ModalEnum.PlayerStats)
+      renderResult.unmount()
+      expect(clearTimeout).toHaveBeenCalled()
+    })
   })
 })

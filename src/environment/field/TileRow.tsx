@@ -25,7 +25,7 @@ const TileRow = ({
   currentPlayer,
   npcs,
 }: TileRowProps) => (
-  <Flex>
+  <Flex data-testid="tile-row">
     {rowSymbols
       .slice(columnStartIndex, columnEndIndex + 1)
       .map((mapSymbol, tileIndexOffset) => (

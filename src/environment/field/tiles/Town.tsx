@@ -2,11 +2,7 @@ import React from 'react'
 import { Box, BoxProps } from '@chakra-ui/react'
 import { LandColors, Town as TownImage } from './terrain'
 
-interface TownProps extends BoxProps {
-  mapSymbol: string
-}
-
-const Town = ({ children, mapSymbol, ...baseProps }: TownProps) => (
+const Town = ({ children, ...baseProps }: BoxProps) => (
   <Box
     {...baseProps}
     backgroundColor={LandColors.Grass}

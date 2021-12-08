@@ -2,10 +2,10 @@ import React from 'react'
 import { Box, BoxProps, Flex, Text } from '@chakra-ui/react'
 
 interface EntranceProps extends BoxProps {
-  mapSymbol: string
+  mapsymbol: string
 }
 
-const Entrance = ({ children, mapSymbol, ...baseProps }: EntranceProps) => (
+const Entrance = ({ children, mapsymbol, ...baseProps }: EntranceProps) => (
   <Flex
     {...baseProps}
     alignItems="center"
@@ -15,7 +15,7 @@ const Entrance = ({ children, mapSymbol, ...baseProps }: EntranceProps) => (
     justifyContent="center"
     position="relative"
   >
-    <Text position="absolute">{mapSymbol}</Text>
+    <Text position="absolute">{mapsymbol}</Text>
     <Box position="absolute">{children}</Box>
   </Flex>
 )

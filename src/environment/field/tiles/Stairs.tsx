@@ -13,14 +13,14 @@ import React from 'react'
 import { CaveExit } from '../../maps/Maps'
 
 interface StairsProps extends BoxProps {
-  mapSymbol: string
+  mapsymbol: string
 }
 
-const Stairs = ({ children, mapSymbol, ...baseProps }: StairsProps) => {
+const Stairs = ({ children, mapsymbol, ...baseProps }: StairsProps) => {
   let backgroundImage
   let popoverPlacement: PlacementWithLogical
 
-  switch (mapSymbol) {
+  switch (mapsymbol) {
     case CaveExit.Grimes:
       backgroundImage = Stairs270
       popoverPlacement = 'right'
@@ -49,7 +49,7 @@ const Stairs = ({ children, mapSymbol, ...baseProps }: StairsProps) => {
       <PopoverContent width="6.25rem">
         <PopoverArrow />
         <Text padding="0.5rem" textAlign="center">
-          {mapSymbol}
+          {mapsymbol}
         </Text>
       </PopoverContent>
     </Popover>

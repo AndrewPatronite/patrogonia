@@ -66,7 +66,7 @@ const Tile = ({
       height="6.25rem"
       width="6.25rem"
       {...landBorderStyles}
-      mapSymbol={mapSymbol}
+      mapsymbol={mapSymbol}
     >
       {playerToDisplay && (
         <Character

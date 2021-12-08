@@ -30,7 +30,6 @@ const Patrogonia = () => {
       nextPath = `/field/${currentPlayer.location.mapName}`
     }
     if (nextPath !== pathname) {
-      console.log(nextPath, pathname)
       history.replace(nextPath)
     }
   }, [currentPlayer, history, updatePlayer])
