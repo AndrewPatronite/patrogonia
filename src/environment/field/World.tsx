@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import TileRow from './TileRow'
-import { getLocationToPlayerMap, getMapDisplayRange } from './helper'
 import { Sound } from '../sound'
 import PlayerStatsModal from '../../player/PlayerStatsModal'
 import FieldMenu from '../../player/FieldMenu'
@@ -38,7 +37,7 @@ const World = ({
     location: { mapName, rowIndex, columnIndex },
     stats,
   } = currentPlayer
-  const { map, players, npcs } = useMap()
+  const { map, npcs, locationToPlayerMap, mapDisplayRange } = useMap()
   usePlayerNavigationEffect()
   useNpcMovementEffect(map)
   const [isLocationCaptionModalOpen, setLocationCaptionModalOpen] = useState(
@@ -80,8 +79,6 @@ const World = ({
     return () => clearTimeout(timer)
   }, [rowIndex, columnIndex, closeModal, openModal])
 
-  const locationToPlayersMap = getLocationToPlayerMap(players, currentPlayer)
-  const displayIndexRange = getMapDisplayRange(currentPlayer, map)
   const isPlayerStatsOpen = isModalOpen(ModalEnum.PlayerStats)
   const isFieldMenuOpen = isModalOpen(ModalEnum.FieldMenu)
   const isDialogOpen = isModalOpen(ModalEnum.Dialog)
@@ -95,21 +92,16 @@ const World = ({
       width="62.5rem"
       maxWidth="62.5rem"
     >
-      {displayIndexRange &&
+      {mapDisplayRange &&
         map?.layout
-          .slice(
-            displayIndexRange.rowStartIndex,
-            displayIndexRange.rowEndIndex + 1
-          )
+          .slice(mapDisplayRange.rowStartIndex, mapDisplayRange.rowEndIndex + 1)
           .map((rowSymbols: string[], rowIndexOffset: number) => (
             <TileRow
-              key={`tileRow-${
-                displayIndexRange.rowStartIndex + rowIndexOffset
-              }`}
+              key={`tileRow-${mapDisplayRange.rowStartIndex + rowIndexOffset}`}
               rowSymbols={rowSymbols}
-              rowIndex={displayIndexRange.rowStartIndex + rowIndexOffset}
-              locationToPlayersMap={locationToPlayersMap}
-              displayIndexRange={displayIndexRange}
+              rowIndex={mapDisplayRange.rowStartIndex + rowIndexOffset}
+              locationToPlayerMap={locationToPlayerMap}
+              mapDisplayRange={mapDisplayRange}
               mapLayout={map.layout}
               currentPlayer={currentPlayer}
               npcs={npcs}

@@ -1,9 +1,10 @@
 import React, * as ReactAlias from 'react'
 import { shallow, ShallowWrapper } from 'enzyme'
 import PlayerSpells from './PlayerSpells'
-import Spell from './Spell'
 import OptionPanel from '../battle/OptionPanel'
 import ThemedPanel from '../components/theme/ThemedPanel'
+import { Cave, Continent, Town } from '../environment/maps/Maps'
+import { Spell } from './types'
 
 describe('PlayerSpells', () => {
   let onBack: jasmine.Spy
@@ -58,15 +59,15 @@ describe('PlayerSpells', () => {
           agility: 12,
         },
         location: {
-          mapName: 'Atoris',
+          mapName: Continent.Atoris,
           rowIndex: 5,
           columnIndex: 7,
           facing: 'down',
-          entranceName: 'Lava Grotto',
+          entranceName: Cave.LavaGrotto,
         },
         lastUpdate: '',
         showFieldMenu: true,
-        visited: ['Dewhurst'],
+        visited: [Town.Dewhurst],
       },
       availableSpells,
       onBack,
@@ -185,8 +186,8 @@ describe('PlayerSpells', () => {
     expect(optionPanel.props()).toEqual({
       options: [
         {
-          value: 'Dewhurst',
-          display: 'Dewhurst',
+          value: Town.Dewhurst,
+          display: Town.Dewhurst,
         },
       ],
       isBackEnabled: true,
@@ -212,10 +213,10 @@ describe('PlayerSpells', () => {
     subject = shallow(<PlayerSpells {...props} />)
     let optionPanel = subject.find(OptionPanel)
     // @ts-ignore
-    optionPanel.prop('onNext')('Dewhurst')
+    optionPanel.prop('onNext')(Town.Dewhurst)
     expect(setSpellCast).toHaveBeenCalledWith({
       name: 'RETURN',
-      targetId: 'Dewhurst',
+      targetId: Town.Dewhurst,
       confirmed: true,
     })
 
@@ -223,7 +224,7 @@ describe('PlayerSpells', () => {
     jest
       .spyOn(ReactAlias, 'useState')
       .mockImplementation(() => [
-        { name: 'RETURN', targetId: 'Dewhurst', confirmed: true },
+        { name: 'RETURN', targetId: Town.Dewhurst, confirmed: true },
         setSpellCast,
       ])
     subject = shallow(<PlayerSpells {...props} />)
@@ -233,7 +234,7 @@ describe('PlayerSpells', () => {
     expect(spellStatus.text()).toEqual('Redwan cast Return')
     jest.runAllTimers()
     expect(setTimeout).toHaveBeenCalledWith(jasmine.any(Function), 4000)
-    expect(castSpell).toHaveBeenCalledWith('RETURN', 'Dewhurst')
+    expect(castSpell).toHaveBeenCalledWith('RETURN', Town.Dewhurst)
     expect(setSpellCast).toHaveBeenCalledWith({})
     expect(onBack).toHaveBeenCalled()
     // @ts-ignore

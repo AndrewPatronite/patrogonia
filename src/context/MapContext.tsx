@@ -1,19 +1,23 @@
 import { createContext } from 'react'
 import { Map } from '../environment/maps'
 import { Npc } from '../npcs'
-import { Player } from '../player'
+import {
+  LocationToPlayerMap,
+  MapDisplayRange,
+} from '../environment/field/types'
 
 interface MapState {
   map?: Map
-  players: Player[]
   npcs: Npc[]
+  locationToPlayerMap: LocationToPlayerMap
+  mapDisplayRange?: MapDisplayRange
   canMoveToPosition: (rowIndex: number, columnIndex: number) => boolean
   updateNpc: (npc: Npc) => void
 }
 
 const MapContext = createContext<MapState>({
-  players: [],
   npcs: [],
+  locationToPlayerMap: {},
   canMoveToPosition: () => false,
   updateNpc: () => {},
 })

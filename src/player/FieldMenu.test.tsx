@@ -1,12 +1,13 @@
-import React, * as ReactAlias from 'react'
+import React from 'react'
 import { shallow, ShallowWrapper } from 'enzyme'
 import FieldMenu from './FieldMenu'
-import Spell from './Spell'
 import OptionPanel from '../battle/OptionPanel'
 import PlayerStatsPanel from './PlayerStatsPanel'
 import PlayerSpells from './PlayerSpells'
-import ThemedPanel from '../components/theme/ThemedPanel'
-import { Drawer } from '@chakra-ui/react'
+import { Drawer, Tab, TabList } from '@chakra-ui/react'
+import { Player, Spell } from './types'
+import { Cave, Continent, Town } from '../environment/maps/Maps'
+import { Direction } from '../navigation'
 
 describe('FieldMenu', () => {
   const availableSpells: Spell[] = [
@@ -24,81 +25,62 @@ describe('FieldMenu', () => {
       battleSpell: false,
     },
   ]
-  let props: any
-  let closeFieldMenu: jasmine.Spy
-  let castSpell: jasmine.Spy
-  let setMenuChoice: jasmine.Spy
+  let currentPlayer: Player
+  let closeFieldMenu: jest.Mock
+  let castSpell: jest.Mock
   let subject: ShallowWrapper
 
   beforeEach(() => {
-    closeFieldMenu = jasmine.createSpy('closeFieldMenu')
-    castSpell = jasmine.createSpy('castSpell')
-    setMenuChoice = jasmine.createSpy('setMenuChoice')
-    jest
-      .spyOn(ReactAlias, 'useState')
-      .mockImplementation(() => ['playerStats', setMenuChoice])
-    props = {
-      showFieldMenu: true,
-      closeFieldMenu,
-      currentPlayer: {
-        id: 1,
-        name: 'Redwan',
-        loggedIn: true,
-        battleId: undefined,
-        spells: availableSpells,
-        stats: {
-          playerName: 'Redwan',
-          level: 5,
-          hp: 40,
-          hpTotal: 54,
-          mp: 20,
-          mpTotal: 27,
-          gold: 10000,
-          xp: 160,
-          xpTillNextLevel: 80,
-          attack: 20,
-          defense: 10,
-          agility: 12,
-        },
-        location: {
-          mapName: 'Atoris',
-          rowIndex: 5,
-          columnIndex: 7,
-          facing: 'down',
-          entranceName: 'Lava Grotto',
-        },
-        lastUpdate: '',
-        showFieldMenu: true,
-        visited: ['Dewhurst'],
+    closeFieldMenu = jest.fn()
+    castSpell = jest.fn()
+    currentPlayer = {
+      id: 1,
+      name: 'Redwan',
+      loggedIn: true,
+      battleId: undefined,
+      spells: availableSpells,
+      stats: {
+        playerId: 1,
+        playerName: 'Redwan',
+        level: 5,
+        hp: 40,
+        hpTotal: 54,
+        mp: 20,
+        mpTotal: 27,
+        gold: 10000,
+        xp: 160,
+        xpTillNextLevel: 80,
+        attack: 20,
+        defense: 10,
+        agility: 12,
       },
-      castSpell,
+      location: {
+        mapName: Continent.Atoris,
+        rowIndex: 5,
+        columnIndex: 7,
+        facing: Direction.Down,
+        entranceName: Cave.LavaGrotto,
+      },
+      lastUpdate: '',
+      visited: [Town.Dewhurst],
+      tutorialLessons: [],
     }
-    subject = shallow(<FieldMenu {...props} />)
+    subject = shallow(
+      <FieldMenu
+        showFieldMenu={true}
+        closeFieldMenu={closeFieldMenu}
+        currentPlayer={currentPlayer}
+        castSpell={castSpell}
+      />
+    )
   })
 
   it('is a Drawer with the expected props exposing a field menu', () => {
     expect(subject.type()).toEqual(Drawer)
-    expect(subject.prop('className')).toEqual('field-menu-modal')
+    expect(subject.prop('size')).toEqual('sm')
+    expect(subject.prop('placement')).toEqual('left')
+    expect(subject.prop('onClose')).toEqual(closeFieldMenu)
     expect(subject.prop('isOpen')).toEqual(true)
-    expect(subject.prop('onRequestClose')).toEqual(closeFieldMenu)
-    expect(subject.prop('style')).toEqual({
-      content: {
-        top: '30%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        maxWidth: '339px',
-        transform: 'translate(5%, 5%)',
-      },
-    })
-    expect(subject.find('.field-menu').type()).toEqual(ThemedPanel)
-  })
-
-  it('calls closeFieldMenu when requested', () => {
-    // @ts-ignore
-    subject.prop('onRequestClose')()
-    expect(closeFieldMenu).toHaveBeenCalled()
   })
 
   it('has an OptionPanel with the expected options', () => {
@@ -116,67 +98,55 @@ describe('FieldMenu', () => {
           value: 'playerOptions',
         },
       ],
-      onBack: jasmine.any(Function),
-      onNext: jasmine.any(Function),
-      onChange: setMenuChoice,
+      onBack: expect.any(Function),
+      onNext: expect.any(Function),
+      onChange: expect.any(Function),
       isBackEnabled: false,
       showNextButton: false,
       initialValue: 'playerStats',
     })
   })
 
-  it("has an OptionPanel with the spells disabled if the player doesn't have any available", () => {
-    props.currentPlayer.stats.mp = 2
-    subject = shallow(<FieldMenu {...props} />)
-    const optionPanel = subject.find(OptionPanel)
-    expect(optionPanel.props()).toEqual({
-      options: [
-        { value: 'playerStats', display: 'Stats' },
-        {
-          value: 'spells',
-          display: 'Spells',
-          disabled: true,
-        },
-        {
-          display: 'Options',
-          value: 'playerOptions',
-        },
-      ],
-      onBack: jasmine.any(Function),
-      onNext: jasmine.any(Function),
-      onChange: setMenuChoice,
-      isBackEnabled: false,
-      showNextButton: false,
-      initialValue: 'playerStats',
-    })
+  it("has a TabList with the spells disabled if the player doesn't have any available", () => {
+    currentPlayer.stats.mp = 2
+    subject = shallow(
+      <FieldMenu
+        showFieldMenu={true}
+        closeFieldMenu={closeFieldMenu}
+        currentPlayer={currentPlayer}
+        castSpell={castSpell}
+      />
+    )
+    const tabList = subject.find(TabList).find(Tab)
+    expect(tabList.length).toEqual(3)
+    expect(tabList.at(0).text()).toEqual('Stats')
+    expect(tabList.at(1).text()).toEqual('Spells')
+    expect(tabList.at(1).prop('isDisabled')).toEqual(true)
+    expect(tabList.at(2).text()).toEqual('Options')
   })
 
   it('displays a PlayerStatsPanel initially with the expected props', () => {
     const playerStatsPanel = subject.find(PlayerStatsPanel)
     expect(playerStatsPanel.props()).toEqual({
-      playerStats: props.currentPlayer.stats,
+      playerStats: currentPlayer.stats,
+      showHeading: false,
+      includeBorder: false,
     })
-  })
-
-  it('sets the menu choice via the OptionPanel', () => {
-    const optionPanel = subject.find(OptionPanel)
-    // @ts-ignore
-    optionPanel.prop('onChange')('spells')
-    expect(setMenuChoice).toHaveBeenCalledWith('spells')
   })
 
   describe('PlayerSpells', () => {
-    beforeEach(() => {
-      jest
-        .spyOn(ReactAlias, 'useState')
-        .mockImplementation(() => ['spells', setMenuChoice])
-    })
-
     it('displays PlayerSpells when chosen with the expected outdoor spells', () => {
-      subject = shallow(<FieldMenu {...props} />)
+      subject = shallow(
+        <FieldMenu
+          showFieldMenu={true}
+          closeFieldMenu={closeFieldMenu}
+          currentPlayer={currentPlayer}
+          castSpell={castSpell}
+        />
+      )
       const playerSpells = subject.find(PlayerSpells)
       expect(playerSpells.props()).toEqual({
-        currentPlayer: props.currentPlayer,
+        currentPlayer: currentPlayer,
         availableSpells: [
           {
             battleSpell: true,
@@ -191,17 +161,24 @@ describe('FieldMenu', () => {
             spellName: 'RETURN',
           },
         ],
-        onBack: jasmine.any(Function),
+        onSpellCast: expect.any(Function),
         castSpell,
       })
     })
 
     it('displays PlayerSpells when chosen with the expected cave spells', () => {
-      props.currentPlayer.location.mapName = 'Lava Grotto'
-      subject = shallow(<FieldMenu {...props} />)
+      currentPlayer.location.mapName = Cave.LavaGrotto
+      subject = shallow(
+        <FieldMenu
+          showFieldMenu={true}
+          closeFieldMenu={closeFieldMenu}
+          currentPlayer={currentPlayer}
+          castSpell={castSpell}
+        />
+      )
       const playerSpells = subject.find(PlayerSpells)
       expect(playerSpells.props()).toEqual({
-        currentPlayer: props.currentPlayer,
+        currentPlayer,
         availableSpells: [
           {
             battleSpell: true,
@@ -216,17 +193,24 @@ describe('FieldMenu', () => {
             spellName: 'OUTSIDE',
           },
         ],
-        onBack: jasmine.any(Function),
+        onSpellCast: expect.any(Function),
         castSpell,
       })
     })
 
-    it('displays PlayerSpells without HEAL when player is at full health', () => {
-      props.currentPlayer.stats.hp = props.currentPlayer.stats.hpTotal
-      subject = shallow(<FieldMenu {...props} />)
+    fit('displays PlayerSpells without HEAL when player is at full health', () => {
+      currentPlayer.stats.hp = currentPlayer.stats.hpTotal
+      subject = shallow(
+        <FieldMenu
+          showFieldMenu={true}
+          closeFieldMenu={closeFieldMenu}
+          currentPlayer={currentPlayer}
+          castSpell={castSpell}
+        />
+      )
       const playerSpells = subject.find(PlayerSpells)
       expect(playerSpells.props()).toEqual({
-        currentPlayer: props.currentPlayer,
+        currentPlayer,
         availableSpells: [
           {
             battleSpell: false,
@@ -235,22 +219,23 @@ describe('FieldMenu', () => {
             spellName: 'RETURN',
           },
         ],
-        onBack: jasmine.any(Function),
+        onSpellCast: expect.any(Function),
         castSpell,
       })
     })
 
-    it('sets the menu choice to player stats on back', () => {
-      const optionPanelRef = {
-        current: {
-          focus: jasmine.createSpy('focus'),
-        },
-      }
-      jest.spyOn(ReactAlias, 'useRef').mockImplementation(() => optionPanelRef)
-      subject = shallow(<FieldMenu {...props} />)
+    it('sets the menu choice to player stats on spell cast and closes the modal', async () => {
+      subject = shallow(
+        <FieldMenu
+          showFieldMenu={true}
+          closeFieldMenu={closeFieldMenu}
+          currentPlayer={currentPlayer}
+          castSpell={castSpell}
+        />
+      )
       const playerSpells = subject.find(PlayerSpells)
-      playerSpells.prop('onBack')()
-      expect(optionPanelRef.current.focus).toHaveBeenCalled()
+      playerSpells.prop('onSpellCast')()
+      expect(closeFieldMenu).toHaveBeenCalled()
     })
   })
 })

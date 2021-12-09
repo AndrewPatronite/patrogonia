@@ -1,5 +1,5 @@
 import MapContext from '../context/MapContext'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { usePlayer } from '../hooks'
 import { subscribe } from '../subscription'
 import { useToastErrorHandler } from './useToastErrorHandler'
@@ -9,6 +9,10 @@ import { RootState } from '../redux'
 import { Maps } from '../environment/maps/Maps'
 import { Npc } from '../npcs'
 import { Player } from '../player'
+import {
+  getLocationToPlayerMap,
+  getMapDisplayRange,
+} from '../environment/field/helper'
 
 const MapProvider = ({
   children,
@@ -16,16 +20,7 @@ const MapProvider = ({
   children: JSX.Element | JSX.Element[]
 }) => {
   const playerUrl = `${process.env.REACT_APP_WEBSOCKET_BASE_URL}/players`
-  const {
-    currentPlayer: {
-      id: currentPlayerId,
-      location: {
-        mapName,
-        rowIndex: currentPlayerRowIndex,
-        columnIndex: currentPlayerColumnIndex,
-      },
-    },
-  } = usePlayer()
+  const { currentPlayer } = usePlayer()
   const [playerLocationMessage, setPlayerLocationMessage] = useState<
     Player | undefined
   >(undefined)
@@ -34,6 +29,14 @@ const MapProvider = ({
   const { map, players, npcs } = useSelector(
     (state: RootState) => state.mapState
   )
+  const {
+    id: currentPlayerId,
+    location: {
+      mapName,
+      rowIndex: currentPlayerRowIndex,
+      columnIndex: currentPlayerColumnIndex,
+    },
+  } = currentPlayer
 
   useEffect(() => {
     const playerLocationSubscription = subscribe(
@@ -77,11 +80,22 @@ const MapProvider = ({
     [map, currentPlayerRowIndex, currentPlayerColumnIndex, npcs]
   )
 
+  const locationToPlayerMap = useMemo(
+    () => getLocationToPlayerMap(players, currentPlayer),
+    [players, currentPlayer]
+  )
+
+  const mapDisplayRange = useMemo(
+    () => getMapDisplayRange(currentPlayer, map),
+    [currentPlayer, map]
+  )
+
   const mapState = {
     map,
-    players,
     npcs,
     canMoveToPosition,
+    locationToPlayerMap,
+    mapDisplayRange,
     updateNpc: (npc: Npc) => updateNpc(dispatch, npc),
   }
   return <MapContext.Provider value={mapState}>{children}</MapContext.Provider>

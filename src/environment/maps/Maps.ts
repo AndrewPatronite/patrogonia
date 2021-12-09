@@ -43,35 +43,44 @@ export const Maps = {
   },
 
   isSaveLocation(position: string): boolean {
-    return ['Dewhurst', 'Fernsworth', 'Easthaven'].includes(position)
+    return Maps.isTown(position)
   },
 
   isTravelDestination(name: string): boolean {
     return [
-      'Dewhurst',
-      'Atoris',
-      'Lava Grotto',
-      'Grimes',
-      'Fernsworth',
-      'Easthaven',
-    ].includes(name)
+      Town.Dewhurst,
+      Continent.Atoris,
+      Cave.LavaGrotto,
+      Continent.Grimes,
+      Town.Fernsworth,
+      Town.Easthaven,
+    ]
+      .map((destination) => `${destination}`)
+      .includes(name)
   },
 
   isTown(name?: string): boolean {
-    return !!name && ['Dewhurst', 'Fernsworth', 'Easthaven'].includes(name)
+    return (
+      !!name &&
+      [Town.Dewhurst, Town.Fernsworth, Town.Easthaven]
+        .map((town) => `${town}`)
+        .includes(name)
+    )
   },
 
   isCave(name: string): boolean {
-    return ['Lava Grotto'].includes(name)
+    return [Cave.LavaGrotto].map((cave) => `${cave}`).includes(name)
   },
 
   isField(name: string): boolean {
-    return ['Atoris', 'Grimes'].includes(name)
+    return [Continent.Atoris, Continent.Grimes]
+      .map((continent) => `${continent}`)
+      .includes(name)
   },
 
-  Atoris(entranceName: string = 'Dewhurst'): Map {
+  Atoris(entranceName: string = Town.Dewhurst): Map {
     return {
-      name: 'Atoris',
+      name: Continent.Atoris,
       layout: [
         [W, W, W, W, W, W, W, W, W, W, W, W, W],
         [W, W, W, W, W, W, W, W, W, W, W, W, W],
@@ -79,8 +88,8 @@ export const Maps = {
         [W, W, W, W, G, G, G, G, G, G, W, W, W],
         [W, W, W, G, G, G, W, W, G, G, G, W, W],
         [W, W, W, M, F, G, W, W, G, G, G, W, W],
-        [W, W, M, M, M, G, W, 'Dewhurst', G, G, W, W, W],
-        [W, W, M, M, 'Lava Grotto', G, W, W, W, G, G, W, W],
+        [W, W, M, M, M, G, W, Town.Dewhurst, G, G, W, W, W],
+        [W, W, M, M, Cave.LavaGrotto, G, W, W, W, G, G, W, W],
         [W, W, F, M, M, F, G, G, G, G, W, W, W],
         [W, W, W, F, F, W, W, W, W, W, W, W, W],
         [W, W, W, W, W, W, W, W, W, W, W, W, W],
@@ -91,7 +100,7 @@ export const Maps = {
             rowIndex: 6,
             columnIndex: 7,
           },
-          'Lava Grotto': {
+          [Cave.LavaGrotto]: {
             rowIndex: 7,
             columnIndex: 4,
           },
@@ -102,9 +111,9 @@ export const Maps = {
     }
   },
 
-  Dewhurst(entranceName: string = 'Atoris'): Map {
+  Dewhurst(entranceName: string = Continent.Atoris): Map {
     return {
-      name: 'Dewhurst',
+      name: Town.Dewhurst,
       // prettier-ignore
       layout: [
             [W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W],
@@ -144,19 +153,19 @@ export const Maps = {
         columnIndex: 24,
       },
       exit: {
-        mapName: 'Atoris',
+        mapName: Continent.Atoris,
         rowIndex: 6,
         columnIndex: 7,
         facing: Direction.Down,
-        entranceName: 'Dewhurst',
+        entranceName: Town.Dewhurst,
       },
       npcs: [Alastair, Barnaby],
     }
   },
 
-  Fernsworth(entranceName = 'Grimes'): Map {
+  Fernsworth(entranceName = Continent.Grimes): Map {
     return {
-      name: 'Fernsworth',
+      name: Town.Fernsworth,
       // prettier-ignore
       layout: [
             [M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M, M],
@@ -185,19 +194,19 @@ export const Maps = {
         columnIndex: 0,
       },
       exit: {
-        mapName: 'Grimes',
+        mapName: Continent.Grimes,
         rowIndex: 8,
         columnIndex: 16,
         facing: Direction.Down,
-        entranceName: 'Fernsworth',
+        entranceName: Town.Fernsworth,
       },
       npcs: [Finlay],
     }
   },
 
-  Easthaven(entranceName = 'Grimes'): Map {
+  Easthaven(entranceName = Continent.Grimes): Map {
     return {
-      name: 'Easthaven',
+      name: Town.Easthaven,
       // prettier-ignore
       layout: [
             [F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F],
@@ -233,24 +242,24 @@ export const Maps = {
         columnIndex: 0,
       },
       exit: {
-        mapName: 'Grimes',
+        mapName: Continent.Grimes,
         rowIndex: 12,
         columnIndex: 42,
         facing: Direction.Down,
-        entranceName: 'Easthaven',
+        entranceName: Town.Easthaven,
       },
       npcs: [Nigel, Tristan],
     }
   },
 
-  'Lava Grotto'(entranceName = 'Atoris'): Map {
+  'Lava Grotto'(entranceName = Continent.Atoris): Map {
     return {
-      name: 'Lava Grotto',
+      name: Cave.LavaGrotto,
       // prettier-ignore
       layout: [
             [L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L],
             [L, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, L, L, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, L],
-            [L, R, 'Atoris', R, D, D, D, D, D, D, D, D, D, D, D, D, R, L, L, R, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, R, L],
+            [L, R, Continent.Atoris, R, D, D, D, D, D, D, D, D, D, D, D, D, R, L, L, R, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, R, L],
             [L, R, D, R, R, D, R, R, R, R, R, R, R, R, R, D, R, L, L, R, D, R, R, R, R, R, R, R, R, R, D, R, R, D, R, R, R, D, R, L],
             [L, R, D, R, R, D, R, R, R, R, R, R, D, R, R, D, R, L, L, R, D, R, R, R, R, R, R, R, R, R, D, R, R, D, R, R, R, D, R, L],
             [L, R, D, R, R, D, R, R, R, R, R, R, D, R, R, D, R, L, L, R, D, R, R, R, R, R, R, R, R, R, D, R, R, D, R, R, R, D, R, L],
@@ -283,7 +292,7 @@ export const Maps = {
             [L, R, D, D, D, R, D, D, D, D, D, D, D, R, R, D, R, L, R, R, D, R, R, D, R, R, R, R, R, R, D, R, D, R, D, D, D, D, R, L],
             [L, R, D, R, D, D, D, R, R, R, R, R, R, R, R, D, R, L, L, R, D, R, R, D, D, D, D, D, D, D, D, R, D, D, D, R, R, D, R, L],
             [L, R, D, R, R, R, R, R, R, R, R, R, R, R, D, D, R, L, L, R, D, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, L],
-            [L, R, D, D, D, D, D, D, D, D, D, D, D, D, D, R, R, L, L, R, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, 'Grimes', R, L],
+            [L, R, D, D, D, D, D, D, D, D, D, D, D, D, D, R, R, L, L, R, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, D, Continent.Grimes, R, L],
             [L, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, L, L, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, R, L],
             [L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L],
         ],
@@ -304,9 +313,9 @@ export const Maps = {
     }
   },
 
-  Grimes(entranceName = 'Lava Grotto'): Map {
+  Grimes(entranceName = Cave.LavaGrotto): Map {
     return {
-      name: 'Grimes',
+      name: Continent.Grimes,
       // prettier-ignore
       layout: [
             [W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W],
@@ -317,11 +326,11 @@ export const Maps = {
             [W, W, W, W, W, W, W, W, W, F, F, M, M, G, G, M, G, G, G, G, G, G, G, G, M, F, F, F, F, F, F, W, W, W, W, W, W, W, W, W, W, W, W, W, D, W, W, W, W, W],
             [W, W, W, W, W, W, W, W, W, F, F, F, G, G, M, M, M, M, F, F, F, F, F, F, M, M, M, M, F, F, F, F, D, D, W, W, W, W, W, W, W, W, W, W, D, D, W, W, W, W],
             [W, W, W, W, W, W, W, F, F, F, F, F, F, M, M, M, M, M, M, F, M, M, F, M, M, M, M, M, M, F, G, G, W, D, G, W, W, W, W, W, W, W, W, W, W, D, W, W, W, W],
-            [W, W, W, W, W, W, F, F, F, F, F, F, F, F, F, D, 'Fernsworth', M, M, M, M, M, M, M, F, M, M, M, M, F, F, W, W, G, G, G, W, W, W, W, W, W, W, W, W, D, D, W, W, W],
+            [W, W, W, W, W, W, F, F, F, F, F, F, F, F, F, D, Town.Fernsworth, M, M, M, M, M, M, M, F, M, M, M, M, F, F, W, W, G, G, G, W, W, W, W, W, W, W, W, W, D, D, W, W, W],
             [W, W, W, W, W, G, G, G, G, G, G, G, F, F, D, D, M, M, F, F, F, F, F, F, G, F, M, M, F, G, G, W, G, G, G, G, G, G, G, G, G, G, W, W, W, W, D, G, W, W],
             [W, W, W, W, W, G, G, G, G, G, G, F, F, F, D, M, M, F, G, G, G, G, G, G, G, F, M, M, G, G, G, W, G, G, G, G, G, G, G, G, G, G, G, W, W, W, D, G, W, W],
             [W, W, W, W, W, W, G, G, G, G, G, G, F, F, D, M, F, F, G, G, G, G, G, G, G, G, M, M, G, G, G, W, G, G, G, G, G, F, G, G, G, F, F, F, W, D, G, G, W, W],
-            [W, W, W, W, W, W, W, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, M, M, F, G, G, G, W, W, W, W, G, G, F, F, G, F, F, 'Easthaven', G, W, D, G, G, W, W],
+            [W, W, W, W, W, W, W, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, M, M, F, G, G, G, W, W, W, W, G, G, F, F, G, F, F, Town.Easthaven, G, W, D, G, G, W, W],
             [W, W, W, W, W, W, G, G, G, G, G, G, G, G, G, G, G, G, F, F, F, G, G, G, G, F, M, F, F, F, G, G, G, G, W, W, G, G, G, F, F, F, G, G, W, D, G, W, W, W],
             [W, W, W, W, W, W, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, F, M, M, F, G, G, G, G, G, G, W, W, W, G, G, F, G, G, W, W, D, W, W, W, W],
             [W, W, W, W, W, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, F, M, M, M, F, W, G, G, G, G, G, G, W, G, G, G, G, W, W, D, D, W, W, W, W],
@@ -330,7 +339,7 @@ export const Maps = {
             [W, W, W, W, G, G, G, G, M, M, F, F, G, G, G, G, G, G, G, G, W, W, W, W, W, W, W, M, M, M, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W],
             [W, W, W, G, G, G, M, M, M, F, F, G, G, G, G, G, G, G, G, W, W, W, W, W, W, W, W, W, M, M, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W],
             [W, W, W, W, F, M, M, F, F, F, F, G, G, G, G, G, G, G, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W],
-            [W, W, W, W, G, F, F, 'Lava Grotto', F, G, G, G, G, G, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W],
+            [W, W, W, W, G, F, F, Cave.LavaGrotto, F, G, G, G, G, G, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W],
             [W, W, W, W, W, G, F, F, F, F, F, G, G, G, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W],
             [W, W, W, W, W, W, G, G, F, F, G, G, G, G, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W],
             [W, W, W, W, W, W, W, G, G, G, G, G, G, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W],
@@ -342,7 +351,7 @@ export const Maps = {
         ],
       entrance: ((): Entrance => {
         const entrances: Record<string, Entrance> = {
-          'Lava Grotto': {
+          [Cave.LavaGrotto]: {
             rowIndex: 21,
             columnIndex: 7,
           },

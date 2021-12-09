@@ -1,8 +1,6 @@
 import React from 'react'
 import World from './World'
 import { Legend } from '../maps/Legend'
-import * as DisplayRangeHelper from './helper/getMapDisplayRange'
-import * as LocationToPlayerHelper from './helper/getLocationToPlayerMap'
 import { ModalEnum, ModalInterface } from '../../context'
 import { useMap, useModalState, usePlayer, useSound } from '../../hooks'
 import { Player } from '../../player'
@@ -64,7 +62,7 @@ describe('World', () => {
       //@ts-ignore missing fields
       stats: { hp: 9, hpTotal: 10, mp: 4, mpTotal: 5 },
     }
-    const locationToPlayersMap = {
+    const locationToPlayerMap = {
       '1-2': [currentPlayer],
     }
     modalState = {
@@ -90,15 +88,13 @@ describe('World', () => {
       map,
       players: [currentPlayer],
       npcs: [],
-    })
-    jest
-      .spyOn(LocationToPlayerHelper, 'getLocationToPlayerMap')
-      .mockReturnValue(locationToPlayersMap)
-    jest.spyOn(DisplayRangeHelper, 'getMapDisplayRange').mockReturnValue({
-      rowStartIndex: 1,
-      rowEndIndex: 3,
-      columnStartIndex: 1,
-      columnEndIndex: 3,
+      locationToPlayerMap,
+      mapDisplayRange: {
+        rowStartIndex: 1,
+        rowEndIndex: 3,
+        columnStartIndex: 1,
+        columnEndIndex: 3,
+      },
     })
     jest.useFakeTimers()
     renderResult = render(

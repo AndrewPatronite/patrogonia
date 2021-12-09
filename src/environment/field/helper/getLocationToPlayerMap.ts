@@ -1,16 +1,16 @@
 import { filter, forEach, isEmpty, isEqual } from 'lodash'
-import { LocationToPlayersMap } from '../types'
+import { LocationToPlayerMap } from '../types'
 import { Player } from '../../../player'
 
 export const getLocationToPlayerMap = (
-  playersOnMap: Player[],
+  players: Player[],
   currentPlayer: Player
 ) => {
-  const locationToPlayers: LocationToPlayersMap = {}
+  const locationToPlayers: LocationToPlayerMap = {}
   const { location: currentPlayerLocation } = currentPlayer
-  if (!isEmpty(playersOnMap) && !isEmpty(currentPlayerLocation)) {
+  if (!isEmpty(players) && !isEmpty(currentPlayerLocation)) {
     const otherPlayers = filter(
-      playersOnMap,
+      players,
       (otherPlayer) =>
         !isEqual(otherPlayer.id, currentPlayer.id) &&
         isEqual(otherPlayer.location.mapName, currentPlayerLocation.mapName)

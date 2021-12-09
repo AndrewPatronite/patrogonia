@@ -5,7 +5,7 @@ import Character from '../../player/Character'
 import { Maps } from '../maps/Maps'
 import { isAdjacentToCurrentPlayer } from '../../utils'
 import { getTile } from './tiles'
-import { LocationToPlayersMap } from './types'
+import { LocationToPlayerMap } from './types'
 import { MapLayout } from '../maps'
 import { Player } from '../../player'
 import { Npc } from '../../npcs'
@@ -14,7 +14,7 @@ interface TileProps {
   mapSymbol: string
   rowIndex: number
   columnIndex: number
-  locationToPlayersMap: LocationToPlayersMap
+  locationToPlayerMap: LocationToPlayerMap
   mapLayout: MapLayout
   currentPlayer: Player
   npcs: Npc[]
@@ -24,7 +24,7 @@ const Tile = ({
   mapSymbol,
   rowIndex,
   columnIndex,
-  locationToPlayersMap,
+  locationToPlayerMap,
   mapLayout,
   currentPlayer,
   npcs,
@@ -44,7 +44,7 @@ const Tile = ({
     columnIndex
   )
   const tileKey = getTileKey(rowIndex, columnIndex)
-  const playersOnTile = locationToPlayersMap[tileKey]
+  const playersOnTile = locationToPlayerMap[tileKey]
   const playerToDisplay = getPlayerToDisplay(playersOnTile, currentPlayerId)
   const npcToDisplay = npcs.find(
     (npc) =>
@@ -67,6 +67,7 @@ const Tile = ({
       width="6.25rem"
       {...landBorderStyles}
       mapsymbol={mapSymbol}
+      data-testid="tile"
     >
       {playerToDisplay && (
         <Character

@@ -26,7 +26,7 @@ const getCharacterImage = (
   }
 }
 
-interface CharacterProps {
+export interface CharacterProps {
   name: string
   directionFacing: Direction
   battleId?: string

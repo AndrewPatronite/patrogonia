@@ -20,7 +20,7 @@ const Battle = () => {
     location: { mapName },
   } = currentPlayer
   const [selectedEnemyId, selectEnemy] = useState<string>()
-  const [playerTurnEnabled, setPlayerTurnEnabled] = useState(true)
+  const [playerTurnEnabled, setPlayerTurnEnabled] = useState<boolean>(true)
   const players = values(playerStats)
   const battleStatusStyle = getBattleStatusStyle(players)
   const battleEnded = !!status && isBattleEnded(status)

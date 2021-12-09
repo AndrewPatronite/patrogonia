@@ -1,9 +1,10 @@
 import { Legend } from '../../maps/Legend'
 import { inRange, isEqual } from 'lodash'
 import { LandColors } from '../tiles/terrain'
+import { MapLayout } from '../../maps'
 
 const getMapSymbol = (
-  mapLayout: string[][],
+  mapLayout: MapLayout,
   rowIndex: number,
   columnIndex: number
 ) => {
@@ -15,11 +16,11 @@ const getMapSymbol = (
 
 const isWater = (symbol?: string) => isEqual(Legend.symbols.WATER, symbol)
 
-const landCorderRadius = '0.4375rem'
+export const landBorderRadius = '0.4375rem'
 
 export const getLandBorderStyles = (
   mapSymbol: string,
-  mapLayout: string[][],
+  mapLayout: MapLayout,
   rowIndex: number,
   columnIndex: number
 ) => {
@@ -55,10 +56,10 @@ export const getLandBorderStyles = (
       borderClasses.borderTopWidth = 2
       borderClasses.borderTopColor = LandColors.WetSand
       if (hasWaterToTheLeft) {
-        borderClasses.borderTopLeftRadius = landCorderRadius
+        borderClasses.borderTopLeftRadius = landBorderRadius
       }
       if (hasWaterToTheRight) {
-        borderClasses.borderTopRightRadius = landCorderRadius
+        borderClasses.borderTopRightRadius = landBorderRadius
       }
     }
     if (hasWaterToTheLeft) {
@@ -73,10 +74,10 @@ export const getLandBorderStyles = (
       borderClasses.borderBottomWidth = 2
       borderClasses.borderBottomColor = LandColors.WetSand
       if (hasWaterToTheLeft) {
-        borderClasses.borderBottomLeftRadius = landCorderRadius
+        borderClasses.borderBottomLeftRadius = landBorderRadius
       }
       if (hasWaterToTheRight) {
-        borderClasses.borderBottomRightRadius = landCorderRadius
+        borderClasses.borderBottomRightRadius = landBorderRadius
       }
     }
   }

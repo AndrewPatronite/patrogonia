@@ -1,7 +1,7 @@
 import React from 'react'
 import Tile from './Tile'
 import { Flex } from '@chakra-ui/react'
-import { LocationToPlayersMap, MapDisplayRange } from './types'
+import { LocationToPlayerMap, MapDisplayRange } from './types'
 import { MapLayout } from '../maps'
 import { Player } from '../../player'
 import { Npc } from '../../npcs'
@@ -9,8 +9,8 @@ import { Npc } from '../../npcs'
 interface TileRowProps {
   rowSymbols: string[]
   rowIndex: number
-  locationToPlayersMap: LocationToPlayersMap
-  displayIndexRange: MapDisplayRange
+  locationToPlayerMap: LocationToPlayerMap
+  mapDisplayRange: MapDisplayRange
   mapLayout: MapLayout
   currentPlayer: Player
   npcs: Npc[]
@@ -19,8 +19,8 @@ interface TileRowProps {
 const TileRow = ({
   rowSymbols,
   rowIndex,
-  locationToPlayersMap,
-  displayIndexRange: { columnStartIndex, columnEndIndex },
+  locationToPlayerMap,
+  mapDisplayRange: { columnStartIndex, columnEndIndex },
   mapLayout,
   currentPlayer,
   npcs,
@@ -34,7 +34,7 @@ const TileRow = ({
           mapSymbol={mapSymbol}
           rowIndex={rowIndex}
           columnIndex={columnStartIndex + tileIndexOffset}
-          locationToPlayersMap={locationToPlayersMap}
+          locationToPlayerMap={locationToPlayerMap}
           mapLayout={mapLayout}
           currentPlayer={currentPlayer}
           npcs={npcs}

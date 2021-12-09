@@ -1,106 +1,124 @@
 import React, * as ReactAlias from 'react'
-import { shallow } from 'enzyme'
+import { shallow, ShallowWrapper } from 'enzyme'
 import Battle from './Battle'
+import { Battle as BattleType, Command, EnemyName } from './types'
 import * as BattleClassHelper from './helper/getBattleStatusStyle'
-import * as BattleStateAlias from '../state/BattleState'
 import EnemyDisplay from './EnemyDisplay'
 import Log from './Log'
 import PlayerPanel from './PlayerPanel'
-import * as Subscriptions from '../subscription/subscribe'
-import * as Player from '../environment/sound/sound'
 import ThemedPanel from '../components/theme/ThemedPanel'
 import { Sound } from '../environment/sound'
+import { useBattle, usePlayer, useSound } from '../hooks'
+import { render } from '@testing-library/react'
+import { BattleStatus } from './types/BattleStatus'
+import { Cave } from '../environment/maps/Maps'
+
+jest.mock('../hooks', () => ({
+  useSound: jest.fn(),
+  useBattle: jest.fn(),
+  usePlayer: jest.fn(),
+}))
 
 describe('Battle', () => {
+  const originalScrollIntoView = window.HTMLElement.prototype.scrollIntoView
   const currentPlayerId = 1
   const anotherPlayerId = 2
-  let props
-  let subject
-  let battle
-  let takeTurn
-  let dismissBattle
-  let battleSubscription
+  const currentPlayer = {
+    location: {
+      mapName: Cave.LavaGrotto,
+    },
+  }
+  let battle: BattleType
+  const direBattleStatusStyle = {
+    border: '2px solid #e31e2d',
+  }
+  let subject: ShallowWrapper
+  let takeTurn: jest.Mock
+  let dismissBattle: jest.Mock
+  let playSound: jest.Mock
+  let pauseSound: jest.Mock
+  let updatePlayer: jest.Mock
+  let loadSave: jest.Mock
 
   beforeEach(() => {
-    battleSubscription = {
-      close: jasmine.createSpy('close'),
-    }
-    spyOn(Subscriptions, 'subscribe').and.returnValue(battleSubscription)
-    spyOn(Player, 'pauseSound')
-    spyOn(Player, 'playSound')
-    jest.spyOn(ReactAlias, 'useEffect').mockImplementation((effect) => effect())
-
     battle = {
       enemies: [
         {
           id: '677d615c-32fe-4e8d-9992-3e110f26a185',
-          name: 'Skeleton',
+          name: EnemyName.Skeleton,
+          stats: {
+            hp: 20,
+          },
         },
       ],
       log: [
-        { content: 'Enemies approach.', delivered: true },
+        { content: 'Enemies approach.', delivered: true, round: 0 },
         {
           content: 'Redwan attacks Skeleton dealing 10 damage.',
-          targetId: '677d615c-32fe-4e8d-9992-3e110f26a185',
+          delivered: false,
+          round: 1,
         },
       ],
       playerStats: {
-        currentPlayerId: { playerId: currentPlayerId },
-        anotherPlayerId: { playerId: anotherPlayerId },
+        //@ts-ignore
+        [currentPlayerId]: { playerId: currentPlayerId },
+        //@ts-ignore
+        [anotherPlayerId]: { playerId: anotherPlayerId },
       },
       roundPlayerActions: {
-        currentPlayerId: 'attack',
-        anotherPlayerId: 'parry',
+        //@ts-ignore
+        [currentPlayerId]: Command.Attack,
+        //@ts-ignore
+        [anotherPlayerId]: Command.Parry,
       },
-      status: '',
+      status: BattleStatus.InProgress,
     }
-    takeTurn = jasmine.createSpy('takeTurn')
-    dismissBattle = jasmine.createSpy('dismissBattle')
-    spyOn(BattleClassHelper, 'getBattleStatusClass').and.returnValue('dire')
-    spyOn(BattleStateAlias, 'BattleState').and.returnValue([
+    window.HTMLElement.prototype.scrollIntoView = jest.fn()
+    playSound = jest.fn()
+    pauseSound = jest.fn()
+    ;(useSound as jest.Mock).mockReturnValue({
+      playSound,
+      pauseSound,
+    })
+    loadSave = jest.fn()
+    updatePlayer = jest.fn()
+    ;(usePlayer as jest.Mock).mockReturnValue({
+      currentPlayer,
+      loadSave,
+      updatePlayer,
+    })
+    takeTurn = jest.fn()
+    dismissBattle = jest.fn()
+    ;(useBattle as jest.Mock).mockReturnValue({
       battle,
       takeTurn,
       dismissBattle,
-    ])
-
-    props = {
-      currentPlayer: {
-        location: {
-          mapName: 'Lava Grotto',
-        },
-      },
-      loadPlayer: jasmine.createSpy('loadPlayer'),
-      updatePlayer: jasmine.createSpy('updatePlayer'),
-      battleUrl: 'wss://localhost:8443/battles',
-      loadSave: jasmine.createSpy('loadSave'),
-    }
-    subject = shallow(<Battle {...props} />)
-  })
-
-  it('is a ThemedPanel with className supplied by getBattleStatusBorder', () => {
-    expect(subject.type()).toEqual(ThemedPanel)
-    expect(subject.prop('className')).toEqual('battle dire')
-  })
-
-  it('has battle music', () => {
-    const audio = subject.find('.battle-music')
-    expect(audio.type()).toEqual('audio')
-    expect(audio.props()).toEqual({
-      className: Sound.BattleMusic,
-      autoPlay: true,
-      loop: true,
-      children: jasmine.anything(),
     })
-    expect(audio.find('source').prop('src')).toEqual('BattleNO3.mp3')
+
+    jest
+      .spyOn(BattleClassHelper, 'getBattleStatusStyle')
+      .mockReturnValue(direBattleStatusStyle)
+    jest.spyOn(ReactAlias, 'useEffect').mockImplementation((effect) => effect())
+    subject = shallow(<Battle />)
+  })
+
+  afterEach(() => {
+    window.HTMLElement.prototype.scrollIntoView = originalScrollIntoView
+  })
+
+  it('is a ThemedPanel', () => {
+    expect(subject.type()).toEqual(ThemedPanel)
   })
 
   it('has an EnemyDisplay with the expected props', () => {
     const enemyDisplay = subject.find(EnemyDisplay)
     expect(enemyDisplay.props()).toEqual({
-      mapName: 'Lava Grotto',
+      mapName: Cave.LavaGrotto,
       enemies: battle.enemies,
       selectedEnemyId: undefined,
-      deliveredLogEntries: [{ content: 'Enemies approach.', delivered: true }],
+      deliveredLogEntries: [
+        { content: 'Enemies approach.', delivered: true, round: 0 },
+      ],
     })
   })
 
@@ -108,10 +126,12 @@ describe('Battle', () => {
     it('has the expected props', () => {
       const log = subject.find(Log)
       expect(log.props()).toEqual({
-        deliveredEntries: [{ content: 'Enemies approach.', delivered: true }],
-        onDismiss: jasmine.any(Function),
+        deliveredEntries: [
+          { content: 'Enemies approach.', delivered: true, round: 0 },
+        ],
+        onDismiss: expect.any(Function),
         showDismiss: false,
-        statusClass: 'dire',
+        battleStatusStyle: direBattleStatusStyle,
         allMessagesDelivered: false,
       })
     })
@@ -124,40 +144,42 @@ describe('Battle', () => {
   })
 
   describe('PlayerPanel', () => {
-    let playerPanel
+    let playerPanel: any
 
     beforeEach(() => {
       playerPanel = subject.find(PlayerPanel).at(0)
     })
 
-    it('has a players div with a PlayerPanel with the expected props for each player', () => {
-      const playerPanels = subject.find('.players').find(PlayerPanel)
+    it('has a PlayerPanel with the expected props for each player', () => {
+      const playerPanels = subject.find(PlayerPanel)
       expect(playerPanels.length).toEqual(2)
       expect(playerPanels.at(0).props()).toEqual({
-        currentPlayer: props.currentPlayer,
+        currentPlayer: currentPlayer,
         playerStats: { playerId: currentPlayerId },
         players: [{ playerId: currentPlayerId }, { playerId: anotherPlayerId }],
-        battleStatusClass: 'dire',
+        battleStatusStyle: direBattleStatusStyle,
         enemies: battle.enemies,
-        selectEnemy: jasmine.any(Function),
-        takeTurn: jasmine.any(Function),
+        selectEnemy: expect.any(Function),
+        takeTurn: expect.any(Function),
         roundPlayerActions: battle.roundPlayerActions,
         selectedEnemyId: undefined,
         playerTurnEnabled: true,
-        loadSave: props.loadSave,
+        loadSave,
+        updatePlayer,
       })
       expect(playerPanels.at(1).props()).toEqual({
-        currentPlayer: props.currentPlayer,
+        currentPlayer: currentPlayer,
         playerStats: { playerId: anotherPlayerId },
         players: [{ playerId: currentPlayerId }, { playerId: anotherPlayerId }],
-        battleStatusClass: 'dire',
+        battleStatusStyle: direBattleStatusStyle,
         enemies: battle.enemies,
-        selectEnemy: jasmine.any(Function),
-        takeTurn: jasmine.any(Function),
+        selectEnemy: expect.any(Function),
+        takeTurn: expect.any(Function),
         roundPlayerActions: battle.roundPlayerActions,
         selectedEnemyId: undefined,
         playerTurnEnabled: true,
-        loadSave: props.loadSave,
+        loadSave,
+        updatePlayer,
       })
     })
 
@@ -178,7 +200,7 @@ describe('Battle', () => {
     })
 
     it('via takeTurn, it submits turn, hides the players panels until the next turn, and clears selected enemy', () => {
-      expect(subject.find('.players').exists()).toEqual(true)
+      expect(subject.find(PlayerPanel).exists()).toEqual(true)
       playerPanel.prop('selectEnemy')('677d615c-32fe-4e8d-9992-3e110f26a185')
       expect(subject.find(EnemyDisplay).prop('selectedEnemyId')).toEqual(
         '677d615c-32fe-4e8d-9992-3e110f26a185'
@@ -188,7 +210,7 @@ describe('Battle', () => {
       playerPanel.prop('takeTurn')('attack', selectedEnemyId)
 
       expect(takeTurn).toHaveBeenCalledWith('attack', selectedEnemyId)
-      expect(subject.find('.players').exists()).toEqual(false)
+      expect(subject.find(PlayerPanel).exists()).toEqual(false)
       expect(
         subject.find(EnemyDisplay).prop('selectedEnemyId')
       ).not.toBeDefined()
@@ -197,48 +219,29 @@ describe('Battle', () => {
     it('calls the loadSave provided by props', () => {
       playerPanel.prop('loadSave')()
 
-      expect(props.loadSave).toHaveBeenCalled()
+      expect(loadSave).toHaveBeenCalled()
     })
   })
 
-  it('subscribes to battle notifications via useEffect and closes the subscription on unmounting', () => {
-    expect(Subscriptions.subscribe).toHaveBeenCalledWith(
-      props.battleUrl,
-      jasmine.any(Function)
-    )
-
-    const subscriptionEffect = ReactAlias.useEffect.mock.calls[0][0]
-    subscriptionEffect()()
-    expect(battleSubscription.close).toHaveBeenCalled()
-  })
-
   it('plays battle music via useEffect', () => {
-    expect(Player.playSound).toHaveBeenCalledWith(Sound.BattleMusic)
+    render(<Battle />)
+    expect(playSound).toHaveBeenCalledWith(Sound.BattleMusic, [
+      Sound.FieldMusic,
+      Sound.CaveMusic,
+    ])
   })
 
   it('enables next player turn after all log messages have been delivered, via useEffect', () => {
-    const setPlayerTurnEnabled = jasmine.createSpy('setPlayerTurnEnabled')
-
-    jest
-      .spyOn(ReactAlias, 'useState')
-      .mockImplementation(() => [false, setPlayerTurnEnabled])
-
     battle.log[1].delivered = true
-    subject = shallow(<Battle {...props} />)
-
-    expect(setPlayerTurnEnabled).toHaveBeenCalledWith(true)
+    render(<Battle />)
+    expect(pauseSound).not.toHaveBeenCalled()
   })
 
   it('pauses battle music and hides the players panel when the battle is over and all log messages have been delivered, via useEffect', () => {
-    const setPlayerTurnEnabled = jasmine.createSpy('setPlayerTurnEnabled')
-
-    jest
-      .spyOn(ReactAlias, 'useState')
-      .mockImplementation(() => [false, setPlayerTurnEnabled])
-
-    battle.status = 'VICTORY'
+    battle.status = BattleStatus.Victory
     battle.log[1].delivered = true
-    subject = shallow(<Battle {...props} />)
-    expect(Player.pauseSound).toHaveBeenCalledWith(Sound.BattleMusic)
+    render(<Battle />)
+
+    expect(pauseSound).toHaveBeenCalledWith(Sound.BattleMusic)
   })
 })

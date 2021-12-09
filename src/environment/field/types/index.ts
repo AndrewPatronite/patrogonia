@@ -1,4 +1,4 @@
-import LocationToPlayersMap from './LocationToPlayersMap'
+import LocationToPlayerMap from './LocationToPlayerMap'
 import MapDisplayRange from './MapDisplayRange'
 
-export type { LocationToPlayersMap, MapDisplayRange }
+export type { LocationToPlayerMap, MapDisplayRange }

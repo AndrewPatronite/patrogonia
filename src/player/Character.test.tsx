@@ -1,53 +1,22 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import Character from './Character'
-import Player from './Player'
+import Character, { CharacterProps } from './Character'
 import { Icon } from '@chakra-ui/react'
+import { Direction } from '../navigation'
 
 describe('Character', () => {
-  interface Props {
-    player: Player
-    isCurrentPlayer: boolean
-    isSaveLocation: boolean
-  }
-  let props: Props
+  let props: CharacterProps
 
   const getCharacter = (
-    facing: string = 'up',
+    directionFacing: Direction = Direction.Up,
     battleId?: string,
     lastUpdate: string = new Date().toString(),
     isCurrentPlayer: boolean = false,
     isSaveLocation: boolean = false
   ) => {
     props = {
-      player: {
-        name: 'Redwan',
-        location: {
-          facing,
-          rowIndex: 1,
-          columnIndex: 2,
-          mapName: 'Lava Grotto',
-        },
-        battleId,
-        lastUpdate,
-        id: 1,
-        loggedIn: true,
-        spells: [],
-        stats: {
-          playerName: 'Redwan',
-          level: 1,
-          hp: 10,
-          hpTotal: 10,
-          mp: 1,
-          mpTotal: 1,
-          gold: 7,
-          xp: 5,
-          xpTillNextLevel: 8,
-          attack: 5,
-          defense: 5,
-          agility: 5,
-        },
-      },
+      name: 'Redwan',
+      directionFacing,
       isCurrentPlayer,
       isSaveLocation,
     }
@@ -61,35 +30,41 @@ describe('Character', () => {
   })
 
   it("shows a hero's name on back when facing up", () => {
-    const subject = getCharacter('up', undefined, undefined, true)
+    const subject = getCharacter(Direction.Up, undefined, undefined, true)
     expect(subject.find('.hero').find('.player-name-back').text()).toEqual(
       'Redwan'
     )
   })
 
   it("shows a hero's name on chest when facing down", () => {
-    const subject = getCharacter('down', undefined, undefined, true)
+    const subject = getCharacter(Direction.Down, undefined, undefined, true)
     expect(subject.find('.hero').find('.player-name-front').text()).toEqual(
       'Redwan'
     )
   })
 
   it("shows a peer's name on back when facing up", () => {
-    const subject = getCharacter('up')
+    const subject = getCharacter(Direction.Up)
     expect(subject.find('.peer').find('.player-name-back').text()).toEqual(
       'Redwan'
     )
   })
 
   it("shows a peer's name on chest when facing down", () => {
-    const subject = getCharacter('down')
+    const subject = getCharacter(Direction.Down)
     expect(subject.find('.peer').find('.player-name-front').text()).toEqual(
       'Redwan'
     )
   })
 
   it('shows a heal-n-save notification when current user is at a save location', () => {
-    const subject = getCharacter('right', undefined, undefined, true, true)
+    const subject = getCharacter(
+      Direction.Right,
+      undefined,
+      undefined,
+      true,
+      true
+    )
     const saved = subject.find('.fade')
     const notifications = saved.find('p')
     expect(notifications.length).toEqual(2)
@@ -98,7 +73,7 @@ describe('Character', () => {
   })
 
   it('shows a dragon icon if player is in battle', () => {
-    const subject = getCharacter('down', 'ff12ff34eeee')
+    const subject = getCharacter(Direction.Down, 'ff12ff34eeee')
     const icon = subject.find(Icon)
     // @ts-ignore
     expect(icon.prop('icon').iconName).toEqual('dragon')
@@ -113,7 +88,11 @@ describe('Character', () => {
       now.getHours(),
       now.getMinutes() - 2
     )
-    const subject = getCharacter('down', undefined, lastUpdate.toString())
+    const subject = getCharacter(
+      Direction.Down,
+      undefined,
+      lastUpdate.toString()
+    )
     const icon = subject.find(Icon)
     // @ts-ignore
     expect(icon.prop('icon').iconName).toEqual('campground')
@@ -129,7 +108,11 @@ describe('Character', () => {
       now.getMinutes(),
       now.getSeconds()
     )
-    const subject = getCharacter('down', undefined, lastUpdate.toString())
+    const subject = getCharacter(
+      Direction.Down,
+      undefined,
+      lastUpdate.toString()
+    )
     const icon = subject.find(Icon)
     expect(icon.exists()).toEqual(false)
   })
