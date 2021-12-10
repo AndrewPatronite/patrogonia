@@ -73,7 +73,9 @@ const Tile = ({
         <Character
           name={playerToDisplay.name}
           directionFacing={playerToDisplay.location.facing}
+          battleId={playerToDisplay.battleId}
           isCurrentPlayer={isEqual(playerToDisplay.id, currentPlayerId)}
+          lastUpdate={playerToDisplay.lastUpdate}
         />
       )}
       {npcToDisplay && (

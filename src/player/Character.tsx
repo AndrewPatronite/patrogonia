@@ -32,7 +32,6 @@ export interface CharacterProps {
   battleId?: string
   isCurrentPlayer?: boolean
   lastUpdate?: string
-  isSaveLocation?: boolean
   inDialogRange?: boolean
 }
 
@@ -40,8 +39,8 @@ const Character = ({
   name,
   directionFacing,
   battleId,
-  lastUpdate,
   isCurrentPlayer,
+  lastUpdate,
   inDialogRange,
 }: CharacterProps) => {
   const lastUpdateDate = lastUpdate && new Date(lastUpdate)

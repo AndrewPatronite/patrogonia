@@ -99,7 +99,7 @@ describe('Log', () => {
     expect(props.onDismiss).toHaveBeenCalled()
   })
 
-  it('has a scroll to div that gets scrolled into view', () => {
+  it('scrolls to the end of the battle log', () => {
     expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalled()
   })
 

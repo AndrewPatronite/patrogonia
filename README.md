@@ -1,3 +1,31 @@
+#Chronicles of Patrogonia
+Chronicles of Patrogonia is a classic RPG where you gain experience and gold by defeating enemies in battle.
+
+#
+Adventure throughout the world of Patrogonia.
+
+![field](./readme/field.png)
+
+#
+Battle foes on your own
+
+![battle](./readme/battle.png)
+
+#
+or band together with other players.
+
+![teamup](./readme/teamup.png)
+
+![teamup2](./readme/teamup2.png)
+
+#
+Chronicles of Patrogonia is backed by a spring boot web service:
+https://github.com/AndrewPatronite/patrogonia-service
+
+#
+For best results, visit the application with Chrome and a viewport set to 1000px x 1000px. 
+
+#
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
