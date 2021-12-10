@@ -6,7 +6,7 @@ import PlayerTurnWizard from './PlayerTurnWizard'
 import { BattleStatusStyle, Enemy, RoundPlayerActions } from './types'
 import { Player, Stats } from '../player'
 
-interface PlayerPanelProps {
+export interface PlayerPanelProps {
   currentPlayer: Player
   playerStats: Stats
   players: Stats[]
@@ -45,7 +45,7 @@ const PlayerPanel = ({
     //TODO AP corner case for deceased peer who loaded game, causing roundPlayerActions to fail:
     players.length === 1
   return (
-    <ThemedPanel className="player-panel" padding="1rem" sx={battleStatusStyle}>
+    <ThemedPanel padding="1rem" sx={battleStatusStyle}>
       <Stack marginRight="2rem" spacing="1rem">
         <label>
           Player: <span>{playerName}</span>

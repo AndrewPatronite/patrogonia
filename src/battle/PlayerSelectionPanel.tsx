@@ -4,7 +4,7 @@ import ThemedHeader from '../components/theme/ThemedHeader'
 import { Stack } from '@chakra-ui/react'
 import { Stats } from '../player'
 
-interface PlayerSelectionPanelProps {
+export interface PlayerSelectionPanelProps {
   players: Stats[]
   action: string
   handleBack: () => void

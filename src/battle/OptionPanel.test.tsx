@@ -1,156 +1,74 @@
 import React from 'react'
-import { shallow } from 'enzyme'
-import OptionPanel from './OptionPanel'
+import OptionPanel, { OptionPanelProps } from './OptionPanel'
+import { Command } from './types'
+import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
 
 describe('OptionPanel', () => {
-  let props
-  let subject
+  let props: OptionPanelProps
+  let renderResult: RenderResult
 
   beforeEach(() => {
     props = {
       options: [
-        { value: 'attack', display: 'Attack' },
-        { value: 'parry', display: 'Parry' },
+        { value: Command.Attack, display: 'Attack' },
+        { value: Command.Parry, display: 'Parry' },
         { value: 'spell', display: 'Spell' },
-        { value: 'run', display: 'Run' },
+        { value: Command.Run, display: 'Run' },
       ],
-      onBack: jasmine.createSpy('onBack'),
-      onChange: jasmine.createSpy('onChange'),
-      onNext: jasmine.createSpy('onNext'),
+      onBack: jest.fn(),
+      onChange: jest.fn(),
+      onNext: jest.fn(),
+      isBackEnabled: true,
     }
-    subject = shallow(<OptionPanel {...props} />)
+    renderResult = render(<OptionPanel {...props} />)
   })
 
-  it('has the expected class', () => {
-    expect(subject.prop('className')).toEqual('option-panel')
-  })
-
-  describe('back button', () => {
-    it("isn't included by default", () => {
-      expect(subject.find('.back-button').exists()).toEqual(false)
-    })
-
-    it('is optionally included with the expected props', () => {
-      props.isBackEnabled = true
-      subject = shallow(<OptionPanel {...props} />)
-      expect(subject.find('.back-button').props()).toEqual({
-        children: '<<',
-        className: 'back-button',
-        onClick: props.onBack,
-        disabled: false,
-      })
-    })
-
-    it('calls the supplied onBack when clicked', () => {
-      props.isBackEnabled = true
-      subject = shallow(<OptionPanel {...props} />)
-
-      subject.find('.back-button').simulate('click')
-
-      expect(props.onBack).toHaveBeenCalled()
+  it('has the expected options', () => {
+    const list = screen.getByRole('listbox')
+    expect(list.children.length).toEqual(props.options.length)
+    props.options.forEach((option, index) => {
+      expect(list.children[index].textContent).toEqual(option.display)
     })
   })
 
-  describe('select', () => {
-    it('has the expected props', () => {
-      const select = subject.find('.option-select')
-      expect(select.props()).toEqual({
-        className: 'option-select',
-        autoFocus: true,
-        value: 'attack',
-        size: 5,
-        onChange: jasmine.any(Function),
-        onKeyDown: jasmine.any(Function),
-        children: jasmine.any(Array),
-        disabled: false,
-      })
+  it('calls onBack via onKeyDown', () => {
+    fireEvent.keyDown(screen.getByRole('listbox'), {
+      key: 'Escape',
     })
 
-    it('has the expected options', () => {
-      const options = subject.find('option')
-      expect(options.length).toEqual(4)
-      expect(options.at(0).props()).toEqual({
-        value: 'attack',
-        children: 'Attack',
-      })
-      expect(options.at(1).props()).toEqual({
-        value: 'parry',
-        children: 'Parry',
-      })
-      expect(options.at(2).props()).toEqual({
-        value: 'spell',
-        children: 'Spell',
-      })
-      expect(options.at(3).props()).toEqual({
-        value: 'run',
-        children: 'Run',
-      })
-    })
-
-    it('sets the selected value and also calls onChange', () => {
-      let select = subject.find('.option-select')
-      expect(select.prop('value')).toEqual('attack')
-
-      select.simulate('change', { target: { value: 'spell' } })
-
-      expect(props.onChange).toHaveBeenCalledWith('spell')
-      select = subject.find('.option-select')
-      expect(select.prop('value')).toEqual('spell')
-    })
-
-    it('calls onBack via onKeyDown', () => {
-      props.isBackEnabled = true
-      subject = shallow(<OptionPanel {...props} />)
-      const select = subject.find('.option-select')
-
-      select.simulate('keyDown', { key: 'Escape' })
-
-      expect(props.onBack).toHaveBeenCalled()
-    })
-
-    it('calls onNext via onKeyDown', () => {
-      const select = subject.find('.option-select')
-
-      select.simulate('keyDown', { key: 'ArrowRight' })
-
-      expect(props.onNext).toHaveBeenCalledWith('attack')
-    })
-
-    it('updates the selected option via onKeyDown', () => {
-      let select = subject.find('.option-select')
-      expect(select.prop('value')).toEqual('attack')
-
-      select.simulate('keyDown', { key: '4' })
-
-      expect(props.onChange).toHaveBeenCalledWith('run')
-      select = subject.find('.option-select')
-      expect(select.prop('value')).toEqual('run')
-    })
+    expect(props.onBack).toHaveBeenCalled()
   })
 
-  describe('next button ', () => {
-    it('has the expected props', () => {
-      expect(subject.find('.next-button').props()).toEqual({
-        className: 'next-button',
-        children: '>>',
-        onClick: jasmine.any(Function),
-        disabled: false,
-      })
+  it('updates the selected option via onKeyDown', () => {
+    fireEvent.keyDown(screen.getByRole('listbox'), {
+      key: 'Enter',
     })
+    expect(props.onNext).toHaveBeenNthCalledWith(1, props.options[0].value)
 
-    it('calls onNext with the selectedValue when clicked', () => {
-      subject.find('.next-button').simulate('click')
+    fireEvent.keyDown(screen.getByRole('listbox'), { key: '4' })
 
-      expect(props.onNext).toHaveBeenCalledWith('attack')
+    expect(props.onChange).toHaveBeenCalledWith(Command.Run)
+  })
+
+  it('calls onNext with the default option when Enter is pressed', () => {
+    fireEvent.keyDown(screen.getByRole('listbox'), {
+      key: 'Enter',
     })
+    expect(props.onNext).toHaveBeenNthCalledWith(1, props.options[0].value)
+  })
 
-    it('calls onNext with the initialValue when present', () => {
-      props.initialValue = 'spell'
-      subject = shallow(<OptionPanel {...props} />)
-
-      subject.find('.next-button').simulate('click')
-
-      expect(props.onNext).toHaveBeenCalledWith('spell')
+  it('calls onNext with the initialValue when present', () => {
+    fireEvent.keyDown(screen.getByRole('listbox'), {
+      key: 'Enter',
     })
+    expect(props.onNext).toHaveBeenNthCalledWith(1, props.options[0].value)
+
+    props.initialValue = Command.Run
+    renderResult.rerender(<OptionPanel {...props} />)
+
+    fireEvent.keyDown(screen.getByRole('listbox'), {
+      key: 'Enter',
+    })
+    expect(props.onNext).toHaveBeenNthCalledWith(2, Command.Run)
   })
 })

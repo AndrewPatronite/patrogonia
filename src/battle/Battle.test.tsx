@@ -144,7 +144,7 @@ describe('Battle', () => {
   })
 
   describe('PlayerPanel', () => {
-    let playerPanel: any
+    let playerPanel: ShallowWrapper<any>
 
     beforeEach(() => {
       playerPanel = subject.find(PlayerPanel).at(0)
@@ -207,9 +207,9 @@ describe('Battle', () => {
       )
       const selectedEnemyId = '677d615c-32fe-4e8d-9992-3e110f26a185'
 
-      playerPanel.prop('takeTurn')('attack', selectedEnemyId)
+      playerPanel.prop('takeTurn')(Command.Attack, selectedEnemyId)
 
-      expect(takeTurn).toHaveBeenCalledWith('attack', selectedEnemyId)
+      expect(takeTurn).toHaveBeenCalledWith(Command.Attack, selectedEnemyId)
       expect(subject.find(PlayerPanel).exists()).toEqual(false)
       expect(
         subject.find(EnemyDisplay).prop('selectedEnemyId')

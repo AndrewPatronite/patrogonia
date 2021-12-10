@@ -60,6 +60,7 @@ const List = forwardRef(
 
     return (
       <Stack
+        role="listbox"
         ref={ref}
         borderWidth={1}
         height={height}

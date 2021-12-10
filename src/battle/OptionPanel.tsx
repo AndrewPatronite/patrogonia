@@ -4,7 +4,7 @@ import List, { ListOption } from '../control/List'
 import { Box } from '@chakra-ui/react'
 import { advanceFocus } from '../utils'
 
-interface OptionPanelProps {
+export interface OptionPanelProps {
   options: ListOption[]
   onBack?: () => void
   onChange?: (selectedOption: any) => void

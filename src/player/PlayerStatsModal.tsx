@@ -8,15 +8,17 @@ import {
 } from '@chakra-ui/react'
 import { Stats } from './types'
 
+export interface PlayerStatsModalProps {
+  isOpen: boolean
+  onClose: () => void
+  stats: Stats
+}
+
 const PlayerStatsModal = ({
   isOpen,
   onClose,
   stats: playerStats,
-}: {
-  isOpen: boolean
-  onClose: () => void
-  stats: Stats
-}) => (
+}: PlayerStatsModalProps) => (
   <Drawer size="sm" placement="left" onClose={onClose} isOpen={isOpen}>
     <DrawerOverlay />
     <DrawerContent

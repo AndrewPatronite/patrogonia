@@ -7,7 +7,7 @@ import { Stack } from '@chakra-ui/react'
 import { Enemy } from './types'
 import { Player } from '../player'
 
-interface EnemySelectionPanelProps {
+export interface EnemySelectionPanelProps {
   currentPlayer: Player
   enemies: Enemy[]
   action: string

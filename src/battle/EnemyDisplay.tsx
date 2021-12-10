@@ -6,7 +6,7 @@ import { Cave, Field } from './background'
 import { Enemy, LogEntry } from './types'
 import { bestiary } from './bestiary'
 
-interface EnemyDisplayProps {
+export interface EnemyDisplayProps {
   mapName: string
   enemies: Enemy[]
   selectedEnemyId?: string

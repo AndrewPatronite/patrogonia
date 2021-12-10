@@ -1,34 +1,33 @@
 import React from 'react'
-import { shallow } from 'enzyme'
-import PlayerSelectionPanel from './PlayerSelectionPanel'
+import { shallow, ShallowWrapper } from 'enzyme'
+import PlayerSelectionPanel, {
+  PlayerSelectionPanelProps,
+} from './PlayerSelectionPanel'
 import OptionPanel from './OptionPanel'
 import ThemedHeader from '../components/theme/ThemedHeader'
 
 describe('PlayerSelectionPanel', () => {
-  let props
-  let subject
+  let props: PlayerSelectionPanelProps
+  let subject: ShallowWrapper<any>
 
   beforeEach(() => {
     props = {
       players: [
+        //@ts-ignore missing Stats fields
         { playerId: 1, playerName: 'Redwan' },
+        //@ts-ignore missing Stats fields
         { playerId: 2, playerName: 'Orfeo' },
       ],
-      action: Sound.Heal,
-      handleBack: jasmine.createSpy('handleBack'),
-      handleNext: jasmine.createSpy('handleNext'),
+      action: 'Heal',
+      handleBack: jest.fn(),
+      handleNext: jest.fn(),
       isBackEnabled: true,
     }
     subject = shallow(<PlayerSelectionPanel {...props} />)
   })
 
-  it('is a div with the expected className', () => {
-    expect(subject.type()).toEqual('div')
-    expect(subject.prop('className')).toEqual('action-options')
-  })
-
   it('has an action ThemedHeader', () => {
-    expect(subject.find(ThemedHeader).text()).toEqual('Heal')
+    expect(subject.find(ThemedHeader).prop('children')).toEqual('Heal')
   })
 
   describe('OptionPanel', () => {

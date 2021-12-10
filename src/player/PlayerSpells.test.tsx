@@ -1,50 +1,48 @@
-import React, * as ReactAlias from 'react'
-import { shallow, ShallowWrapper } from 'enzyme'
-import PlayerSpells from './PlayerSpells'
-import OptionPanel from '../battle/OptionPanel'
-import ThemedPanel from '../components/theme/ThemedPanel'
+import React from 'react'
+import PlayerSpells, { PlayerSpellsProps } from './PlayerSpells'
 import { Cave, Continent, Town } from '../environment/maps/Maps'
-import { Spell } from './types'
+import { Direction } from '../navigation'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { upperFirst } from 'lodash'
+import { useSound } from '../hooks'
+import { Sound } from '../environment/sound'
+
+jest.mock('../hooks', () => ({
+  useSound: jest.fn(),
+}))
 
 describe('PlayerSpells', () => {
-  let onBack: jasmine.Spy
-  let castSpell: jasmine.Spy
-  let setSpellCast: jasmine.Spy
-  const availableSpells: Spell[] = [
-    { spellName: 'HEAL', mpCost: 5, offensive: false, battleSpell: true },
-    {
-      spellName: 'RETURN',
-      mpCost: 7,
-      offensive: false,
-      battleSpell: false,
-    },
-    {
-      spellName: 'OUTSIDE',
-      mpCost: 7,
-      offensive: false,
-      battleSpell: false,
-    },
-  ]
-  let props: any
-  let subject: ShallowWrapper
+  let props: PlayerSpellsProps
+  let playSound: jest.Mock
 
   beforeEach(() => {
-    onBack = jasmine.createSpy('onBack')
-    castSpell = jasmine.createSpy('castSpell')
-    setSpellCast = jasmine.createSpy('setSpellCast')
-    jest.spyOn(ReactAlias, 'useEffect').mockImplementation((effect) => effect())
-    jest.spyOn(ReactAlias, 'useCallback').mockImplementation((effect) => onBack)
-    jest
-      .spyOn(ReactAlias, 'useState')
-      .mockImplementation(() => [{}, setSpellCast])
+    playSound = jest.fn()
+    ;(useSound as jest.Mock).mockReturnValue({
+      playSound,
+    })
     props = {
       currentPlayer: {
         id: 1,
         name: 'Redwan',
         loggedIn: true,
         battleId: undefined,
-        spells: availableSpells,
+        spells: [
+          { spellName: 'HEAL', mpCost: 5, offensive: false, battleSpell: true },
+          {
+            spellName: 'RETURN',
+            mpCost: 7,
+            offensive: false,
+            battleSpell: false,
+          },
+          {
+            spellName: 'OUTSIDE',
+            mpCost: 7,
+            offensive: false,
+            battleSpell: false,
+          },
+        ],
         stats: {
+          playerId: 1,
           playerName: 'Redwan',
           level: 5,
           hp: 40,
@@ -62,199 +60,93 @@ describe('PlayerSpells', () => {
           mapName: Continent.Atoris,
           rowIndex: 5,
           columnIndex: 7,
-          facing: 'down',
+          facing: Direction.Down,
           entranceName: Cave.LavaGrotto,
         },
         lastUpdate: '',
-        showFieldMenu: true,
-        visited: [Town.Dewhurst],
+        visited: [Town.Dewhurst, Town.Fernsworth, Town.Easthaven],
+        tutorialLessons: [],
       },
-      availableSpells,
-      onBack,
-      castSpell,
+      availableSpells: [
+        { spellName: 'HEAL', mpCost: 5, offensive: false, battleSpell: true },
+        {
+          spellName: 'RETURN',
+          mpCost: 7,
+          offensive: false,
+          battleSpell: false,
+        },
+        {
+          spellName: 'OUTSIDE',
+          mpCost: 7,
+          offensive: false,
+          battleSpell: false,
+        },
+      ],
+      castSpell: jest.fn(),
+      onSpellCast: jest.fn(),
     }
-    subject = shallow(<PlayerSpells {...props} />)
+    render(<PlayerSpells {...props} />)
   })
 
-  it('is a ThemedPanel with the expected class name', () => {
-    expect(subject.type()).toEqual(ThemedPanel)
-    expect(subject.prop('className')).toEqual('player-spells')
-    expect(subject.prop('heading')).toEqual('Spells')
-    expect(subject.prop('flexDirection')).toEqual('column')
-  })
-
-  it('has an OptionPanel for spells', () => {
-    const optionPanel = subject.find(OptionPanel)
-    expect(optionPanel.props()).toEqual({
-      options: [
-        {
-          value: 'HEAL',
-          display: 'Heal',
-        },
-        {
-          value: 'RETURN',
-          display: 'Return',
-        },
-        {
-          value: 'OUTSIDE',
-          display: 'Outside',
-        },
-      ],
-      isBackEnabled: true,
-      onBack: jasmine.any(Function),
-      onNext: jasmine.any(Function),
-      disabled: false,
-      onChange: jasmine.any(Function),
+  it('has a List of spells', () => {
+    const spellList = screen.getByRole('listbox')
+    expect(spellList.children.length).toEqual(props.availableSpells.length)
+    props.availableSpells.forEach(({ spellName }, index) => {
+      expect(spellList.children[index].textContent).toEqual(
+        upperFirst(spellName.toLowerCase())
+      )
     })
   })
 
-  it('selects Heal and shows its cost', () => {
-    const optionPanel = subject.find(OptionPanel)
-    // @ts-ignore
-    optionPanel.prop('onChange')('HEAL')
-    expect(setSpellCast).toHaveBeenCalledWith({
-      name: 'HEAL',
-      targetId: undefined,
-      confirmed: undefined,
-    })
-    setSpellCast.calls.reset()
-    const spellCost = subject.find('.spell-cost')
-    expect(spellCost.text()).toEqual('Cost 5/20')
-    // @ts-ignore
-    optionPanel.prop('onNext')('HEAL')
-    expect(setSpellCast).toHaveBeenCalledWith({
-      name: 'HEAL',
-      targetId: props.currentPlayer.id.toString(),
-      confirmed: true,
-    })
-  })
-
-  it('selects Outside', () => {
-    const optionPanel = subject.find(OptionPanel)
-    // @ts-ignore
-    optionPanel.prop('onChange')('OUTSIDE')
-    expect(setSpellCast).toHaveBeenCalledWith({
-      name: 'OUTSIDE',
-      targetId: undefined,
-      confirmed: undefined,
-    })
-    setSpellCast.calls.reset()
-    // @ts-ignore
-    optionPanel.prop('onNext')('OUTSIDE')
-    expect(setSpellCast).toHaveBeenCalledWith({
-      name: 'OUTSIDE',
-      targetId: props.currentPlayer.location.entranceName,
-      confirmed: true,
+  it('displays the magic cost of each spell', () => {
+    const spellList = screen.getByRole('listbox')
+    props.availableSpells.forEach(({ spellName, mpCost }, index) => {
+      fireEvent.click(spellList.children[index])
+      const formattedSpellName = upperFirst(spellName.toLowerCase())
+      const selectedSpellDescription = screen.getAllByText(
+        formattedSpellName
+      )[1]
+      if (formattedSpellName === 'Return') {
+        expect(selectedSpellDescription?.parentElement?.textContent).toEqual(
+          `${formattedSpellName}to ${props.currentPlayer.visited[0]}MP ${mpCost}/${props.currentPlayer.stats.mp}`
+        )
+      } else {
+        expect(selectedSpellDescription?.parentElement?.textContent).toEqual(
+          `${formattedSpellName}MP ${mpCost}/${props.currentPlayer.stats.mp}`
+        )
+      }
     })
   })
 
-  it('selects Return', () => {
-    const optionPanel = subject.find(OptionPanel)
-    // @ts-ignore
-    optionPanel.prop('onChange')('RETURN')
-    expect(setSpellCast).toHaveBeenCalledWith({
-      name: 'RETURN',
-      targetId: undefined,
-      confirmed: undefined,
-    })
-    setSpellCast.calls.reset()
-    // @ts-ignore
-    optionPanel.prop('onNext')('RETURN')
-    expect(setSpellCast).toHaveBeenCalledWith({
-      name: 'RETURN',
-      targetId: undefined,
-      confirmed: true,
+  it('displays the visited towns for Return spell and includes the town name in the spell description', () => {
+    const returnSpell = screen.getByRole('button', { name: 'Return' })
+    fireEvent.click(returnSpell)
+    const townList = screen.getAllByRole('listbox')[1]
+    expect(townList.children.length).toEqual(props.currentPlayer.visited.length)
+    props.currentPlayer.visited.forEach((townName, index) => {
+      expect(townList.children[index].textContent).toEqual(townName)
+      fireEvent.click(screen.getByRole('button', { name: townName }))
+      const returnSpellDescription = screen.getAllByText('Return')[1]
+      expect(returnSpellDescription?.nextSibling?.textContent).toEqual(
+        `to ${townName}`
+      )
     })
   })
 
-  it("selects no spell if it doesn't find a matching field spell", () => {
-    const optionPanel = subject.find(OptionPanel)
-    // @ts-ignore
-    optionPanel.prop('onNext')('ICE')
-    expect(setSpellCast).not.toHaveBeenCalled()
-  })
-
-  it('has an OptionPanel for a return destination and shows its cost', () => {
-    jest
-      .spyOn(ReactAlias, 'useState')
-      .mockImplementation(() => [
-        { name: 'RETURN', targetId: undefined, confirmed: true },
-        setSpellCast,
-      ])
-    subject = shallow(<PlayerSpells {...props} />)
-    const optionPanel = subject.find(OptionPanel)
-    expect(optionPanel.props()).toEqual({
-      options: [
-        {
-          value: Town.Dewhurst,
-          display: Town.Dewhurst,
-        },
-      ],
-      isBackEnabled: true,
-      onBack: jasmine.any(Function),
-      onNext: jasmine.any(Function),
-      disabled: false,
-    })
-    const spellCost = subject.find('.spell-cost')
-    expect(spellCost.text()).toEqual('Cost 7/20')
-    // @ts-ignore
-    optionPanel.prop('onBack')()
-    expect(setSpellCast).toHaveBeenCalledWith({})
-    setSpellCast.calls.reset()
-  })
-
-  it('casts the chosen spell via useEffect', () => {
-    jest
-      .spyOn(ReactAlias, 'useState')
-      .mockImplementation(() => [
-        { name: 'RETURN', targetId: undefined, confirmed: true },
-        setSpellCast,
-      ])
-    subject = shallow(<PlayerSpells {...props} />)
-    let optionPanel = subject.find(OptionPanel)
-    // @ts-ignore
-    optionPanel.prop('onNext')(Town.Dewhurst)
-    expect(setSpellCast).toHaveBeenCalledWith({
-      name: 'RETURN',
-      targetId: Town.Dewhurst,
-      confirmed: true,
-    })
-
+  fit('displays a spell cast message, plays the spell sound, then a few seconds later casts the chosen spell and calls onSpellCast', () => {
+    fireEvent.click(screen.getByRole('button', { name: 'Return' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Easthaven' }))
+    expect(
+      screen.getAllByText('Return')[1]?.parentElement?.textContent
+    ).toEqual('Returnto EasthavenMP 7/20')
     jest.useFakeTimers()
-    jest
-      .spyOn(ReactAlias, 'useState')
-      .mockImplementation(() => [
-        { name: 'RETURN', targetId: Town.Dewhurst, confirmed: true },
-        setSpellCast,
-      ])
-    subject = shallow(<PlayerSpells {...props} />)
-    optionPanel = subject.find(OptionPanel)
-    expect(optionPanel.prop('disabled')).toEqual(true)
-    const spellStatus = subject.find('.spell-status')
-    expect(spellStatus.text()).toEqual('Redwan cast Return')
+    fireEvent.click(screen.getByRole('button', { name: 'Cast' }))
+    waitFor(() => {
+      screen.getByText(`${props.currentPlayer.name} cast Return.`)
+    })
+    expect(playSound).toHaveBeenCalledWith(Sound.Warp)
     jest.runAllTimers()
-    expect(setTimeout).toHaveBeenCalledWith(jasmine.any(Function), 4000)
-    expect(castSpell).toHaveBeenCalledWith('RETURN', Town.Dewhurst)
-    expect(setSpellCast).toHaveBeenCalledWith({})
-    expect(onBack).toHaveBeenCalled()
-    // @ts-ignore
-    ReactAlias.useEffect.mock.calls[0][0]()()
-    expect(clearTimeout).toHaveBeenCalled()
-  })
-
-  it('has audio for Heal', () => {
-    const healAudio = subject.find('.heal')
-    expect(healAudio.type()).toEqual('audio')
-    expect(healAudio.find('source').prop('src')).toEqual(
-      'zapsplat_fantasy_magic_mystery_glissando_bell_43990.mp3'
-    )
-  })
-
-  it('has audio for Return and Outside', () => {
-    const warpAudio = subject.find('.warp')
-    expect(warpAudio.type()).toEqual('audio')
-    expect(warpAudio.find('source').prop('src')).toEqual(
-      'magic_spell_ascending_metallic_pad.mp3'
-    )
+    expect(props.castSpell).toHaveBeenCalledWith('RETURN', 'Easthaven')
+    expect(props.onSpellCast).toHaveBeenCalled()
   })
 })

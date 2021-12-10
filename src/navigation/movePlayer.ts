@@ -54,7 +54,7 @@ const updatePlayerLocation = (
         location: {
           mapName,
           ...entrance,
-          facing: 'down',
+          facing: Direction.Down,
         },
         tutorialLessons: getCompletedLessons(
           saveGame,

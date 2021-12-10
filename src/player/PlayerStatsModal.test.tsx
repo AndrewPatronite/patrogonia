@@ -1,19 +1,16 @@
-import React, * as ReactAlias from 'react'
-import { shallow, ShallowWrapper } from 'enzyme'
-import PlayerStatsModal from './PlayerStatsModal'
-import PlayerStatsPanel from './PlayerStatsPanel'
-import { Drawer } from '@chakra-ui/react'
+import React from 'react'
+import PlayerStatsModal, { PlayerStatsModalProps } from './PlayerStatsModal'
+import { render, screen } from '@testing-library/react'
 
 describe('PlayerStatsModal', () => {
-  let props: any
-  let subject: ShallowWrapper
+  let props: PlayerStatsModalProps
 
   beforeEach(() => {
-    jest.spyOn(ReactAlias, 'useEffect').mockImplementation((effect) => effect())
     props = {
-      showPlayerStats: true,
-      onClose: jasmine.createSpy('onClose'),
+      isOpen: true,
+      onClose: jest.fn(),
       stats: {
+        playerId: 1,
         playerName: 'Redwan',
         level: 1,
         hp: 9,
@@ -28,35 +25,28 @@ describe('PlayerStatsModal', () => {
         agility: 5,
       },
     }
-    subject = shallow(<PlayerStatsModal {...props} />)
+    render(<PlayerStatsModal {...props} />)
   })
 
-  it('is a Drawer with the expected props', () => {
-    expect(subject.type()).toEqual(Drawer)
-    expect(subject.prop('className')).toEqual('player-stats-modal')
-    expect(subject.prop('isOpen')).toEqual(true)
-    expect(subject.prop('onRequestClose')).toEqual(jasmine.any(Function))
-    expect(subject.prop('style')).toEqual({
-      content: {
-        top: '30%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(5%, 5%)',
-      },
-    })
-    expect(subject.prop('shouldFocusAfterRender')).toEqual(false)
-  })
-
-  it('has a PlayerStatsPanel with the expected props', () => {
-    const playerStats = subject.find(PlayerStatsPanel)
-    expect(playerStats.props()).toEqual({
-      playerStats: props.stats,
-    })
-  })
-
-  it('calls Modal.setAppElement', () => {
-    expect(Modal.setAppElement).toHaveBeenCalledWith('body')
+  it('displays the stats', () => {
+    expect(screen.getByRole('heading').textContent).toEqual('Stats')
+    const stats = screen.getAllByTestId('player-stat')
+    expect(stats.length).toEqual(10)
+    expect(stats[0].textContent).toEqual(`Player${props.stats.playerName}`)
+    expect(stats[1].textContent).toEqual(`Level${props.stats.level}`)
+    expect(stats[2].textContent).toEqual(
+      `HP${props.stats.hp}/${props.stats.hpTotal}`
+    )
+    expect(stats[3].textContent).toEqual(
+      `MP${props.stats.mp}/${props.stats.mpTotal}`
+    )
+    expect(stats[4].textContent).toEqual(`Gold${props.stats.gold}`)
+    expect(stats[5].textContent).toEqual(`XP${props.stats.xp}`)
+    expect(stats[6].textContent).toEqual(
+      `XP till next level${props.stats.xpTillNextLevel}`
+    )
+    expect(stats[7].textContent).toEqual(`Attack${props.stats.attack}`)
+    expect(stats[8].textContent).toEqual(`Defense${props.stats.defense}`)
+    expect(stats[9].textContent).toEqual(`Agility${props.stats.agility}`)
   })
 })

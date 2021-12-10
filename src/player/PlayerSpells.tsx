@@ -13,7 +13,7 @@ const spellSounds: { [index: string]: Sound } = {
   RETURN: Sound.Warp,
 }
 
-interface PlayerSpellsProps extends ThemedPanelProps {
+export interface PlayerSpellsProps extends ThemedPanelProps {
   currentPlayer: Player
   availableSpells: Spell[]
   castSpell: (spellName: string, targetId: string) => void
@@ -40,7 +40,7 @@ const PlayerSpells = ({
   const cast = () => {
     if (spell) {
       setSpellCastMessage(
-        `${playerName} cast ${upperFirst(spell.spellName.toLowerCase())}`
+        `${playerName} cast ${upperFirst(spell.spellName.toLowerCase())}.`
       )
       playSound(spellSounds[spell.spellName])
       setTimeout(() => {

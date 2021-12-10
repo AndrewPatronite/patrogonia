@@ -7,7 +7,7 @@ import { getLesson, LessonEnum, TutorialModal } from '../tutorial'
 import { Command } from './types'
 import { Player, Spell } from '../player'
 
-interface CommandPanelProps {
+export interface CommandPanelProps {
   currentPlayer: Player
   handleCommand: (command: Command | Spell) => void
   mp: number

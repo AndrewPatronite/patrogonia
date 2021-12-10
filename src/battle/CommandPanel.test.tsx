@@ -1,36 +1,43 @@
 import React from 'react'
-import { shallow } from 'enzyme'
-import CommandPanel from './CommandPanel'
+import { shallow, ShallowWrapper } from 'enzyme'
+import CommandPanel, { CommandPanelProps } from './CommandPanel'
 import OptionPanel from './OptionPanel'
 import ThemedHeader from '../components/theme/ThemedHeader'
+import { Command } from './types'
 
 describe('CommandPanel', () => {
-  let props
-  let subject
+  let props: CommandPanelProps
+  let subject: ShallowWrapper<any>
   beforeEach(() => {
     props = {
+      //@ts-ignore missing Player fields
       currentPlayer: {
         spells: [
-          { spellName: 'HEAL', mpCost: 5, battleSpell: true },
-          { spellName: 'FIRE', mpCost: 5, battleSpell: true },
-          { spellName: 'ICE', mpCost: 5, battleSpell: true },
-          { spellName: 'RETURN', mpCost: 5, battleSpell: false },
-          { spellName: 'OUTSIDE', mpCost: 5, battleSpell: false },
+          { spellName: 'HEAL', mpCost: 5, battleSpell: true, offensive: false },
+          { spellName: 'FIRE', mpCost: 5, battleSpell: true, offensive: true },
+          { spellName: 'ICE', mpCost: 5, battleSpell: true, offensive: true },
+          {
+            spellName: 'RETURN',
+            mpCost: 5,
+            battleSpell: false,
+            offensive: false,
+          },
+          {
+            spellName: 'OUTSIDE',
+            mpCost: 5,
+            battleSpell: false,
+            offensive: false,
+          },
         ],
       },
-      handleCommand: jasmine.createSpy('handleCommand'),
+      handleCommand: jest.fn(),
       mp: 10,
     }
     subject = shallow(<CommandPanel {...props} />)
   })
 
-  it('is a div with the expected className', () => {
-    expect(subject.type()).toEqual('div')
-    expect(subject.prop('className')).toEqual('action-options')
-  })
-
   it('has a command label', () => {
-    expect(subject.find(ThemedHeader).text()).toEqual('Command')
+    expect(subject.find(ThemedHeader).prop('children')).toEqual('Command')
   })
 
   describe('OptionPanel', () => {
@@ -40,39 +47,42 @@ describe('CommandPanel', () => {
         options: [
           {
             display: 'Attack',
-            value: 'attack',
+            value: Command.Attack,
           },
           {
             display: 'Heal',
-            value: JSON.stringify({
+            value: {
               spellName: 'HEAL',
               mpCost: 5,
               battleSpell: true,
-            }),
+              offensive: false,
+            },
           },
           {
             display: 'Fire',
-            value: JSON.stringify({
+            value: {
               spellName: 'FIRE',
               mpCost: 5,
               battleSpell: true,
-            }),
+              offensive: true,
+            },
           },
           {
             display: 'Ice',
-            value: JSON.stringify({
+            value: {
               spellName: 'ICE',
               mpCost: 5,
               battleSpell: true,
-            }),
+              offensive: true,
+            },
           },
           {
             display: 'Parry',
-            value: 'parry',
+            value: Command.Parry,
           },
           {
             display: 'Run',
-            value: 'run',
+            value: Command.Run,
           },
         ],
         onNext: props.handleCommand,
@@ -88,15 +98,15 @@ describe('CommandPanel', () => {
         options: [
           {
             display: 'Attack',
-            value: 'attack',
+            value: Command.Attack,
           },
           {
             display: 'Parry',
-            value: 'parry',
+            value: Command.Parry,
           },
           {
             display: 'Run',
-            value: 'run',
+            value: Command.Run,
           },
         ],
         onNext: props.handleCommand,

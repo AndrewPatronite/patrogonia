@@ -1,35 +1,55 @@
 import React from 'react'
-import { shallow } from 'enzyme'
-import PlayerTurnWizard from './PlayerTurnWizard'
+import { shallow, ShallowWrapper } from 'enzyme'
+import PlayerTurnWizard, { PlayerTurnWizardProps } from './PlayerTurnWizard'
 import CommandPanel from './CommandPanel'
 import EnemySelectionPanel from './EnemySelectionPanel'
 import PlayerSelectionPanel from './PlayerSelectionPanel'
+import { Player, Spell } from '../player'
+import { Command, EnemyName } from './types'
 
 describe('PlayerTurnWizard', () => {
-  const currentPlayer = {
+  //@ts-ignore missing Player fields
+  const currentPlayer: Player = {
     id: 1,
     name: 'Redwan',
+    tutorialLessons: [],
   }
-  const anotherPlayer = {
+  //@ts-ignore missing Player fields
+  const anotherPlayer: Player = {
     id: 2,
     name: 'Andy',
   }
+  const iceSpell: Spell = {
+    spellName: 'ICE',
+    battleSpell: true,
+    offensive: true,
+    mpCost: 5,
+  }
+  const healSpell: Spell = {
+    spellName: 'HEAL',
+    battleSpell: true,
+    offensive: false,
+    mpCost: 5,
+  }
   const anotherEnemyId = 'cccc123'
-  let props
-  let subject
+  let props: PlayerTurnWizardProps
+  let subject: ShallowWrapper
 
   beforeEach(() => {
     props = {
       currentPlayer,
+      //@ts-ignore missing Player fields
       players: [currentPlayer, anotherPlayer],
       enemies: [
-        { id: 'abcdef123123', name: 'Skeleton', stats: { hp: 20 } },
-        { id: anotherEnemyId, name: 'Knight', stats: { hp: 25 } },
+        { id: 'abcdef123123', name: EnemyName.Skeleton, stats: { hp: 20 } },
+        { id: anotherEnemyId, name: EnemyName.Knight, stats: { hp: 25 } },
       ],
-      selectEnemy: jasmine.createSpy('selectEnemy'),
-      takeTurn: jasmine.createSpy('takeTurn'),
+      selectEnemy: jest.fn(),
+      takeTurn: jest.fn(),
       selectedEnemyId: 'abcdef123123',
       playerTurnEnabled: true,
+      mp: 5,
+      updatePlayer: jest.fn(),
     }
     subject = shallow(<PlayerTurnWizard {...props} />)
   })
@@ -39,35 +59,32 @@ describe('PlayerTurnWizard', () => {
       const commandPanel = subject.find(CommandPanel)
       expect(commandPanel.props()).toEqual({
         currentPlayer,
-        handleCommand: jasmine.any(Function),
+        handleCommand: expect.any(Function),
+        mp: props.mp,
       })
     })
 
     it('submits turn if command is "parry"', () => {
       const commandPanel = subject.find(CommandPanel)
-      commandPanel.prop('handleCommand')('parry')
-      expect(props.takeTurn).toHaveBeenCalledWith('parry')
+      commandPanel.prop('handleCommand')(Command.Parry)
+      expect(props.takeTurn).toHaveBeenCalledWith(Command.Parry)
     })
 
     it('submits turn if command is "run"', () => {
       const commandPanel = subject.find(CommandPanel)
-      commandPanel.prop('handleCommand')('run')
-      expect(props.takeTurn).toHaveBeenCalledWith('run')
+      commandPanel.prop('handleCommand')(Command.Run)
+      expect(props.takeTurn).toHaveBeenCalledWith(Command.Run)
     })
 
     it('advances to EnemySelectionPanel if command is "attack"', () => {
       const commandPanel = subject.find(CommandPanel)
-      commandPanel.prop('handleCommand')('attack')
+      commandPanel.prop('handleCommand')(Command.Attack)
       expect(props.takeTurn).not.toHaveBeenCalled()
       expect(subject.find(EnemySelectionPanel).exists()).toEqual(true)
     })
 
     it('advances to EnemySelectionPanel if command is an offensive spell', () => {
       const commandPanel = subject.find(CommandPanel)
-      const iceSpell = JSON.stringify({
-        spellName: 'ICE',
-        offensive: true,
-      })
       commandPanel.prop('handleCommand')(iceSpell)
       expect(props.takeTurn).not.toHaveBeenCalled()
       expect(subject.find(EnemySelectionPanel).exists()).toEqual(true)
@@ -75,7 +92,6 @@ describe('PlayerTurnWizard', () => {
 
     it('advances to PlayerSelectionPanel if command is a defensive spell', () => {
       const commandPanel = subject.find(CommandPanel)
-      const healSpell = JSON.stringify({ spellName: 'HEAL' })
       commandPanel.prop('handleCommand')(healSpell)
       expect(props.takeTurn).not.toHaveBeenCalled()
       expect(subject.find(PlayerSelectionPanel).exists()).toEqual(true)
@@ -83,20 +99,21 @@ describe('PlayerTurnWizard', () => {
   })
 
   describe('attack - EnemySelectionPanel', () => {
-    let enemySelectionPanel
+    let enemySelectionPanel: ShallowWrapper<any>
 
     beforeEach(() => {
       const commandPanel = subject.find(CommandPanel)
-      commandPanel.prop('handleCommand')('attack')
+      commandPanel.prop('handleCommand')(Command.Attack)
       enemySelectionPanel = subject.find(EnemySelectionPanel)
     })
 
     it('is a EnemySelectionPanel with the expected props', () => {
       expect(enemySelectionPanel.props()).toEqual({
+        currentPlayer,
         enemies: props.enemies,
-        action: 'attack',
-        handleBack: jasmine.any(Function),
-        handleNext: jasmine.any(Function),
+        action: Command.Attack,
+        handleBack: expect.any(Function),
+        handleNext: expect.any(Function),
         selectEnemy: props.selectEnemy,
         selectedEnemyId: props.selectedEnemyId,
         playerTurnEnabled: props.playerTurnEnabled,
@@ -114,8 +131,15 @@ describe('PlayerTurnWizard', () => {
     it('submits the turn onNext', () => {
       enemySelectionPanel.prop('handleNext')(props.selectedEnemyId)
 
+      expect(props.updatePlayer).toHaveBeenCalledWith({
+        ...currentPlayer,
+        tutorialLessons: [
+          ...currentPlayer.tutorialLessons,
+          'BattleCommandLesson',
+        ],
+      })
       expect(props.takeTurn).toHaveBeenCalledWith(
-        'attack',
+        Command.Attack,
         props.selectedEnemyId
       )
     })
@@ -128,8 +152,7 @@ describe('PlayerTurnWizard', () => {
   })
 
   describe('offensive spell - EnemySelectionPanel', () => {
-    const iceSpell = JSON.stringify({ spellName: 'ICE', offensive: true })
-    let enemySelectionPanel
+    let enemySelectionPanel: ShallowWrapper<any>
 
     beforeEach(() => {
       const commandPanel = subject.find(CommandPanel)
@@ -139,10 +162,11 @@ describe('PlayerTurnWizard', () => {
 
     it('is a EnemySelectionPanel with the expected props', () => {
       expect(enemySelectionPanel.props()).toEqual({
+        currentPlayer,
         enemies: props.enemies,
         action: 'Ice',
-        handleBack: jasmine.any(Function),
-        handleNext: jasmine.any(Function),
+        handleBack: expect.any(Function),
+        handleNext: expect.any(Function),
         selectEnemy: props.selectEnemy,
         selectedEnemyId: props.selectedEnemyId,
         playerTurnEnabled: props.playerTurnEnabled,
@@ -160,6 +184,13 @@ describe('PlayerTurnWizard', () => {
     it('submits the turn onNext', () => {
       enemySelectionPanel.prop('handleNext')(props.selectedEnemyId)
 
+      expect(props.updatePlayer).toHaveBeenCalledWith({
+        ...currentPlayer,
+        tutorialLessons: [
+          ...currentPlayer.tutorialLessons,
+          'BattleTargetLesson',
+        ],
+      })
       expect(props.takeTurn).toHaveBeenCalledWith('Ice', props.selectedEnemyId)
     })
 
@@ -171,8 +202,7 @@ describe('PlayerTurnWizard', () => {
   })
 
   describe('defensive spell - PlayerSelectionPanel', () => {
-    const healSpell = JSON.stringify({ spellName: 'HEAL' })
-    let playerSelectionPanel
+    let playerSelectionPanel: ShallowWrapper<any>
 
     beforeEach(() => {
       const commandPanel = subject.find(CommandPanel)
@@ -184,8 +214,8 @@ describe('PlayerTurnWizard', () => {
       expect(playerSelectionPanel.props()).toEqual({
         players: props.players,
         action: 'Heal',
-        handleBack: jasmine.any(Function),
-        handleNext: jasmine.any(Function),
+        handleBack: expect.any(Function),
+        handleNext: expect.any(Function),
         isBackEnabled: true,
       })
     })

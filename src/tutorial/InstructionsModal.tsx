@@ -21,6 +21,7 @@ import {
 import NpcLesson from './NpcLesson'
 import IntroductionLesson from '../tutorial/introduction/Introduction'
 import CaveExplorationLesson from './CaveExplorationLesson'
+import { Command } from '../battle/types'
 
 interface LessonEntry {
   name: string
@@ -61,7 +62,7 @@ const InstructionsModal = () => {
             { value: 'HEAL', display: 'Heal' },
             { value: 'ICE', display: 'Ice' },
             { value: 'PARRY', display: 'Parry' },
-            { value: 'RUN', display: 'run' },
+            { value: 'RUN', display: Command.Run },
           ]}
         />
       ),

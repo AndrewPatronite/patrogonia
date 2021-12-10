@@ -7,7 +7,7 @@ import { LessonEnum, recordLesson } from '../tutorial'
 import { Command, Enemy } from './types'
 import { Player, Spell, Stats } from '../player'
 
-interface PlayerTurnWizardProps {
+export interface PlayerTurnWizardProps {
   currentPlayer: Player
   players: Stats[]
   enemies: Enemy[]
