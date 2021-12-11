@@ -133,6 +133,8 @@ describe('Battle', () => {
         showDismiss: false,
         battleStatusStyle: direBattleStatusStyle,
         allMessagesDelivered: false,
+        typing: false,
+        setTyping: expect.any(Function),
       })
     })
 

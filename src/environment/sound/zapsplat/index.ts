@@ -6,5 +6,14 @@ const LevelUpSound = require('./cartoon_success_fanfair.mp3').default
 const PartyDestroyedSound = require('./cartoon_fail_strings_trumpet.mp3')
   .default
 const WarpSound = require('./magic_spell_ascending_metallic_pad.mp3').default
+const TalkingSound = require('./zapsplat_multimedia_game_sound_retro_blip_022_29554.mp3')
+  .default
 
-export { HealingSound, IceSound, LevelUpSound, PartyDestroyedSound, WarpSound }
+export {
+  HealingSound,
+  IceSound,
+  LevelUpSound,
+  PartyDestroyedSound,
+  TalkingSound,
+  WarpSound,
+}

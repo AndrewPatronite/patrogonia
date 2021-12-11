@@ -1,3 +1,5 @@
+// noinspection JSUnusedLocalSymbols
+
 import { Legend } from './Legend'
 import { Entrance, Map } from './types'
 import { Alastair, Barnaby, Nigel, Tristan } from '../../npcs'

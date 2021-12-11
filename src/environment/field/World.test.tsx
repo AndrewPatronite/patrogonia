@@ -28,6 +28,12 @@ jest.mock('../../hooks', () => ({
   usePlayer: jest.fn(),
   useNpcMovementEffect: jest.fn(),
 }))
+jest.mock(
+  'react-typist',
+  () => ({ children }: { children: JSX.Element | JSX.Element[] }) => (
+    <span>{children}</span>
+  )
+)
 
 describe('World', () => {
   const { WATER: W, GRASS: G } = Legend.symbols

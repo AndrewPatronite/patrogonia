@@ -8,6 +8,7 @@ export enum Sound {
   LevelUp = 'level-up',
   PartyDestroyed = 'party-destroyed',
   PlayerAttack = 'player-attack',
+  Talking = 'talking',
   TownMusic = 'town-music',
   Warp = 'warp',
 }

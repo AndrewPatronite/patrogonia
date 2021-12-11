@@ -73,6 +73,7 @@
         "@types/bcryptjs": "^2.4.2",
         "@types/enzyme-adapter-react-16": "^1.0.6",
         "@types/preval.macro": "^3.0.0",
+        "@types/react-typist": "^2.0.3",
         "prettier": "2.0.4",
         "prettier-eslint": "^9.0.1",
         "react-app-rewired": "^2.1.5"

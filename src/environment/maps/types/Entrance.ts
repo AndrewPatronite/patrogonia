@@ -1,4 +1,4 @@
 export default interface Entrance {
-    rowIndex: number,
-    columnIndex: number
+  rowIndex: number
+  columnIndex: number
 }

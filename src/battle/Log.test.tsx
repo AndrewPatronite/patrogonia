@@ -7,6 +7,12 @@ import { useSound } from '../hooks'
 jest.mock('../hooks', () => ({
   useSound: jest.fn(),
 }))
+jest.mock(
+  'react-typist',
+  () => ({ children }: { children: JSX.Element | JSX.Element[] }) => (
+    <span>{children}</span>
+  )
+)
 
 describe('Log', () => {
   const originalScrollIntoView = window.HTMLElement.prototype.scrollIntoView
@@ -30,6 +36,8 @@ describe('Log', () => {
       showDismiss: false,
       battleStatusStyle: { border: '2px solid #e31e2d' },
       allMessagesDelivered: true,
+      typing: false,
+      setTyping: jest.fn(),
     }
     renderResult = render(<Log {...props} />)
   })

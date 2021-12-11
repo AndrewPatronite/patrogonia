@@ -66,8 +66,8 @@ const Credits = () => {
               http://www.irishacts.com
             </Link>
 
-            <ThemedHeader marginTop="2rem" marginBottom="0">
-              Trumpet and spell sound effects
+            <ThemedHeader marginTop="2rem" marginBottom="0" minWidth="25rem">
+              Trumpet, spell, and dialogue sound effects
             </ThemedHeader>
             <Link isExternal href="https://www.zapsplat.com" width="12rem">
               https://www.zapsplat.com

@@ -6,6 +6,7 @@ import {
   IceSound,
   LevelUpSound,
   PartyDestroyedSound,
+  TalkingSound,
   WarpSound,
 } from './zapsplat'
 import { SoundAudio } from './SoundAudio'
@@ -22,6 +23,7 @@ export {
   PlayerAttackSound,
   Sound,
   SoundAudio,
+  TalkingSound,
   TownMusic,
   WarpSound,
 }

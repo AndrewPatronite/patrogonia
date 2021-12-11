@@ -1,7 +1,7 @@
 import { getMapDisplayRange } from './getMapDisplayRange'
 import { Legend } from '../../maps/Legend'
-import Player from '../../../player/Player'
 import { Map } from '../../maps'
+import { Player } from '../../../player'
 
 describe('getMapDisplayRange', () => {
   const { WATER: W, GRASS: G } = Legend.symbols

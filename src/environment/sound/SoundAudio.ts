@@ -9,6 +9,7 @@ import {
   PartyDestroyedSound,
   PlayerAttackSound,
   Sound,
+  TalkingSound,
   TownMusic,
   WarpSound,
 } from '.'
@@ -31,4 +32,5 @@ export const SoundAudio: { [key in Sound]: HTMLAudioElement } = {
   [Sound.Heal]: new Audio(HealingSound),
   [Sound.Ice]: new Audio(IceSound),
   [Sound.Warp]: new Audio(WarpSound),
+  [Sound.Talking]: new Audio(TalkingSound),
 }

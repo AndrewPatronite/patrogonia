@@ -1,7 +1,6 @@
 import { Direction } from '../navigation'
 import Npc, { NpcType } from './Npc'
 import React from 'react'
-import { Text } from '@chakra-ui/react'
 
 export enum NpcName {
   Alastair = 'Alastair',
@@ -73,7 +72,7 @@ export const Tristan: Npc = {
 
 const NPC_DIALOG: { [index in NpcName]: string | JSX.Element } = {
   [NpcName.Alastair]: (
-    <Text>
+    <span>
       The marketplace and hostel are vacant and the villagers seem to have
       vanished.
       <br />
@@ -82,25 +81,24 @@ const NPC_DIALOG: { [index in NpcName]: string | JSX.Element } = {
       <br />
       <br />
       Beware, fierce monsters lurk there.
-    </Text>
+    </span>
   ),
   [NpcName.Barnaby]: (
-    <Text>
+    <span>
       You should visit towns often to restore your health and save your game.
       <br />
-      <br />
-      You can access your field menu by pressing Enter.
+      <br /> You can access your field menu by pressing Enter.
       <br />
       <br />
       View stats, cast spells, change settings, or log out.
-    </Text>
+    </span>
   ),
   [NpcName.Finlay]: (
-    <Text>
+    <span>
       Where is everyone?
       <br />
       <br />I stopped here on my way to Easthaven and nary a soul to be found.
-    </Text>
+    </span>
   ),
   [NpcName.Nigel]: 'Morning guv!',
   [NpcName.Tristan]: 'Hallo hallo!',

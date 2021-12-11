@@ -1,3 +1,5 @@
+// noinspection HtmlUnknownTarget
+
 import { Flex, Modal, ModalContent } from '@chakra-ui/react'
 import React, { ReactNode } from 'react'
 import ThemedPanel from './theme/ThemedPanel'

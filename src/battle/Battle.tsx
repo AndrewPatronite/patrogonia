@@ -21,6 +21,7 @@ const Battle = () => {
   } = currentPlayer
   const [selectedEnemyId, selectEnemy] = useState<string>()
   const [playerTurnEnabled, setPlayerTurnEnabled] = useState<boolean>(true)
+  const [typing, setTyping] = useState(false)
   const players = values(playerStats)
   const battleStatusStyle = getBattleStatusStyle(players)
   const battleEnded = !!status && isBattleEnded(status)
@@ -67,8 +68,10 @@ const Battle = () => {
         showDismiss={battleEnded}
         battleStatusStyle={battleStatusStyle}
         allMessagesDelivered={allMessagesDelivered}
+        typing={typing}
+        setTyping={setTyping}
       />
-      {!battleEnded && playerTurnEnabled && (
+      {!battleEnded && playerTurnEnabled && !typing && (
         <Flex flex="1 1 auto" maxHeight="14.75rem" margin="0 1px 1px 1px">
           {players.map((playerStat) => (
             <PlayerPanel

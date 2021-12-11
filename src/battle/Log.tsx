@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
+import Typist from 'react-typist'
 import { isEmpty } from 'lodash'
 import ThemedPanel from '../components/theme/ThemedPanel'
 import { Box, Button, Stack, Text } from '@chakra-ui/react'
@@ -19,6 +20,8 @@ export interface LogProps {
   showDismiss: boolean
   battleStatusStyle: BattleStatusStyle
   allMessagesDelivered: boolean
+  typing: boolean
+  setTyping: (typing: boolean) => void
 }
 
 export interface DeliveredLogEntries {
@@ -31,6 +34,8 @@ const Log = ({
   showDismiss,
   battleStatusStyle,
   allMessagesDelivered,
+  typing,
+  setTyping,
 }: LogProps) => {
   const { playSound, pauseSound } = useSound()
   const [logEntryMusicPlayed, setLogEntryMusicPlayed] = useState<
@@ -39,7 +44,7 @@ const Log = ({
   const scrollTo = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    scrollTo?.current?.scrollIntoView()
+    scrollTo?.current?.scrollIntoView && scrollTo?.current?.scrollIntoView()
   })
 
   useLayoutEffect(() => {
@@ -91,10 +96,23 @@ const Log = ({
     >
       <Stack spacing="0.5rem" data-testid="battle-log">
         {!isEmpty(deliveredEntries) &&
-          deliveredEntries.map((entry, index) => (
-            <Text key={index}>{entry.content}</Text>
-          ))}
-        {showDismiss && allMessagesDelivered && (
+          deliveredEntries.map((entry, index) =>
+            index === deliveredEntries.length - 1 ? (
+              <Typist
+                key={index}
+                avgTypingDelay={5}
+                stdTypingDelay={10}
+                cursor={{ show: false }}
+                onCharacterTyped={() => setTyping(true)}
+                onTypingDone={() => setTyping(false)}
+              >
+                {entry.content}
+              </Typist>
+            ) : (
+              <Text key={index}>{entry.content}</Text>
+            )
+          )}
+        {showDismiss && allMessagesDelivered && !typing && (
           <Button
             autoFocus={true}
             alignSelf="flex-start"

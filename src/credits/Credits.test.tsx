@@ -68,7 +68,7 @@ describe('Credits', () => {
 
     it('has credits for the Trumpet sound effects', () => {
       const heading = screen.getByRole('heading', {
-        name: 'Trumpet and spell sound effects',
+        name: 'Trumpet, spell, and dialogue sound effects',
       })
       expect(heading).toBeInTheDocument()
       verifyLink(

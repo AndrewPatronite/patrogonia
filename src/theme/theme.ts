@@ -1,3 +1,5 @@
+// noinspection JSUnusedGlobalSymbols
+
 import { extendTheme, ThemeConfig } from '@chakra-ui/react'
 
 export enum ColorMode {

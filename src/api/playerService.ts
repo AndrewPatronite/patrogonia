@@ -89,7 +89,7 @@ export const loadSave = (
   onSuccess: () => void,
   onFailure: (error: any) => void
 ) => {
-  return axiosInstance
+  axiosInstance
     .put(`/loadSave/${playerId}`)
     .then((response) => {
       if (response.status === HttpStatus.Ok) {
