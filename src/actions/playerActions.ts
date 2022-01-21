@@ -59,7 +59,8 @@ export const loadPlayer = (
 ) =>
   getPlayer(
     playerId,
-    (player: Player) => storeAndDispatchPlayerUpdate(dispatch, player),
+    (player: Player) =>
+      storeAndDispatchPlayerUpdate(dispatch, { ...player, loggedIn: true }),
     onFailure
   )
 
