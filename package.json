@@ -20,7 +20,7 @@
         "bcryptjs": "^2.4.3",
         "enzyme": "^3.11.0",
         "enzyme-adapter-react-16": "^1.15.2",
-        "express": "^4.17.1",
+        "express": "^4.17.3",
         "font-awesome": "^4.7.0",
         "formik": "^2.2.9",
         "framer-motion": "^4.1.17",
