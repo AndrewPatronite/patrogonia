@@ -12,4 +12,4 @@ export {
   PartyDestroyedSound,
   TalkingSound,
   WarpSound,
-}
+};

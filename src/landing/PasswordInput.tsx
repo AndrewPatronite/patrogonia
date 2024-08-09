@@ -1,15 +1,15 @@
-import { Button, Stack } from '@chakra-ui/react'
-import React, { ChangeEventHandler, useState } from 'react'
-import { Input } from '../control'
+import { Button, Stack } from '@chakra-ui/react';
+import React, { ChangeEventHandler, useState } from 'react';
+import { Input } from '../control';
 
 interface PasswordInputProps {
-  password: string
-  confirmedPassword?: string
-  onBlur: (e: { target: { name: string } }) => void
-  onChange: ChangeEventHandler
-  doConfirm?: boolean
-  passwordErrorMessage?: string
-  confirmedPasswordErrorMessage?: string
+  password: string;
+  confirmedPassword?: string;
+  onBlur: (e: { target: { name: string } }) => void;
+  onChange: ChangeEventHandler;
+  doConfirm?: boolean;
+  passwordErrorMessage?: string;
+  confirmedPasswordErrorMessage?: string;
 }
 
 const PasswordInput = ({
@@ -21,7 +21,7 @@ const PasswordInput = ({
   passwordErrorMessage,
   confirmedPasswordErrorMessage,
 }: PasswordInputProps) => {
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <Stack spacing="1rem">
@@ -62,7 +62,7 @@ const PasswordInput = ({
         {showPassword ? 'Hide' : 'Show'}
       </Button>
     </Stack>
-  )
-}
+  );
+};
 
-export default PasswordInput
+export default PasswordInput;

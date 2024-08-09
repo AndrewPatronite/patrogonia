@@ -1,4 +1,4 @@
 export default interface PlayerAction {
-  action: string
-  targetId: string
+  action: string;
+  targetId: string;
 }

@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { PlayerContext } from '../context'
-import { RootState } from '../redux'
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { PlayerContext } from '../context';
+import { RootState } from '../redux';
 import {
   castSpell,
   createAccount,
@@ -9,19 +9,19 @@ import {
   loadSave,
   login,
   updatePlayer,
-} from '../actions'
-import { useToastErrorHandler } from './useToastErrorHandler'
-import { Player } from '../player'
+} from '../actions';
+import { useToastErrorHandler } from './useToastErrorHandler';
+import { Player } from '../player';
 
 const PlayerProvider = ({
   children,
 }: {
-  children: JSX.Element | JSX.Element[]
+  children: JSX.Element | JSX.Element[];
 }) => {
-  const displayError = useToastErrorHandler()
-  const dispatch = useDispatch()
+  const displayError = useToastErrorHandler();
+  const dispatch = useDispatch();
 
-  const currentPlayer = useSelector((state: RootState) => state.currentPlayer)
+  const currentPlayer = useSelector((state: RootState) => state.currentPlayer);
 
   const playerState = {
     castSpell: useCallback(
@@ -55,16 +55,16 @@ const PlayerProvider = ({
           saveGame,
           updateToServer,
           displayError
-        )
+        );
       },
       [dispatch, displayError]
     ),
-  }
+  };
   return (
     <PlayerContext.Provider value={playerState}>
       {children}
     </PlayerContext.Provider>
-  )
-}
+  );
+};
 
-export default PlayerProvider
+export default PlayerProvider;

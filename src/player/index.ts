@@ -1,3 +1,3 @@
-import { Location, Player, Spell, Stats } from './types'
+import { Location, Player, Spell, Stats } from './types';
 
-export type { Location, Player, Spell, Stats }
+export type { Location, Player, Spell, Stats };

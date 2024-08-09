@@ -1,16 +1,19 @@
-import React from 'react'
-import { filter, find, isEqual } from 'lodash'
-import { Maps } from '../environment/maps/Maps'
-import { Box, Flex } from '@chakra-ui/react'
-import { Cave, Field } from './background'
-import { Enemy, LogEntry } from './types'
-import { bestiary } from './bestiary'
+import React from 'react';
+import filter from 'lodash/filter';
+import find from 'lodash/find';
+import isEqual from 'lodash/isEqual';
+import { isField } from '../environment/maps/Maps';
+import { Box, Flex } from '@chakra-ui/react';
+import { Cave, Field } from './background';
+import { Enemy, LogEntry } from './types';
+import { bestiary } from './bestiary';
+import { MapName } from '../environment/maps/types';
 
 export interface EnemyDisplayProps {
-  mapName: string
-  enemies: Enemy[]
-  selectedEnemyId?: string
-  deliveredLogEntries: LogEntry[]
+  mapName: MapName;
+  enemies: Enemy[];
+  selectedEnemyId?: string;
+  deliveredLogEntries: LogEntry[];
 }
 
 const EnemyDisplay = ({
@@ -24,13 +27,13 @@ const EnemyDisplay = ({
       deliveredLogEntries,
       ({ content, targetId }) =>
         content.includes('defeated') && isEqual(enemyId, targetId)
-    )
+    );
   const displayedEnemies = filter(
     enemies,
     ({ id: enemyId, stats: enemyStats }) => {
-      return enemyStats.hp > 0 || enemyDefeatNotYetReported(enemyId)
+      return enemyStats.hp > 0 || enemyDefeatNotYetReported(enemyId);
     }
-  )
+  );
 
   return (
     <Flex
@@ -41,7 +44,7 @@ const EnemyDisplay = ({
       backgroundSize="cover"
       backgroundColor="white"
       margin="1px"
-      backgroundImage={Maps.isField(mapName) ? Field : Cave}
+      backgroundImage={isField(mapName) ? Field : Cave}
     >
       {displayedEnemies.map(({ id, name }) => (
         <Box
@@ -59,7 +62,7 @@ const EnemyDisplay = ({
         />
       ))}
     </Flex>
-  )
-}
+  );
+};
 
-export default EnemyDisplay
+export default EnemyDisplay;

@@ -1,6 +1,6 @@
-import Player from './Player'
+import Player from './Player';
 
 export default interface CredentialedPlayer extends Player {
-  username: string
-  password: string
+  username: string;
+  password: string;
 }

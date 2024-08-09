@@ -1,10 +1,10 @@
-import { Box, Flex, Icon, Image, Stack, Text } from '@chakra-ui/react'
-import { FaCampground } from 'react-icons/fa'
-import Camping from './screenshots/camping.png'
-import React from 'react'
+import { Box, Flex, Icon, Image, Stack, Text } from '@chakra-ui/react';
+import { FaCampground } from 'react-icons/fa';
+import Camping from './screenshots/camping.png';
+import React from 'react';
 
 interface CampingPlayerProps {
-  isCompact: boolean
+  isCompact: boolean;
 }
 
 const CampingPlayer = ({ isCompact }: CampingPlayerProps) => (
@@ -23,6 +23,6 @@ const CampingPlayer = ({ isCompact }: CampingPlayerProps) => (
       src={Camping}
     />
   </Flex>
-)
+);
 
-export default CampingPlayer
+export default CampingPlayer;

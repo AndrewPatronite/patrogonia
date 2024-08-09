@@ -1,3 +1,3 @@
-import { subscribe } from './subscribe'
+import { subscribe } from './subscribe';
 
-export { subscribe }
+export { subscribe };

@@ -1,3 +1,3 @@
-import CaptionModal from './CaptionModal'
+import CaptionModal from './CaptionModal';
 
-export { CaptionModal }
+export { CaptionModal };

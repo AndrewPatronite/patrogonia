@@ -1,19 +1,19 @@
-import { createContext } from 'react'
-import { getInitialPlayer } from '../redux'
-import { Player } from '../player'
+import { createContext } from 'react';
+import { getInitialPlayer } from '../redux';
+import { Player } from '../player';
 
 interface PlayerState {
-  castSpell: (spellName: string, targetId: string) => void
-  createAccount: (player: Player) => void
-  currentPlayer: Player
-  loadPlayer: (playerId: number) => void
-  loadSave: (playerId: number) => void
-  login: (username: string, password: string) => void
+  castSpell: (spellName: string, targetId: string) => void;
+  createAccount: (player: Player) => void;
+  currentPlayer: Player;
+  loadPlayer: (playerId: number) => void;
+  loadSave: (playerId: number) => void;
+  login: (username: string, password: string) => void;
   updatePlayer: (
     player: Player,
     saveGame?: boolean,
     updateToServer?: boolean
-  ) => void
+  ) => void;
 }
 
 const PlayerContext = createContext<PlayerState>({
@@ -24,6 +24,6 @@ const PlayerContext = createContext<PlayerState>({
   loadSave: () => {},
   login: () => {},
   updatePlayer: () => {},
-})
+});
 
-export default PlayerContext
+export default PlayerContext;

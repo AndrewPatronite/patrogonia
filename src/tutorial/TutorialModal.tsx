@@ -4,22 +4,22 @@ import {
   DrawerContent,
   Flex,
   HStack,
-} from '@chakra-ui/react'
-import React, { useEffect } from 'react'
-import ThemedPanel from '../components/theme/ThemedPanel'
-import { hasCompletedLesson } from './lessonUtils'
-import { useModalState } from '../hooks'
-import Character from '../player/Character'
-import { Lesson } from './Lesson'
-import { ModalEnum } from '../context'
-import { Direction } from '../navigation'
-import { Player } from '../player'
+} from '@chakra-ui/react';
+import React, { useEffect } from 'react';
+import ThemedPanel from '../components/theme/ThemedPanel';
+import { hasCompletedLesson } from './lessonUtils';
+import { useModalState } from '../hooks';
+import Character from '../player/Character';
+import { Lesson } from './Lesson';
+import { ModalEnum } from '../context';
+import { Direction } from '../navigation';
+import { Player } from '../player';
 
 interface TutorialModalProps {
-  player: Player
-  lesson: Lesson
-  lessonProps?: any
-  focusModal?: boolean
+  player: Player;
+  lesson: Lesson;
+  lessonProps?: any;
+  focusModal?: boolean;
 }
 
 const TutorialModal = ({
@@ -28,22 +28,22 @@ const TutorialModal = ({
   lessonProps,
   focusModal = false,
 }: TutorialModalProps) => {
-  const { isModalOpen, openModal, closeModal } = useModalState()
+  const { isModalOpen, openModal, closeModal } = useModalState();
   const NextLesson = hasCompletedLesson(player, lesson.name)
     ? null
-    : lesson.component
+    : lesson.component;
 
   useEffect(() => {
     if (NextLesson) {
       if (!isModalOpen(ModalEnum.Tutorial)) {
-        openModal(ModalEnum.Tutorial)
+        openModal(ModalEnum.Tutorial);
       }
     } else {
       if (isModalOpen(ModalEnum.Tutorial)) {
-        closeModal(ModalEnum.Tutorial)
+        closeModal(ModalEnum.Tutorial);
       }
     }
-  }, [NextLesson, closeModal, isModalOpen, openModal])
+  }, [NextLesson, closeModal, isModalOpen, openModal]);
 
   return (
     <Drawer
@@ -75,7 +75,7 @@ const TutorialModal = ({
         </DrawerBody>
       </DrawerContent>
     </Drawer>
-  )
-}
+  );
+};
 
-export default TutorialModal
+export default TutorialModal;

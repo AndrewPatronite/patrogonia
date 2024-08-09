@@ -1,17 +1,17 @@
-import React from 'react'
-import { encrypt, validatePassword } from './helper'
-import { Button, Stack } from '@chakra-ui/react'
-import PasswordInput from './PasswordInput'
-import { Input } from '../control'
-import { useFormik } from 'formik'
-import * as Yup from 'yup'
-import { isEmpty } from 'lodash'
-import { startingLocation } from './startingLocation'
-import { Player } from '../player'
-import { CredentialedPlayer } from '../player/types'
+import React from 'react';
+import { encrypt, validatePassword } from './helper';
+import { Button, Stack } from '@chakra-ui/react';
+import PasswordInput from './PasswordInput';
+import { Input } from '../control';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import isEmpty from 'lodash/isEmpty';
+import { startingLocation } from './startingLocation';
+import { Player } from '../player';
+import { CredentialedPlayer } from '../player/types';
 
 interface CreateAccountFormProps {
-  createAccount: (player: Player) => void
+  createAccount: (player: Player) => void;
 }
 
 const CreateAccountForm = ({ createAccount }: CreateAccountFormProps) => {
@@ -32,15 +32,15 @@ const CreateAccountForm = ({ createAccount }: CreateAccountFormProps) => {
         const passwordStatus = validatePassword(
           formik.values.password,
           formik.values.confirmedPassword
-        )
+        );
         return (
           passwordStatus.isValid ||
           this.createError({
             message: passwordStatus.errorMessage,
           })
-        )
+        );
       }),
-  })
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -50,26 +50,26 @@ const CreateAccountForm = ({ createAccount }: CreateAccountFormProps) => {
       confirmedPassword: '',
     },
     onSubmit: async (values) => {
-      const { name, username, password } = values
+      const { name, username, password } = values;
       //@ts-ignore additional fields
       const player: CredentialedPlayer = {
         name,
         username,
         password: encrypt(password),
         location: startingLocation,
-      }
-      createAccount(player)
+      };
+      createAccount(player);
     },
     validationSchema,
-  })
+  });
 
   const submitNewAccount = (e: { preventDefault: () => void }) => {
-    formik.submitForm()
-    e.preventDefault()
-  }
+    formik.submitForm();
+    e.preventDefault();
+  };
 
   const handleBlur = ({ target: { name } }: { target: { name: string } }) =>
-    formik.setFieldTouched(name)
+    formik.setFieldTouched(name);
 
   return (
     <form onSubmit={submitNewAccount}>
@@ -121,7 +121,7 @@ const CreateAccountForm = ({ createAccount }: CreateAccountFormProps) => {
         </Button>
       </Stack>
     </form>
-  )
-}
+  );
+};
 
-export default CreateAccountForm
+export default CreateAccountForm;

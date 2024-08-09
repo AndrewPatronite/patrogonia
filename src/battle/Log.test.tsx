@@ -1,34 +1,39 @@
-import React from 'react'
-import Log, { LogProps } from './Log'
-import { Sound } from '../environment/sound'
-import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
-import { useSound } from '../hooks'
+import React from 'react';
+import Log, { LogProps } from './Log';
+import { Sound } from '../environment/sound';
+import {
+  fireEvent,
+  render,
+  RenderResult,
+  screen,
+} from '@testing-library/react';
+import { useSound } from '../hooks';
 
 jest.mock('../hooks', () => ({
   useSound: jest.fn(),
-}))
+}));
 jest.mock(
   'react-typist',
   () => ({ children }: { children: JSX.Element | JSX.Element[] }) => (
     <span>{children}</span>
   )
-)
+);
 
 describe('Log', () => {
-  const originalScrollIntoView = window.HTMLElement.prototype.scrollIntoView
-  let props: LogProps
-  let renderResult: RenderResult
-  let playSound: jest.Mock
-  let pauseSound: jest.Mock
+  const originalScrollIntoView = window.HTMLElement.prototype.scrollIntoView;
+  let props: LogProps;
+  let renderResult: RenderResult;
+  let playSound: jest.Mock;
+  let pauseSound: jest.Mock;
 
   beforeEach(() => {
-    window.HTMLElement.prototype.scrollIntoView = jest.fn()
-    playSound = jest.fn()
-    pauseSound = jest.fn()
-    ;(useSound as jest.Mock).mockReturnValue({
+    window.HTMLElement.prototype.scrollIntoView = jest.fn();
+    playSound = jest.fn();
+    pauseSound = jest.fn();
+    (useSound as jest.Mock).mockReturnValue({
       playSound,
       pauseSound,
-    })
+    });
 
     props = {
       deliveredEntries: [],
@@ -38,13 +43,13 @@ describe('Log', () => {
       allMessagesDelivered: true,
       typing: false,
       setTyping: jest.fn(),
-    }
-    renderResult = render(<Log {...props} />)
-  })
+    };
+    renderResult = render(<Log {...props} />);
+  });
 
   afterEach(() => {
-    window.HTMLElement.prototype.scrollIntoView = originalScrollIntoView
-  })
+    window.HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
+  });
 
   const getDeliveredEntries = (logMessages: string[]) =>
     logMessages.map((logMessage) => ({
@@ -52,20 +57,20 @@ describe('Log', () => {
       round: 1,
       targetId: '',
       delivered: true,
-    }))
+    }));
 
   it('has content of each delivered entry', () => {
     const logContents = [
       'Enemies approach.',
       'Redwan attacks Skeleton dealing 10 damage.',
-    ]
-    props.deliveredEntries = getDeliveredEntries(logContents)
-    renderResult.rerender(<Log {...props} />)
+    ];
+    props.deliveredEntries = getDeliveredEntries(logContents);
+    renderResult.rerender(<Log {...props} />);
 
     expect(screen.getByTestId('battle-log').textContent).toEqual(
       logContents.join('')
-    )
-  })
+    );
+  });
 
   it("has a dismiss button if all messages have been received and the party wasn't destroyed", () => {
     const logContents = [
@@ -73,19 +78,19 @@ describe('Log', () => {
       'Redwan attacks Skeleton dealing 10 damage.',
       'Skeleton is defeated.',
       'The enemies are defeated!',
-    ]
-    props.deliveredEntries = getDeliveredEntries(logContents)
-    props.allMessagesDelivered = true
-    props.showDismiss = true
-    renderResult.rerender(<Log {...props} />)
+    ];
+    props.deliveredEntries = getDeliveredEntries(logContents);
+    props.allMessagesDelivered = true;
+    props.showDismiss = true;
+    renderResult.rerender(<Log {...props} />);
     expect(screen.getByTestId('battle-log').textContent).toEqual(
       `${logContents.join('')}OK`
-    )
-    const dismissButton = screen.getByRole('button')
-    expect(dismissButton.textContent).toEqual('OK')
-    fireEvent.click(dismissButton)
-    expect(props.onDismiss).toHaveBeenCalled()
-  })
+    );
+    const dismissButton = screen.getByRole('button');
+    expect(dismissButton.textContent).toEqual('OK');
+    fireEvent.click(dismissButton);
+    expect(props.onDismiss).toHaveBeenCalled();
+  });
 
   it('has a load save button if all messages have been received and the party was destroyed', () => {
     const logContents = [
@@ -93,23 +98,23 @@ describe('Log', () => {
       'Skeleton attacks Redwan dealing 10 damage.',
       'Redwan is dead.',
       'The party was destroyed!',
-    ]
-    props.deliveredEntries = getDeliveredEntries(logContents)
-    props.allMessagesDelivered = true
-    props.showDismiss = true
-    renderResult.rerender(<Log {...props} />)
+    ];
+    props.deliveredEntries = getDeliveredEntries(logContents);
+    props.allMessagesDelivered = true;
+    props.showDismiss = true;
+    renderResult.rerender(<Log {...props} />);
     expect(screen.getByTestId('battle-log').textContent).toEqual(
       `${logContents.join('')}Load save`
-    )
-    const dismissButton = screen.getByRole('button')
-    expect(dismissButton.textContent).toEqual('Load save')
-    fireEvent.click(dismissButton)
-    expect(props.onDismiss).toHaveBeenCalled()
-  })
+    );
+    const dismissButton = screen.getByRole('button');
+    expect(dismissButton.textContent).toEqual('Load save');
+    fireEvent.click(dismissButton);
+    expect(props.onDismiss).toHaveBeenCalled();
+  });
 
   it('scrolls to the end of the battle log', () => {
-    expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalled()
-  })
+    expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalled();
+  });
 
   describe('sound effects', () => {
     it('plays appropriate sounds through a victorious, level gaining battle', () => {
@@ -191,45 +196,45 @@ describe('Log', () => {
           content: 'Andy has reached level 10!',
           delivered: true,
         },
-      ]
-      props.deliveredEntries = completeBattleLog.slice(0, 3)
-      renderResult.rerender(<Log {...props} />)
+      ];
+      props.deliveredEntries = completeBattleLog.slice(0, 3);
+      renderResult.rerender(<Log {...props} />);
 
-      props.deliveredEntries = completeBattleLog.slice(0, 4)
-      renderResult.rerender(<Log {...props} />)
+      props.deliveredEntries = completeBattleLog.slice(0, 4);
+      renderResult.rerender(<Log {...props} />);
 
-      props.deliveredEntries = completeBattleLog.slice(0, 5)
-      renderResult.rerender(<Log {...props} />)
+      props.deliveredEntries = completeBattleLog.slice(0, 5);
+      renderResult.rerender(<Log {...props} />);
 
-      props.deliveredEntries = completeBattleLog.slice(0, 6)
-      renderResult.rerender(<Log {...props} />)
+      props.deliveredEntries = completeBattleLog.slice(0, 6);
+      renderResult.rerender(<Log {...props} />);
 
-      props.deliveredEntries = completeBattleLog.slice(0, 8)
-      renderResult.rerender(<Log {...props} />)
+      props.deliveredEntries = completeBattleLog.slice(0, 8);
+      renderResult.rerender(<Log {...props} />);
 
-      props.deliveredEntries = completeBattleLog.slice(0, 9)
-      renderResult.rerender(<Log {...props} />)
+      props.deliveredEntries = completeBattleLog.slice(0, 9);
+      renderResult.rerender(<Log {...props} />);
 
-      props.deliveredEntries = completeBattleLog.slice(0, 10)
-      renderResult.rerender(<Log {...props} />)
+      props.deliveredEntries = completeBattleLog.slice(0, 10);
+      renderResult.rerender(<Log {...props} />);
 
-      props.deliveredEntries = completeBattleLog.slice(0, 11)
-      renderResult.rerender(<Log {...props} />)
+      props.deliveredEntries = completeBattleLog.slice(0, 11);
+      renderResult.rerender(<Log {...props} />);
 
-      props.deliveredEntries = completeBattleLog
-      renderResult.rerender(<Log {...props} />)
+      props.deliveredEntries = completeBattleLog;
+      renderResult.rerender(<Log {...props} />);
 
-      expect(playSound).toHaveBeenNthCalledWith(1, Sound.PlayerAttack)
-      expect(playSound).toHaveBeenNthCalledWith(2, Sound.EnemyAttack)
-      expect(playSound).toHaveBeenNthCalledWith(3, Sound.EnemyAttack)
-      expect(playSound).toHaveBeenNthCalledWith(4, Sound.Ice)
-      expect(playSound).toHaveBeenNthCalledWith(5, Sound.EnemyAttack)
-      expect(playSound).toHaveBeenNthCalledWith(6, Sound.Heal)
-      expect(playSound).toHaveBeenNthCalledWith(7, Sound.EnemyAttack)
-      expect(playSound).toHaveBeenNthCalledWith(8, Sound.PlayerAttack)
-      expect(playSound).toHaveBeenNthCalledWith(9, Sound.LevelUp)
-      expect(pauseSound).toHaveBeenCalledWith(Sound.BattleMusic)
-    })
+      expect(playSound).toHaveBeenNthCalledWith(1, Sound.PlayerAttack);
+      expect(playSound).toHaveBeenNthCalledWith(2, Sound.EnemyAttack);
+      expect(playSound).toHaveBeenNthCalledWith(3, Sound.EnemyAttack);
+      expect(playSound).toHaveBeenNthCalledWith(4, Sound.Ice);
+      expect(playSound).toHaveBeenNthCalledWith(5, Sound.EnemyAttack);
+      expect(playSound).toHaveBeenNthCalledWith(6, Sound.Heal);
+      expect(playSound).toHaveBeenNthCalledWith(7, Sound.EnemyAttack);
+      expect(playSound).toHaveBeenNthCalledWith(8, Sound.PlayerAttack);
+      expect(playSound).toHaveBeenNthCalledWith(9, Sound.LevelUp);
+      expect(pauseSound).toHaveBeenCalledWith(Sound.BattleMusic);
+    });
 
     it('plays appropriate sounds through a party defeat', () => {
       props.deliveredEntries = [
@@ -245,21 +250,21 @@ describe('Log', () => {
           targetId: '1',
           delivered: true,
         },
-      ]
+      ];
 
-      renderResult.rerender(<Log {...props} />)
-      expect(playSound).toHaveBeenCalledWith(Sound.EnemyAttack)
+      renderResult.rerender(<Log {...props} />);
+      expect(playSound).toHaveBeenCalledWith(Sound.EnemyAttack);
 
       props.deliveredEntries = getDeliveredEntries([
         'Enemies approach.',
         'Skeleton attacks Redwan dealing 10 damage.',
         'Redwan is dead.',
         'The party was destroyed!',
-      ])
-      renderResult.rerender(<Log {...props} />)
+      ]);
+      renderResult.rerender(<Log {...props} />);
 
-      expect(pauseSound).toHaveBeenCalledWith(Sound.BattleMusic)
-      expect(playSound).toHaveBeenCalledWith(Sound.PartyDestroyed)
-    })
-  })
-})
+      expect(pauseSound).toHaveBeenCalledWith(Sound.BattleMusic);
+      expect(playSound).toHaveBeenCalledWith(Sound.PartyDestroyed);
+    });
+  });
+});

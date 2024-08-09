@@ -1,12 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { Player } from '../player'
+import { createSlice } from '@reduxjs/toolkit';
+import { Player } from '../player';
 
 export const getInitialPlayer = (): Player => {
-  const storedPlayer = localStorage.getItem('currentPlayer')
+  const storedPlayer = localStorage.getItem('currentPlayer');
   return storedPlayer
     ? JSON.parse(storedPlayer)
-    : { loggedIn: false, location: {}, tutorialLessons: [] }
-}
+    : { loggedIn: false, location: {}, tutorialLessons: [] };
+};
 
 const playerSlice = createSlice({
   name: 'currentPlayer',
@@ -14,6 +14,6 @@ const playerSlice = createSlice({
   reducers: {
     setPlayer: (state, { payload }) => ({ ...state, ...payload }),
   },
-})
+});
 
-export default playerSlice
+export default playerSlice;

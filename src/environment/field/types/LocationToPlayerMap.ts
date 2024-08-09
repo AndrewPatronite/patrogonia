@@ -1,5 +1,5 @@
-import { Player } from '../../../player'
+import { Player } from '../../../player';
 
 export default interface LocationToPlayerMap {
-  [rowColumnIndices: string]: Player[]
+  [rowColumnIndices: string]: Player[];
 }

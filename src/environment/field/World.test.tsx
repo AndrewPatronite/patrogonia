@@ -1,19 +1,19 @@
-import React from 'react'
-import World from './World'
-import { Legend } from '../maps/Legend'
-import { ModalEnum, ModalInterface } from '../../context'
-import { useMap, useModalState, usePlayer, useSound } from '../../hooks'
-import { Player } from '../../player'
-import { Direction } from '../../navigation'
+import React from 'react';
+import World from './World';
+import { Legend } from '../maps/Legend';
+import { ModalEnum, ModalInterface } from '../../context';
+import { useMap, useModalState, usePlayer, useSound } from '../../hooks';
+import { Player } from '../../player';
+import { Direction } from '../../navigation';
 import {
   act,
   fireEvent,
   render,
   RenderResult,
   screen,
-} from '@testing-library/react'
-import { Sound } from '../sound'
-import { Cave, Continent, Town } from '../maps/Maps'
+} from '@testing-library/react';
+import { Sound } from '../sound';
+import { CaveName, ContinentName, MapName, TownName } from '../maps/types';
 
 jest.mock('../../hooks', () => ({
   useCharacterPositions: jest.fn().mockReturnValue({
@@ -27,33 +27,33 @@ jest.mock('../../hooks', () => ({
   useMap: jest.fn(),
   usePlayer: jest.fn(),
   useNpcMovementEffect: jest.fn(),
-}))
+}));
 jest.mock(
   'react-typist',
   () => ({ children }: { children: JSX.Element | JSX.Element[] }) => (
     <span>{children}</span>
   )
-)
+);
 
 describe('World', () => {
-  const { WATER: W, GRASS: G } = Legend.symbols
+  const { WATER: W, GRASS: G } = Legend.symbols;
   const map = {
     layout: [
       [W, W, W, W, W],
       [W, W, G, W, W],
-      [W, G, Town.Dewhurst, G, W],
+      [W, G, TownName.Dewhurst, G, W],
       [W, W, G, W, W],
       [W, W, W, W, W],
     ],
-  }
-  let modalState: ModalInterface
-  let playSound: jest.Mock
-  let pauseSound: jest.Mock
-  let renderResult: RenderResult
+  };
+  let modalState: ModalInterface;
+  let playSound: jest.Mock;
+  let pauseSound: jest.Mock;
+  let renderResult: RenderResult;
 
   const setup = (
     isModalOpen: (modal: ModalEnum) => boolean = () => false,
-    mapName: string = Cave.LavaGrotto,
+    mapName: MapName = CaveName.LavaGrotto,
     content: string = ''
   ) => {
     const currentPlayer: Player = {
@@ -62,15 +62,15 @@ describe('World', () => {
         mapName,
         rowIndex: 1,
         columnIndex: 2,
-        entranceName: Continent.Atoris,
+        entranceName: ContinentName.Atoris,
         facing: Direction.Down,
       },
       //@ts-ignore missing fields
       stats: { hp: 9, hpTotal: 10, mp: 4, mpTotal: 5 },
-    }
+    };
     const locationToPlayerMap = {
       '1-2': [currentPlayer],
-    }
+    };
     modalState = {
       closeModal: jest.fn(),
       isModalOpen,
@@ -78,19 +78,19 @@ describe('World', () => {
       getModalContent: () => ({
         content,
       }),
-    }
-    ;(useModalState as jest.Mock).mockReturnValue(modalState)
-    playSound = jest.fn()
-    pauseSound = jest.fn()
-    ;(useSound as jest.Mock).mockReturnValue({
+    };
+    (useModalState as jest.Mock).mockReturnValue(modalState);
+    playSound = jest.fn();
+    pauseSound = jest.fn();
+    (useSound as jest.Mock).mockReturnValue({
       playSound,
       pauseSound,
-    })
-    ;(usePlayer as jest.Mock).mockReturnValue({
+    });
+    (usePlayer as jest.Mock).mockReturnValue({
       currentPlayer,
       updatePlayer: jest.fn(),
-    })
-    ;(useMap as jest.Mock).mockReturnValue({
+    });
+    (useMap as jest.Mock).mockReturnValue({
       map,
       players: [currentPlayer],
       npcs: [],
@@ -101,12 +101,21 @@ describe('World', () => {
         columnStartIndex: 1,
         columnEndIndex: 3,
       },
-    })
-    jest.useFakeTimers()
+    });
+    jest.useFakeTimers();
+    jest
+      .spyOn(global, 'setTimeout')
+      .mockImplementation((callback: string | Function) => {
+        if (callback instanceof Function) {
+          callback();
+        }
+        return 0;
+      });
+    jest.spyOn(global, 'clearTimeout');
     renderResult = render(
       <World currentPlayer={currentPlayer} castSpell={jest.fn()} />
-    )
-  }
+    );
+  };
 
   it('has TileRows for a subset of the map based on the display range', () => {
     const verifyTile = (
@@ -114,85 +123,85 @@ describe('World', () => {
       expectedTileClassId: string,
       expectedMapSymbol: string
     ) => {
-      expect((tile.getAttribute('class') || '').includes(expectedTileClassId))
-      expect(tile.getAttribute('mapsymbol')).toEqual(expectedMapSymbol)
-    }
+      expect((tile.getAttribute('class') || '').includes(expectedTileClassId));
+      expect(tile.getAttribute('mapsymbol')).toEqual(expectedMapSymbol);
+    };
 
-    setup()
-    const tileRows = screen.getAllByTestId('tile-row')
-    expect(tileRows.length).toEqual(3)
-    verifyTile(tileRows[0].children[0], 'rc1-1', W)
-    verifyTile(tileRows[0].children[1], 'rc1-2', G)
-    verifyTile(tileRows[0].children[2], 'rc1-3', W)
-    verifyTile(tileRows[1].children[0], 'rc2-1', G)
-    verifyTile(tileRows[1].children[1], 'rc2-2', Town.Dewhurst)
-    verifyTile(tileRows[1].children[2], 'rc2-3', G)
-    verifyTile(tileRows[2].children[0], 'rc3-1', W)
-    verifyTile(tileRows[2].children[1], 'rc3-2', G)
-    verifyTile(tileRows[2].children[2], 'rc3-3', W)
-  })
+    setup();
+    const tileRows = screen.getAllByTestId('tile-row');
+    expect(tileRows.length).toEqual(3);
+    verifyTile(tileRows[0].children[0], 'rc1-1', W);
+    verifyTile(tileRows[0].children[1], 'rc1-2', G);
+    verifyTile(tileRows[0].children[2], 'rc1-3', W);
+    verifyTile(tileRows[1].children[0], 'rc2-1', G);
+    verifyTile(tileRows[1].children[1], 'rc2-2', TownName.Dewhurst);
+    verifyTile(tileRows[1].children[2], 'rc2-3', G);
+    verifyTile(tileRows[2].children[0], 'rc3-1', W);
+    verifyTile(tileRows[2].children[1], 'rc3-2', G);
+    verifyTile(tileRows[2].children[2], 'rc3-3', W);
+  });
 
   it('displays player stats', () => {
-    setup((modal) => modal === ModalEnum.PlayerStats)
-    expect(screen.getByRole('heading').textContent).toEqual('Stats')
-    expect(screen.getByText('9/10')).toBeInTheDocument()
-    expect(screen.getByText('4/5')).toBeInTheDocument()
-  })
+    setup((modal) => modal === ModalEnum.PlayerStats);
+    expect(screen.getByRole('heading').textContent).toEqual('Stats');
+    expect(screen.getByText('9/10')).toBeInTheDocument();
+    expect(screen.getByText('4/5')).toBeInTheDocument();
+  });
 
   it('displays a field menu', () => {
-    setup((modal) => modal === ModalEnum.FieldMenu)
-    const menuSections = screen.getAllByRole('tab')
-    expect(menuSections.length).toEqual(3)
-    expect(menuSections[0].textContent).toEqual('Stats')
-    expect(menuSections[1].textContent).toEqual('Spells')
-    expect(menuSections[2].textContent).toEqual('Options')
-  })
+    setup((modal) => modal === ModalEnum.FieldMenu);
+    const menuSections = screen.getAllByRole('tab');
+    expect(menuSections.length).toEqual(3);
+    expect(menuSections[0].textContent).toEqual('Stats');
+    expect(menuSections[1].textContent).toEqual('Spells');
+    expect(menuSections[2].textContent).toEqual('Options');
+  });
 
   it('displays dialogue', () => {
     setup(
       (modal) => modal === ModalEnum.Dialog,
-      Town.Dewhurst,
+      TownName.Dewhurst,
       "Important stuff n' things"
-    )
-    expect(screen.getByText("Important stuff n' things")).toBeInTheDocument()
-    const okButton = screen.getByRole('button', { name: 'OK' })
-    fireEvent.click(okButton)
-    expect(modalState.closeModal).toHaveBeenCalledWith(ModalEnum.Dialog)
-  })
+    );
+    expect(screen.getByText("Important stuff n' things")).toBeInTheDocument();
+    const okButton = screen.getByRole('button', { name: 'OK' });
+    fireEvent.click(okButton);
+    expect(modalState.closeModal).toHaveBeenCalledWith(ModalEnum.Dialog);
+  });
 
   it('plays field music for field maps', () => {
-    setup(() => false, Continent.Atoris)
+    setup(() => false, ContinentName.Atoris);
     expect(playSound).toHaveBeenCalledWith(Sound.FieldMusic, [
       Sound.CaveMusic,
       Sound.TownMusic,
-    ])
-  })
+    ]);
+  });
 
   it('plays cave music for cave maps', () => {
-    setup()
+    setup();
     expect(playSound).toHaveBeenCalledWith(Sound.CaveMusic, [
       Sound.FieldMusic,
       Sound.TownMusic,
-    ])
-  })
+    ]);
+  });
 
   it('plays town music for town maps', () => {
-    setup(() => false, Town.Dewhurst)
+    setup(() => false, TownName.Dewhurst);
     expect(playSound).toHaveBeenCalledWith(Sound.TownMusic, [
       Sound.CaveMusic,
       Sound.FieldMusic,
-    ])
-  })
+    ]);
+  });
 
   it('sets show player stats modal via 5 second timer that it clears ', () => {
-    setup()
-    expect(modalState.closeModal).toHaveBeenCalledWith(ModalEnum.PlayerStats)
+    setup();
+    expect(modalState.closeModal).toHaveBeenCalledWith(ModalEnum.PlayerStats);
     act(() => {
-      jest.runAllTimers()
-      expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 5000)
-      expect(modalState.openModal).toHaveBeenCalledWith(ModalEnum.PlayerStats)
-      renderResult.unmount()
-      expect(clearTimeout).toHaveBeenCalled()
-    })
-  })
-})
+      jest.runAllTimers();
+      expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 5000);
+      expect(modalState.openModal).toHaveBeenCalledWith(ModalEnum.PlayerStats);
+      renderResult.unmount();
+      expect(clearTimeout).toHaveBeenCalled();
+    });
+  });
+});

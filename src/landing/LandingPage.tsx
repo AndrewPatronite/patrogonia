@@ -1,23 +1,23 @@
-import React from 'react'
-import preval from 'preval.macro'
-import { FaDragon } from 'react-icons/fa'
-import { ColorModeToggle } from '../components/theme'
-import ThemedPanel from '../components/theme/ThemedPanel'
-import { Credits } from '../credits'
-import { Heading, Text, useColorMode, VStack } from '@chakra-ui/react'
-import { HeadingColor } from '../theme'
-import AccountSelector from './AccountSelector'
-import { InstructionsModal } from '../tutorial'
-import { Player } from '../player'
+import React from 'react';
+import preval from 'preval.macro';
+import { FaDragon } from 'react-icons/fa';
+import { ColorModeToggle } from '../components/theme';
+import ThemedPanel from '../components/theme/ThemedPanel';
+import { Credits } from '../credits';
+import { Heading, Text, useColorMode, VStack } from '@chakra-ui/react';
+import { HeadingColor } from '../theme';
+import AccountSelector from './AccountSelector';
+import { InstructionsModal } from '../tutorial';
+import { Player } from '../player';
 
 interface LandingPageProps {
-  login: (username: string, password: string) => void
-  createAccount: (player: Player) => void
+  login: (username: string, password: string) => void;
+  createAccount: (player: Player) => void;
 }
 
 const LandingPage = ({ login, createAccount }: LandingPageProps) => {
-  const { colorMode } = useColorMode()
-  const lastUpdate = preval`module.exports = new Date().toLocaleString();`
+  const { colorMode } = useColorMode();
+  const lastUpdate = preval`module.exports = new Date().toLocaleString();`;
 
   return (
     <ThemedPanel
@@ -43,7 +43,7 @@ const LandingPage = ({ login, createAccount }: LandingPageProps) => {
         <Credits />
       </VStack>
     </ThemedPanel>
-  )
-}
+  );
+};
 
-export default LandingPage
+export default LandingPage;

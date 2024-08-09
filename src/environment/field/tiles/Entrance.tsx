@@ -1,8 +1,8 @@
-import React from 'react'
-import { Box, BoxProps, Flex, Text } from '@chakra-ui/react'
+import React from 'react';
+import { Box, BoxProps, Flex, Text } from '@chakra-ui/react';
 
 interface EntranceProps extends BoxProps {
-  mapsymbol: string
+  mapsymbol: string;
 }
 
 const Entrance = ({ children, mapsymbol, ...baseProps }: EntranceProps) => (
@@ -18,6 +18,6 @@ const Entrance = ({ children, mapsymbol, ...baseProps }: EntranceProps) => (
     <Text position="absolute">{mapsymbol}</Text>
     <Box position="absolute">{children}</Box>
   </Flex>
-)
+);
 
-export default Entrance
+export default Entrance;

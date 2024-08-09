@@ -1,3 +1,3 @@
-import theme, { ColorMode, ErrorLabelColor, HeadingColor } from './theme'
+import theme, { ColorMode, ErrorLabelColor, HeadingColor } from './theme';
 
-export { ColorMode, ErrorLabelColor, HeadingColor, theme }
+export { ColorMode, ErrorLabelColor, HeadingColor, theme };

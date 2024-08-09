@@ -1,7 +1,7 @@
-import React from 'react'
-import ThemedPanel from '../components/theme/ThemedPanel'
-import ThemedHeader from '../components/theme/ThemedHeader'
-import { FaLinkedin } from 'react-icons/fa'
+import React from 'react';
+import ThemedPanel from '../components/theme/ThemedPanel';
+import ThemedHeader from '../components/theme/ThemedHeader';
+import { FaLinkedin } from 'react-icons/fa';
 import {
   Button,
   Flex,
@@ -13,12 +13,12 @@ import {
   ModalOverlay,
   useColorMode,
   useDisclosure,
-} from '@chakra-ui/react'
-import { ColorMode } from '../theme'
+} from '@chakra-ui/react';
+import { ColorMode } from '../theme';
 
 const Credits = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const { colorMode } = useColorMode()
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { colorMode } = useColorMode();
   return (
     <>
       <Button variant="link" onClick={onOpen}>
@@ -76,7 +76,7 @@ const Credits = () => {
         </ModalContent>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default Credits
+export default Credits;

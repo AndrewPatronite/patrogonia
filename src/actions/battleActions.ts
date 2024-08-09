@@ -1,14 +1,14 @@
-import { isEmpty } from 'lodash'
+import isEmpty from 'lodash/isEmpty';
 import {
   getBattle as getBattleRemote,
   takeTurn as takeTurnRemote,
-} from '../api/battleService'
-import { battleSlice } from '../redux'
-import { Dispatch } from '@reduxjs/toolkit'
-import { Battle } from '../battle/types'
+} from '../api/battleService';
+import { battleSlice } from '../redux';
+import { Dispatch } from '@reduxjs/toolkit';
+import { Battle } from '../battle/types';
 
 export const dismissBattle = (dispatch: Dispatch) =>
-  dispatch(battleSlice.actions.dismissBattle())
+  dispatch(battleSlice.actions.dismissBattle());
 
 export const loadBattle = (
   dispatch: Dispatch,
@@ -18,15 +18,15 @@ export const loadBattle = (
 ) => {
   const onSuccess = (battle: Battle) => {
     if (isEmpty(battle)) {
-      onBattleNotFound()
+      onBattleNotFound();
     } else {
-      dispatch(battleSlice.actions.loadBattle(battle))
+      dispatch(battleSlice.actions.loadBattle(battle));
     }
-  }
+  };
   getBattleRemote(battleId, onSuccess, () =>
     onFailure('Failed to get battle. Try again or refresh the page.')
-  )
-}
+  );
+};
 
 export const takeTurn = (
   dispatch: Dispatch,
@@ -36,7 +36,7 @@ export const takeTurn = (
   onFailure: (error: any) => void,
   targetId?: string | number
 ) => {
-  const onSuccess = () => {}
+  const onSuccess = () => {};
   takeTurnRemote(
     battleId,
     playerId,
@@ -44,8 +44,8 @@ export const takeTurn = (
     onSuccess,
     () => onFailure('Failed to take turn. Try again or refresh the page.'),
     targetId
-  )
-}
+  );
+};
 
 export const updateBattle = (dispatch: Dispatch, battle: Battle) =>
-  dispatch(battleSlice.actions.updateBattle(battle))
+  dispatch(battleSlice.actions.updateBattle(battle));

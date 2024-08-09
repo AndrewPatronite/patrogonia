@@ -1,6 +1,6 @@
-import React from 'react'
-import { Box, BoxProps } from '@chakra-ui/react'
-import { LandColors, Town as TownImage } from './terrain'
+import React from 'react';
+import { Box, BoxProps } from '@chakra-ui/react';
+import { LandColors, Town as TownImage } from './terrain';
 
 const Town = ({ children, ...baseProps }: BoxProps) => (
   <Box
@@ -12,6 +12,6 @@ const Town = ({ children, ...baseProps }: BoxProps) => (
   >
     {children}
   </Box>
-)
+);
 
-export default Town
+export default Town;

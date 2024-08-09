@@ -1,13 +1,13 @@
-import React from 'react'
-import { isEqual } from 'lodash'
-import { Box, Flex, Icon, Text } from '@chakra-ui/react'
-import { FaCampground, FaDragon, FaInfoCircle } from 'react-icons/fa'
-import { IconType } from 'react-icons/lib'
-import { HeroDown, HeroLeft, HeroRight, HeroUp } from './hero'
-import { PeerDown, PeerLeft, PeerRight, PeerUp } from './peer'
-import { Direction } from '../navigation'
+import React from 'react';
+import isEqual from 'lodash/isEqual';
+import { Box, Flex, Icon, Text } from '@chakra-ui/react';
+import { FaCampground, FaDragon, FaInfoCircle } from 'react-icons/fa';
+import { IconType } from 'react-icons/lib';
+import { HeroDown, HeroLeft, HeroRight, HeroUp } from './hero';
+import { PeerDown, PeerLeft, PeerRight, PeerUp } from './peer';
+import { Direction } from '../navigation';
 
-const CAMPING_DURATION_MILLIS = 10000
+const CAMPING_DURATION_MILLIS = 10000;
 
 const getCharacterImage = (
   directionFacing: Direction,
@@ -15,24 +15,24 @@ const getCharacterImage = (
 ) => {
   switch (directionFacing) {
     case Direction.Up:
-      return isCurrentPlayer ? HeroUp : PeerUp
+      return isCurrentPlayer ? HeroUp : PeerUp;
     case Direction.Left:
-      return isCurrentPlayer ? HeroLeft : PeerLeft
+      return isCurrentPlayer ? HeroLeft : PeerLeft;
     case Direction.Right:
-      return isCurrentPlayer ? HeroRight : PeerRight
+      return isCurrentPlayer ? HeroRight : PeerRight;
     case Direction.Down:
     default:
-      return isCurrentPlayer ? HeroDown : PeerDown
+      return isCurrentPlayer ? HeroDown : PeerDown;
   }
-}
+};
 
 export interface CharacterProps {
-  name: string
-  directionFacing: Direction
-  battleId?: string
-  isCurrentPlayer?: boolean
-  lastUpdate?: string
-  inDialogRange?: boolean
+  name: string;
+  directionFacing: Direction;
+  battleId?: string;
+  isCurrentPlayer?: boolean;
+  lastUpdate?: string;
+  inDialogRange?: boolean;
 }
 
 const Character = ({
@@ -43,22 +43,22 @@ const Character = ({
   lastUpdate,
   inDialogRange,
 }: CharacterProps) => {
-  const lastUpdateDate = lastUpdate && new Date(lastUpdate)
-  const now = new Date()
+  const lastUpdateDate = lastUpdate && new Date(lastUpdate);
+  const now = new Date();
   const camping =
     lastUpdateDate &&
-    now.getTime() - lastUpdateDate.getTime() > CAMPING_DURATION_MILLIS
+    now.getTime() - lastUpdateDate.getTime() > CAMPING_DURATION_MILLIS;
   const icon: IconType | undefined = (() => {
     if (battleId) {
-      return FaDragon
+      return FaDragon;
     } else if (camping) {
-      return FaCampground
+      return FaCampground;
     } else if (inDialogRange) {
-      return FaInfoCircle
+      return FaInfoCircle;
     } else {
-      return undefined
+      return undefined;
     }
-  })()
+  })();
 
   return (
     <Box position="relative">
@@ -101,7 +101,7 @@ const Character = ({
         />
       )}
     </Box>
-  )
-}
+  );
+};
 
-export default Character
+export default Character;

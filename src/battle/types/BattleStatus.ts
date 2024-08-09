@@ -5,4 +5,4 @@ export enum BattleStatus {
 }
 
 export const isBattleEnded = (status: BattleStatus) =>
-  [BattleStatus.Victory, BattleStatus.Defeat].includes(status)
+  [BattleStatus.Victory, BattleStatus.Defeat].includes(status);

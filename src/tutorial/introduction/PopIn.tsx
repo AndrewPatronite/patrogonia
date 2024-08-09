@@ -1,7 +1,7 @@
-import { Flex, Kbd, Stack, Text } from '@chakra-ui/react'
-import React from 'react'
-import Character from '../../player/Character'
-import { Direction } from '../../navigation'
+import { Flex, Kbd, Stack, Text } from '@chakra-ui/react';
+import React from 'react';
+import Character from '../../player/Character';
+import { Direction } from '../../navigation';
 
 const PopIn = ({ isCompact }: { isCompact: boolean }) => (
   <Stack>
@@ -21,6 +21,6 @@ const PopIn = ({ isCompact }: { isCompact: boolean }) => (
       the field menu by pressing <Kbd>Enter</Kbd>
     </Text>
   </Stack>
-)
+);
 
-export default PopIn
+export default PopIn;

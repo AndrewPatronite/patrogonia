@@ -1,16 +1,18 @@
-import React from 'react'
-import { filter, isEmpty, upperFirst } from 'lodash'
-import OptionPanel from './OptionPanel'
-import ThemedHeader from '../components/theme/ThemedHeader'
-import { Stack } from '@chakra-ui/react'
-import { getLesson, LessonEnum, TutorialModal } from '../tutorial'
-import { Command } from './types'
-import { Player, Spell } from '../player'
+import React from 'react';
+import filter from 'lodash/filter';
+import isEmpty from 'lodash/isEmpty';
+import upperFirst from 'lodash/upperFirst';
+import OptionPanel from './OptionPanel';
+import ThemedHeader from '../components/theme/ThemedHeader';
+import { Stack } from '@chakra-ui/react';
+import { getLesson, LessonEnum, TutorialModal } from '../tutorial';
+import { Command } from './types';
+import { Player, Spell } from '../player';
 
 export interface CommandPanelProps {
-  currentPlayer: Player
-  handleCommand: (command: Command | Spell) => void
-  mp: number
+  currentPlayer: Player;
+  handleCommand: (command: Command | Spell) => void;
+  mp: number;
 }
 
 const CommandPanel = ({
@@ -31,7 +33,7 @@ const CommandPanel = ({
         }))),
     { value: Command.Parry, display: 'Parry' },
     { value: Command.Run, display: 'Run' },
-  ]
+  ];
 
   return (
     <Stack spacing={0}>
@@ -47,7 +49,7 @@ const CommandPanel = ({
         lessonProps={{ options }}
       />
     </Stack>
-  )
-}
+  );
+};
 
-export default CommandPanel
+export default CommandPanel;

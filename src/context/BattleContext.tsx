@@ -1,15 +1,15 @@
-import { createContext } from 'react'
-import { Battle } from '../battle/types'
+import { createContext } from 'react';
+import { Battle } from '../battle/types';
 
 interface BattleState {
-  battle?: Battle
-  takeTurn: (playerAction: string, targetId?: string | number) => void
-  dismissBattle: (dismissedBattle: Battle) => void
+  battle?: Battle;
+  takeTurn: (playerAction: string, targetId?: string | number) => void;
+  dismissBattle: (dismissedBattle: Battle) => void;
 }
 
 const BattleContext = createContext<BattleState>({
   takeTurn: () => {},
   dismissBattle: () => {},
-})
+});
 
-export default BattleContext
+export default BattleContext;

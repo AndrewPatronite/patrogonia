@@ -1,6 +1,6 @@
-import { Sound } from './types'
-import { BattleMusic, CaveMusic, FieldMusic, TownMusic } from './crusaderp'
-import { EnemyAttackSound, PlayerAttackSound } from './FXhome.com'
+import { Sound } from './types';
+import { BattleMusic, CaveMusic, FieldMusic, TownMusic } from './crusaderp';
+import { EnemyAttackSound, PlayerAttackSound } from './FXhome.com';
 import {
   HealingSound,
   IceSound,
@@ -8,8 +8,8 @@ import {
   PartyDestroyedSound,
   TalkingSound,
   WarpSound,
-} from './zapsplat'
-import { SoundAudio } from './SoundAudio'
+} from './zapsplat';
+import { SoundAudio } from './SoundAudio';
 
 export {
   BattleMusic,
@@ -26,4 +26,4 @@ export {
   TalkingSound,
   TownMusic,
   WarpSound,
-}
+};

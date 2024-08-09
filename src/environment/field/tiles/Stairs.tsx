@@ -7,28 +7,28 @@ import {
   PopoverContent,
   PopoverTrigger,
   Text,
-} from '@chakra-ui/react'
-import { Stairs as StairsImage, Stairs270 } from './terrain'
-import React from 'react'
-import { CaveExit } from '../../maps/Maps'
+} from '@chakra-ui/react';
+import { Stairs as StairsImage, Stairs270 } from './terrain';
+import React from 'react';
+import { ContinentName } from '../../maps/types';
 
 interface StairsProps extends BoxProps {
-  mapsymbol: string
+  mapsymbol: string;
 }
 
 const Stairs = ({ children, mapsymbol, ...baseProps }: StairsProps) => {
-  let backgroundImage
-  let popoverPlacement: PlacementWithLogical
+  let backgroundImage;
+  let popoverPlacement: PlacementWithLogical;
 
   switch (mapsymbol) {
-    case CaveExit.Grimes:
-      backgroundImage = Stairs270
-      popoverPlacement = 'right'
-      break
-    case CaveExit.Atoris:
+    case ContinentName.Grimes:
+      backgroundImage = Stairs270;
+      popoverPlacement = 'right';
+      break;
+    case ContinentName.Atoris:
     default:
-      backgroundImage = StairsImage
-      popoverPlacement = 'top-start'
+      backgroundImage = StairsImage;
+      popoverPlacement = 'top-start';
   }
 
   return (
@@ -53,7 +53,7 @@ const Stairs = ({ children, mapsymbol, ...baseProps }: StairsProps) => {
         </Text>
       </PopoverContent>
     </Popover>
-  )
-}
+  );
+};
 
-export default Stairs
+export default Stairs;

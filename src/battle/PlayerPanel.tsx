@@ -1,28 +1,28 @@
-import React from 'react'
-import { has } from 'lodash'
-import ThemedPanel from '../components/theme/ThemedPanel'
-import { Button, Stack } from '@chakra-ui/react'
-import PlayerTurnWizard from './PlayerTurnWizard'
-import { BattleStatusStyle, Enemy, RoundPlayerActions } from './types'
-import { Player, Stats } from '../player'
+import React from 'react';
+import has from 'lodash/has';
+import ThemedPanel from '../components/theme/ThemedPanel';
+import { Button, Stack } from '@chakra-ui/react';
+import PlayerTurnWizard from './PlayerTurnWizard';
+import { BattleStatusStyle, Enemy, RoundPlayerActions } from './types';
+import { Player, Stats } from '../player';
 
 export interface PlayerPanelProps {
-  currentPlayer: Player
-  playerStats: Stats
-  players: Stats[]
-  battleStatusStyle: BattleStatusStyle
-  enemies: Enemy[]
-  selectEnemy: (enemyId?: string) => void
-  takeTurn: (action: string, targetId?: string | number) => void
-  roundPlayerActions: RoundPlayerActions
-  selectedEnemyId?: string
-  playerTurnEnabled: boolean
-  loadSave: (playerId: number) => void
+  currentPlayer: Player;
+  playerStats: Stats;
+  players: Stats[];
+  battleStatusStyle: BattleStatusStyle;
+  enemies: Enemy[];
+  selectEnemy: (enemyId?: string) => void;
+  takeTurn: (action: string, targetId?: string | number) => void;
+  roundPlayerActions: RoundPlayerActions;
+  selectedEnemyId?: string;
+  playerTurnEnabled: boolean;
+  loadSave: (playerId: number) => void;
   updatePlayer: (
     player: Player,
     saveGame?: boolean,
     updateToServer?: boolean
-  ) => void
+  ) => void;
 }
 
 const PlayerPanel = ({
@@ -43,7 +43,7 @@ const PlayerPanel = ({
     (currentPlayer.id === playerId &&
       !has(roundPlayerActions, currentPlayer.id)) ||
     //TODO AP corner case for deceased peer who loaded game, causing roundPlayerActions to fail:
-    players.length === 1
+    players.length === 1;
   return (
     <ThemedPanel padding="1rem" sx={battleStatusStyle}>
       <Stack marginRight="2rem" spacing="1rem">
@@ -85,7 +85,7 @@ const PlayerPanel = ({
           </Button>
         ))}
     </ThemedPanel>
-  )
-}
+  );
+};
 
-export default PlayerPanel
+export default PlayerPanel;

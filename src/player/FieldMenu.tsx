@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
-import { filter, isEmpty } from 'lodash'
-import PlayerStatsPanel from './PlayerStatsPanel'
-import PlayerSpells from './PlayerSpells'
-import { Maps } from '../environment/maps/Maps'
-import PlayerOptions from './PlayerOptions'
-import ThemedPanel from '../components/theme/ThemedPanel'
+import React, { useState } from 'react';
+import filter from 'lodash/filter';
+import isEmpty from 'lodash/isEmpty';
+import PlayerStatsPanel from './PlayerStatsPanel';
+import PlayerSpells from './PlayerSpells';
+import { isCave, isField, isTown } from '../environment/maps/Maps';
+import PlayerOptions from './PlayerOptions';
+import ThemedPanel from '../components/theme/ThemedPanel';
 import {
   Drawer,
   DrawerBody,
@@ -15,9 +16,9 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-} from '@chakra-ui/react'
-import { advanceFocus } from '../utils'
-import { Player } from './types'
+} from '@chakra-ui/react';
+import { advanceFocus } from '../utils';
+import { Player } from './types';
 
 const FieldMenu = ({
   showFieldMenu,
@@ -25,44 +26,44 @@ const FieldMenu = ({
   currentPlayer,
   castSpell,
 }: {
-  showFieldMenu: boolean
-  closeFieldMenu: () => void
-  currentPlayer: Player
-  castSpell: (spellName: string, targetId: string) => void
+  showFieldMenu: boolean;
+  closeFieldMenu: () => void;
+  currentPlayer: Player;
+  castSpell: (spellName: string, targetId: string) => void;
 }) => {
-  const [tabIndex, setTabIndex] = useState(0)
+  const [tabIndex, setTabIndex] = useState(0);
 
   const availableSpells = filter(currentPlayer.spells, (spell) => {
-    let canCast = spell.mpCost <= currentPlayer.stats.mp && !spell.offensive
+    let canCast = spell.mpCost <= currentPlayer.stats.mp && !spell.offensive;
     if (canCast) {
       switch (spell.spellName) {
         case 'HEAL':
-          canCast = currentPlayer.stats.hp < currentPlayer.stats.hpTotal
-          break
+          canCast = currentPlayer.stats.hp < currentPlayer.stats.hpTotal;
+          break;
         case 'OUTSIDE':
-          canCast = Maps.isCave(currentPlayer.location.mapName)
-          break
+          canCast = isCave(currentPlayer.location.mapName);
+          break;
         case 'RETURN':
           canCast =
-            Maps.isField(currentPlayer.location.mapName) ||
-            Maps.isTown(currentPlayer.location.mapName)
-          break
+            isField(currentPlayer.location.mapName) ||
+            isTown(currentPlayer.location.mapName);
+          break;
       }
     }
-    return canCast
-  })
+    return canCast;
+  });
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if ('Tab' === e.key) {
-      e.preventDefault()
-      advanceFocus(e.target as Element, e.shiftKey)
+      e.preventDefault();
+      advanceFocus(e.target as Element, e.shiftKey);
     }
-  }
+  };
 
   const tabProps = {
     justifyContent: 'flex-start',
     paddingRight: '1rem',
-  }
+  };
 
   return (
     <Drawer
@@ -115,8 +116,8 @@ const FieldMenu = ({
                     availableSpells={availableSpells}
                     castSpell={castSpell}
                     onSpellCast={() => {
-                      setTabIndex(0)
-                      closeFieldMenu()
+                      setTabIndex(0);
+                      closeFieldMenu();
                     }}
                   />
                 </TabPanel>
@@ -129,7 +130,7 @@ const FieldMenu = ({
         </DrawerBody>
       </DrawerContent>
     </Drawer>
-  )
-}
+  );
+};
 
-export default FieldMenu
+export default FieldMenu;

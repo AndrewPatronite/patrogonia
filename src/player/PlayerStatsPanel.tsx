@@ -1,7 +1,7 @@
-import React from 'react'
-import ThemedPanel from '../components/theme/ThemedPanel'
-import { Stats } from './types'
-import PlayerStat from './PlayerStat'
+import React from 'react';
+import ThemedPanel from '../components/theme/ThemedPanel';
+import { Stats } from './types';
+import PlayerStat from './PlayerStat';
 
 const PlayerStatsPanel = ({
   playerStats: {
@@ -21,9 +21,9 @@ const PlayerStatsPanel = ({
   showHeading = true,
   includeBorder = true,
 }: {
-  playerStats: Stats
-  showHeading?: boolean
-  includeBorder?: boolean
+  playerStats: Stats;
+  showHeading?: boolean;
+  includeBorder?: boolean;
 }) => (
   <ThemedPanel
     className="player-stats-panel"
@@ -46,6 +46,6 @@ const PlayerStatsPanel = ({
     <PlayerStat name="Defense" value={defense} />
     <PlayerStat name="Agility" value={agility} />
   </ThemedPanel>
-)
+);
 
-export default PlayerStatsPanel
+export default PlayerStatsPanel;

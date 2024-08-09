@@ -1,7 +1,7 @@
-import { createContext } from 'react'
+import { createContext } from 'react';
 
 interface TutorialState {}
 
-const TutorialContext = createContext<TutorialState>({})
+const TutorialContext = createContext<TutorialState>({});
 
-export default TutorialContext
+export default TutorialContext;

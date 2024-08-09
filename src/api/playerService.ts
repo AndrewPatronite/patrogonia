@@ -1,11 +1,11 @@
-import axios from 'axios'
-import { Player } from '../player'
-import { HttpStatus } from './types'
+import axios from 'axios';
+import { Player } from '../player';
+import { HttpStatus } from './types';
 
 const axiosInstance = axios.create({
   baseURL: `${process.env.REACT_APP_BASE_URL}/player`,
   headers: { 'Content-Type': 'application/json' },
-})
+});
 
 export const createAccount = (
   player: Player,
@@ -16,11 +16,11 @@ export const createAccount = (
     .post('/create', player)
     .then((response) => {
       if (response.status === HttpStatus.Created) {
-        getPlayer(response.data, onSuccess, onFailure)
+        getPlayer(response.data, onSuccess, onFailure);
       }
     })
-    .catch((error) => onFailure(error))
-}
+    .catch((error) => onFailure(error));
+};
 
 export const login = (
   username: string,
@@ -32,11 +32,11 @@ export const login = (
     .post('/login', { username, password })
     .then((response) => {
       if (response.status === HttpStatus.Ok) {
-        getPlayer(response.data, onSuccess, onFailure)
+        getPlayer(response.data, onSuccess, onFailure);
       }
     })
-    .catch((error) => onFailure(error))
-}
+    .catch((error) => onFailure(error));
+};
 
 export const getPlayer = (
   playerId: number,
@@ -47,11 +47,11 @@ export const getPlayer = (
     .get(`/get/${playerId}`)
     .then((response) => {
       if (response.status === HttpStatus.Ok) {
-        onSuccess(response.data)
+        onSuccess(response.data);
       }
     })
-    .catch((error) => onFailure(error))
-}
+    .catch((error) => onFailure(error));
+};
 
 export const getPlayers = (
   mapName: string,
@@ -62,11 +62,11 @@ export const getPlayers = (
     .get(`/getPlayers/${mapName}`)
     .then((response) => {
       if (response.status === HttpStatus.Ok) {
-        onSuccess(response.data)
+        onSuccess(response.data);
       }
     })
-    .catch((error) => onFailure(error))
-}
+    .catch((error) => onFailure(error));
+};
 
 export const updatePlayer = (
   player: Partial<Player>,
@@ -78,11 +78,11 @@ export const updatePlayer = (
     .put(`/update/${saveGame}`, player)
     .then((response) => {
       if (response.status === HttpStatus.Ok) {
-        onSuccess(response.data)
+        onSuccess(response.data);
       }
     })
-    .catch((error) => onFailure(error))
-}
+    .catch((error) => onFailure(error));
+};
 
 export const loadSave = (
   playerId: number,
@@ -93,11 +93,11 @@ export const loadSave = (
     .put(`/loadSave/${playerId}`)
     .then((response) => {
       if (response.status === HttpStatus.Ok) {
-        onSuccess()
+        onSuccess();
       }
     })
-    .catch((error) => onFailure(error))
-}
+    .catch((error) => onFailure(error));
+};
 
 export const castSpell = (
   player: Partial<Player>,
@@ -110,8 +110,8 @@ export const castSpell = (
     .put(`/castSpell/${spellName}/${targetId}`, player)
     .then((response) => {
       if (response.status === HttpStatus.Ok) {
-        onSuccess(response.data)
+        onSuccess(response.data);
       }
     })
-    .catch((error) => onFailure(error))
-}
+    .catch((error) => onFailure(error));
+};

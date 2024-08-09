@@ -5,16 +5,16 @@ import {
   Input as ChakraInput,
   InputProps as ChakraInputProps,
   useColorMode,
-} from '@chakra-ui/react'
-import React from 'react'
-import { ErrorLabelColor } from '../theme'
+} from '@chakra-ui/react';
+import React from 'react';
+import { ErrorLabelColor } from '../theme';
 
 interface InputProps extends ChakraInputProps {
-  name: string
-  label: string
-  value: string
-  isRequired: boolean
-  errorMessage?: string
+  name: string;
+  label: string;
+  value: string;
+  isRequired: boolean;
+  errorMessage?: string;
 }
 
 const Input = ({
@@ -25,8 +25,8 @@ const Input = ({
   errorMessage,
   ...baseProps
 }: InputProps) => {
-  const { colorMode } = useColorMode()
-  const isInvalid = !!errorMessage
+  const { colorMode } = useColorMode();
+  const isInvalid = !!errorMessage;
   return (
     <FormControl
       isRequired={isRequired}
@@ -47,7 +47,7 @@ const Input = ({
       <ChakraInput {...baseProps} borderRadius={0} name={name} value={value} />
       <FormErrorMessage>{errorMessage}</FormErrorMessage>
     </FormControl>
-  )
-}
+  );
+};
 
-export default Input
+export default Input;

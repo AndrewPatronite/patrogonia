@@ -1,4 +1,4 @@
-import { HttpStatus } from './types'
+import { HttpStatus } from './types';
 import {
   castSpell,
   createAccount,
@@ -7,7 +7,7 @@ import {
   loadSave,
   login,
   updatePlayer,
-} from './playerService'
+} from './playerService';
 
 export {
   castSpell,
@@ -18,4 +18,4 @@ export {
   loadSave,
   login,
   updatePlayer,
-}
+};

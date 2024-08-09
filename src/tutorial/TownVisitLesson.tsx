@@ -1,6 +1,6 @@
-import React from 'react'
-import { Flex, Image, Stack, Text } from '@chakra-ui/react'
-import { Town } from '../environment/field/tiles/terrain'
+import React from 'react';
+import { Flex, Image, Stack, Text } from '@chakra-ui/react';
+import { Town } from '../environment/field/tiles/terrain';
 
 const TownVisitLesson = () => (
   <Flex>
@@ -15,6 +15,6 @@ const TownVisitLesson = () => (
     </Stack>
     <Image alt="Town" boxSize="5rem" marginLeft="1rem" src={Town} />
   </Flex>
-)
+);
 
-export default TownVisitLesson
+export default TownVisitLesson;

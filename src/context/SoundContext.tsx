@@ -1,14 +1,14 @@
-import { createContext } from 'react'
-import { Sound } from '../environment/sound'
+import { createContext } from 'react';
+import { Sound } from '../environment/sound';
 
 interface SoundState {
-  pauseSound: (sound: Sound) => void
-  playSound: (sound: Sound, soundsToPause?: Sound[]) => void
+  pauseSound: (sound: Sound) => void;
+  playSound: (sound: Sound, soundsToPause?: Sound[]) => void;
 }
 
 const SoundContext = createContext<SoundState>({
   pauseSound: () => {},
   playSound: () => {},
-})
+});
 
-export default SoundContext
+export default SoundContext;

@@ -1,17 +1,17 @@
-import React from 'react'
-import PlayerStatsPanel from './PlayerStatsPanel'
+import React from 'react';
+import PlayerStatsPanel from './PlayerStatsPanel';
 import {
   Drawer,
   DrawerBody,
   DrawerContent,
   DrawerOverlay,
-} from '@chakra-ui/react'
-import { Stats } from './types'
+} from '@chakra-ui/react';
+import { Stats } from './types';
 
 export interface PlayerStatsModalProps {
-  isOpen: boolean
-  onClose: () => void
-  stats: Stats
+  isOpen: boolean;
+  onClose: () => void;
+  stats: Stats;
 }
 
 const PlayerStatsModal = ({
@@ -32,6 +32,6 @@ const PlayerStatsModal = ({
       </DrawerBody>
     </DrawerContent>
   </Drawer>
-)
+);
 
-export default PlayerStatsModal
+export default PlayerStatsModal;

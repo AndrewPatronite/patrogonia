@@ -1,23 +1,25 @@
-import React from 'react'
-import { find, isEmpty, isEqual } from 'lodash'
-import { getLandBorderStyles, getTileKey } from './helper'
-import Character from '../../player/Character'
-import { Maps } from '../maps/Maps'
-import { isAdjacentToCurrentPlayer } from '../../utils'
-import { getTile } from './tiles'
-import { LocationToPlayerMap } from './types'
-import { MapLayout } from '../maps'
-import { Player } from '../../player'
-import { Npc } from '../../npcs'
+import React from 'react';
+import find from 'lodash/find';
+import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
+import { getLandBorderStyles, getTileKey } from './helper';
+import Character from '../../player/Character';
+import { isTown } from '../maps/Maps';
+import { isAdjacentToCurrentPlayer } from '../../utils';
+import { getTile } from './tiles';
+import { LocationToPlayerMap } from './types';
+import { MapLayout } from '../maps';
+import { Player } from '../../player';
+import { Npc } from '../../npcs';
 
 interface TileProps {
-  mapSymbol: string
-  rowIndex: number
-  columnIndex: number
-  locationToPlayerMap: LocationToPlayerMap
-  mapLayout: MapLayout
-  currentPlayer: Player
-  npcs: Npc[]
+  mapSymbol: string;
+  rowIndex: number;
+  columnIndex: number;
+  locationToPlayerMap: LocationToPlayerMap;
+  mapLayout: MapLayout;
+  currentPlayer: Player;
+  npcs: Npc[];
 }
 
 const Tile = ({
@@ -29,35 +31,34 @@ const Tile = ({
   currentPlayer,
   npcs,
 }: TileProps) => {
-  const { id: currentPlayerId } = currentPlayer
-  const isTown = Maps.isTown(mapSymbol)
+  const { id: currentPlayerId } = currentPlayer;
   const getPlayerToDisplay = (players: Player[], playerId: number) => {
     return isEmpty(players)
       ? undefined
       : find(players, (player) => isEqual(player.id, playerId)) ||
-          (!isTown && players[0])
-  }
+          (!isTown(mapSymbol) && players[0]);
+  };
   const landBorderStyles = getLandBorderStyles(
     mapSymbol,
     mapLayout,
     rowIndex,
     columnIndex
-  )
-  const tileKey = getTileKey(rowIndex, columnIndex)
-  const playersOnTile = locationToPlayerMap[tileKey]
-  const playerToDisplay = getPlayerToDisplay(playersOnTile, currentPlayerId)
+  );
+  const tileKey = getTileKey(rowIndex, columnIndex);
+  const playersOnTile = locationToPlayerMap[tileKey];
+  const playerToDisplay = getPlayerToDisplay(playersOnTile, currentPlayerId);
   const npcToDisplay = npcs.find(
     (npc) =>
       npc.currentRowIndex === rowIndex && npc.currentColumnIndex === columnIndex
-  )
+  );
   const npcInDialogRange =
     npcToDisplay &&
     isAdjacentToCurrentPlayer(
       currentPlayer,
       npcToDisplay.currentRowIndex,
       npcToDisplay.currentColumnIndex
-    )
-  const TileComponent = getTile(mapSymbol)
+    );
+  const TileComponent = getTile(mapSymbol);
 
   return (
     <TileComponent
@@ -87,7 +88,7 @@ const Tile = ({
         />
       )}
     </TileComponent>
-  )
-}
+  );
+};
 
-export default Tile
+export default Tile;

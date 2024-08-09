@@ -1,15 +1,15 @@
-import React from 'react'
-import OptionPanel from './OptionPanel'
-import ThemedHeader from '../components/theme/ThemedHeader'
-import { Stack } from '@chakra-ui/react'
-import { Stats } from '../player'
+import React from 'react';
+import OptionPanel from './OptionPanel';
+import ThemedHeader from '../components/theme/ThemedHeader';
+import { Stack } from '@chakra-ui/react';
+import { Stats } from '../player';
 
 export interface PlayerSelectionPanelProps {
-  players: Stats[]
-  action: string
-  handleBack: () => void
-  handleNext: (playerId: number) => void
-  isBackEnabled: boolean
+  players: Stats[];
+  action: string;
+  handleBack: () => void;
+  handleNext: (playerId: number) => void;
+  isBackEnabled: boolean;
 }
 
 const PlayerSelectionPanel = ({
@@ -22,7 +22,7 @@ const PlayerSelectionPanel = ({
   const options = players.map(({ playerId, playerName }) => ({
     value: playerId,
     display: playerName,
-  }))
+  }));
 
   return (
     <Stack spacing={0}>
@@ -34,7 +34,7 @@ const PlayerSelectionPanel = ({
         isBackEnabled={isBackEnabled}
       />
     </Stack>
-  )
-}
+  );
+};
 
-export default PlayerSelectionPanel
+export default PlayerSelectionPanel;

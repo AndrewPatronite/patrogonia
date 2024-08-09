@@ -12,13 +12,13 @@ import {
   TalkingSound,
   TownMusic,
   WarpSound,
-} from '.'
+} from '.';
 
 const getLoopingAudio = (source: string) => {
-  const audio = new Audio(source)
-  audio.loop = true
-  return audio
-}
+  const audio = new Audio(source);
+  audio.loop = true;
+  return audio;
+};
 
 export const SoundAudio: { [key in Sound]: HTMLAudioElement } = {
   [Sound.FieldMusic]: getLoopingAudio(FieldMusic),
@@ -33,4 +33,4 @@ export const SoundAudio: { [key in Sound]: HTMLAudioElement } = {
   [Sound.Ice]: new Audio(IceSound),
   [Sound.Warp]: new Audio(WarpSound),
   [Sound.Talking]: new Audio(TalkingSound),
-}
+};

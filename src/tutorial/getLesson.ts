@@ -1,6 +1,6 @@
-import { Lesson } from './Lesson'
-import BattleTargetLesson from './BattleTargetLesson'
-import CaveExplorationLesson from './CaveExplorationLesson'
+import { Lesson } from './Lesson';
+import BattleTargetLesson from './BattleTargetLesson';
+import CaveExplorationLesson from './CaveExplorationLesson';
 import {
   FieldMenuLesson,
   Introduction,
@@ -8,8 +8,8 @@ import {
   MovementLesson,
   NpcLesson,
   TownVisitLesson,
-} from '.'
-import BattleCommandLesson from './BattleCommandLesson'
+} from '.';
+import BattleCommandLesson from './BattleCommandLesson';
 
 export const getLesson = (lesson: LessonEnum) => {
   const lessons: { [key in LessonEnum]: Lesson } = {
@@ -45,6 +45,6 @@ export const getLesson = (lesson: LessonEnum) => {
       name: LessonEnum.TownVisitLesson,
       component: TownVisitLesson,
     },
-  }
-  return lessons[lesson]
-}
+  };
+  return lessons[lesson];
+};

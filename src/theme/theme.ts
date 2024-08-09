@@ -1,6 +1,6 @@
 // noinspection JSUnusedGlobalSymbols
 
-import { extendTheme, ThemeConfig } from '@chakra-ui/react'
+import { extendTheme, ThemeConfig } from '@chakra-ui/react';
 
 export enum ColorMode {
   Dark = 'dark',
@@ -10,7 +10,7 @@ export enum ColorMode {
 const config: ThemeConfig = {
   initialColorMode: ColorMode.Dark,
   useSystemColorMode: false,
-}
+};
 
 const darkThemePanelStyle = {
   backgroundColor: 'gray.700',
@@ -22,7 +22,7 @@ const darkThemePanelStyle = {
   span: {
     color: 'gray.200',
   },
-}
+};
 
 const lightThemePanelStyle = {
   backgroundColor: 'gray.100',
@@ -34,17 +34,17 @@ const lightThemePanelStyle = {
   span: {
     color: 'gray.700',
   },
-}
+};
 
 export const HeadingColor: { [key in ColorMode]: string } = {
   [ColorMode.Dark]: 'white',
   [ColorMode.Light]: 'messenger.700',
-}
+};
 
 export const ErrorLabelColor: { [key in ColorMode]: string } = {
   [ColorMode.Dark]: 'red.300',
   [ColorMode.Light]: 'red.600',
-}
+};
 
 const components = {
   Button: {
@@ -81,8 +81,8 @@ const components = {
       colorMode,
       includeBorder,
     }: {
-      colorMode: ColorMode
-      includeBorder: boolean
+      colorMode: ColorMode;
+      includeBorder: boolean;
     }) => ({
       ...(colorMode === ColorMode.Light
         ? lightThemePanelStyle
@@ -93,8 +93,8 @@ const components = {
       }),
     }),
   },
-}
+};
 
-const theme = extendTheme({ components, config })
+const theme = extendTheme({ components, config });
 
-export default theme
+export default theme;

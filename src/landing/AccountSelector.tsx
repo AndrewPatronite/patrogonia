@@ -6,26 +6,26 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-} from '@chakra-ui/react'
-import React from 'react'
-import LoginForm from './LoginForm'
-import CreateAccountForm from './CreateAccountForm'
-import QuickStartForm from './QuickStartForm'
-import { advanceFocus } from '../utils'
-import { Player } from '../player'
+} from '@chakra-ui/react';
+import React from 'react';
+import LoginForm from './LoginForm';
+import CreateAccountForm from './CreateAccountForm';
+import QuickStartForm from './QuickStartForm';
+import { advanceFocus } from '../utils';
+import { Player } from '../player';
 
 interface AccountSelectorProps {
-  login: (username: string, password: string) => void
-  createAccount: (player: Player) => void
+  login: (username: string, password: string) => void;
+  createAccount: (player: Player) => void;
 }
 
 const AccountSelector = ({ login, createAccount }: AccountSelectorProps) => {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if ('Tab' === e.key) {
-      e.preventDefault()
-      advanceFocus(e.target as Element, e.shiftKey)
+      e.preventDefault();
+      advanceFocus(e.target as Element, e.shiftKey);
     }
-  }
+  };
 
   return (
     <Flex height="39rem" direction="column" justifyContent="center">
@@ -51,7 +51,7 @@ const AccountSelector = ({ login, createAccount }: AccountSelectorProps) => {
         </Tabs>
       </Box>
     </Flex>
-  )
-}
+  );
+};
 
-export default AccountSelector
+export default AccountSelector;

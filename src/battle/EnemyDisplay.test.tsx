@@ -1,17 +1,17 @@
-import React from 'react'
-import { shallow, ShallowWrapper } from 'enzyme'
-import EnemyDisplay, { EnemyDisplayProps } from './EnemyDisplay'
-import { Cave, Continent } from '../environment/maps/Maps'
-import { Box } from '@chakra-ui/react'
-import { EnemyName } from './types'
+import React from 'react';
+import { shallow, ShallowWrapper } from 'enzyme';
+import EnemyDisplay, { EnemyDisplayProps } from './EnemyDisplay';
+import { Box } from '@chakra-ui/react';
+import { EnemyName } from './types';
+import { CaveName, ContinentName } from '../environment/maps/types';
 
 describe('EnemyDisplay', () => {
-  let props: EnemyDisplayProps
-  let subject: ShallowWrapper
+  let props: EnemyDisplayProps;
+  let subject: ShallowWrapper;
 
   beforeEach(() => {
     props = {
-      mapName: Cave.LavaGrotto,
+      mapName: CaveName.LavaGrotto,
       enemies: [
         { id: 'ffff123', name: EnemyName.Rat, stats: { hp: 0 } },
         { id: 'eeee123', name: EnemyName.Rat, stats: { hp: 0 } },
@@ -26,23 +26,23 @@ describe('EnemyDisplay', () => {
           delivered: true,
         },
       ],
-    }
-    subject = shallow(<EnemyDisplay {...props} />)
-  })
+    };
+    subject = shallow(<EnemyDisplay {...props} />);
+  });
 
   it('has the cave image based on the map', () => {
-    expect(subject.prop('backgroundImage')).toEqual('cave.svg')
-  })
+    expect(subject.prop('backgroundImage')).toEqual('cave.svg');
+  });
 
   it('has the field image based on the map', () => {
-    props.mapName = Continent.Grimes
-    subject = shallow(<EnemyDisplay {...props} />)
-    expect(subject.prop('backgroundImage')).toEqual('field.svg')
-  })
+    props.mapName = ContinentName.Grimes;
+    subject = shallow(<EnemyDisplay {...props} />);
+    expect(subject.prop('backgroundImage')).toEqual('field.svg');
+  });
 
   it("has a Box to house each enemy that hasn't been reported as defeated", () => {
-    const enemies = subject.find(Box)
-    expect(enemies.length).toEqual(2)
+    const enemies = subject.find(Box);
+    expect(enemies.length).toEqual(2);
     expect(enemies.at(0).props()).toEqual({
       backgroundImage: 'rat.svg',
       backgroundRepeat: 'no-repeat',
@@ -54,7 +54,7 @@ describe('EnemyDisplay', () => {
         backgroundPositionY: 'bottom',
       },
       width: expect.anything(),
-    })
+    });
     expect(enemies.at(1).props()).toEqual({
       backgroundImage: 'goblin.svg',
       backgroundRepeat: 'no-repeat',
@@ -66,6 +66,6 @@ describe('EnemyDisplay', () => {
         backgroundPositionY: 'bottom',
       },
       width: expect.anything(),
-    })
-  })
-})
+    });
+  });
+});

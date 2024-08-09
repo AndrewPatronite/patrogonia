@@ -1,22 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
-import Description from './Description'
-import TeamUp from './TeamUp'
-import CampingPlayer from './CampingPlayer'
-import Welcome from './Welcome'
-import PopIn from './PopIn'
-import { LessonEnum, recordLesson } from '..'
-import { Button, Flex, Stack } from '@chakra-ui/react'
-import { Player } from '../../player'
+import Description from './Description';
+import TeamUp from './TeamUp';
+import CampingPlayer from './CampingPlayer';
+import Welcome from './Welcome';
+import PopIn from './PopIn';
+import { LessonEnum, recordLesson } from '..';
+import { Button, Flex, Stack } from '@chakra-ui/react';
+import { Player } from '../../player';
 
 interface IntroductionProps {
-  currentPlayer?: Player
+  currentPlayer?: Player;
   updatePlayer?: (
     player: Player,
     saveGame?: boolean,
     updateToServer?: boolean
-  ) => void
-  isCompact?: boolean
+  ) => void;
+  isCompact?: boolean;
 }
 
 const Introduction = ({
@@ -24,7 +24,7 @@ const Introduction = ({
   updatePlayer,
   isCompact = false,
 }: IntroductionProps) => {
-  const [introductionPanelIndex, setIntroductionPanelIndex] = useState(0)
+  const [introductionPanelIndex, setIntroductionPanelIndex] = useState(0);
 
   const introductionPanels = [
     Welcome,
@@ -32,24 +32,26 @@ const Introduction = ({
     TeamUp,
     CampingPlayer,
     PopIn,
-  ].slice(isCompact ? 1 : 0)
-  const IntroductionPanel = introductionPanels[introductionPanelIndex]
+  ].slice(isCompact ? 1 : 0);
+  const IntroductionPanel = introductionPanels[introductionPanelIndex];
 
   const handlePreviousClick = () =>
-    setIntroductionPanelIndex((previousIndex) => Math.max(previousIndex - 1, 0))
+    setIntroductionPanelIndex((previousIndex) =>
+      Math.max(previousIndex - 1, 0)
+    );
 
   const handleNextClick = () => {
     setIntroductionPanelIndex((previousIndex) => {
       if (previousIndex < introductionPanels.length - 1) {
-        return previousIndex + 1
+        return previousIndex + 1;
       } else {
         if (currentPlayer && updatePlayer) {
-          recordLesson(currentPlayer, LessonEnum.Introduction, updatePlayer)
+          recordLesson(currentPlayer, LessonEnum.Introduction, updatePlayer);
         }
-        return isCompact ? 0 : previousIndex
+        return isCompact ? 0 : previousIndex;
       }
-    })
-  }
+    });
+  };
 
   return (
     <Stack spacing="2rem">
@@ -71,7 +73,7 @@ const Introduction = ({
         </Button>
       </Flex>
     </Stack>
-  )
-}
+  );
+};
 
-export default Introduction
+export default Introduction;

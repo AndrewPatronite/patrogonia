@@ -1,1 +1,1 @@
-export type MapLayout = string[][]
+export type MapLayout = string[][];

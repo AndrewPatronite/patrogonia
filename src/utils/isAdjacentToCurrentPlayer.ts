@@ -1,4 +1,4 @@
-import { Player } from '../player'
+import { Player } from '../player';
 
 export const isAdjacentToCurrentPlayer = (
   {
@@ -13,4 +13,4 @@ export const isAdjacentToCurrentPlayer = (
   (currentPlayerRowIndex === targetRowIndex ||
     currentPlayerColumnIndex === targetColumnIndex) &&
   Math.abs(currentPlayerRowIndex - targetRowIndex) <= 1 &&
-  Math.abs(currentPlayerColumnIndex - targetColumnIndex) <= 1
+  Math.abs(currentPlayerColumnIndex - targetColumnIndex) <= 1;

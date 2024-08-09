@@ -1,50 +1,52 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { filter, values } from 'lodash'
-import { getBattleStatusStyle } from './helper'
-import Log from './Log'
-import PlayerPanel from './PlayerPanel'
-import ThemedPanel from '../components/theme/ThemedPanel'
-import { Flex } from '@chakra-ui/react'
-import { useBattle, usePlayer, useSound } from '../hooks'
-import { isBattleEnded } from './types'
-import EnemyDisplay from './EnemyDisplay'
-import { Sound } from '../environment/sound'
+import React, { useEffect, useMemo, useState } from 'react';
+import filter from 'lodash/filter';
+import values from 'lodash/values';
+import { getBattleStatusStyle } from './helper';
+import Log from './Log';
+import PlayerPanel from './PlayerPanel';
+import ThemedPanel from '../components/theme/ThemedPanel';
+import { Flex } from '@chakra-ui/react';
+import { useBattle, usePlayer, useSound } from '../hooks';
+import { isBattleEnded } from './types';
+import EnemyDisplay from './EnemyDisplay';
+import { Sound } from '../environment/sound';
 
 const Battle = () => {
-  const { playSound, pauseSound } = useSound()
-  const { currentPlayer, loadSave, updatePlayer } = usePlayer()
-  const { battle, dismissBattle, takeTurn } = useBattle()
+  const { playSound, pauseSound } = useSound();
+  const { currentPlayer, loadSave, updatePlayer } = usePlayer();
+  const { battle, dismissBattle, takeTurn } = useBattle();
   const { enemies = [], log, playerStats, roundPlayerActions = {}, status } =
-    battle || {}
+    battle || {};
   const {
     location: { mapName },
-  } = currentPlayer
-  const [selectedEnemyId, selectEnemy] = useState<string>()
-  const [playerTurnEnabled, setPlayerTurnEnabled] = useState<boolean>(true)
-  const [typing, setTyping] = useState(false)
-  const players = values(playerStats)
-  const battleStatusStyle = getBattleStatusStyle(players)
-  const battleEnded = !!status && isBattleEnded(status)
+  } = currentPlayer;
+  const [selectedEnemyId, selectEnemy] = useState<string>();
+  const [playerTurnEnabled, setPlayerTurnEnabled] = useState<boolean>(true);
+  const [typing, setTyping] = useState(false);
+  const players = values(playerStats);
+  const battleStatusStyle = getBattleStatusStyle(players);
+  const battleEnded = !!status && isBattleEnded(status);
+
   //TODO AP clean this up after breaking battleMessage up into smaller pieces
-  const deliveredLogEntries = useMemo(
-    () => filter(log, (entry) => entry.delivered),
-    [log]
-  )
-  const allMessagesDelivered = log?.length === deliveredLogEntries.length
+  const { deliveredLogEntries, allMessagesDelivered } = useMemo(() => {
+    const deliveredLogEntries = filter(log, (entry) => entry.delivered);
+    const allMessagesDelivered = log?.length === deliveredLogEntries.length;
+    return { deliveredLogEntries, allMessagesDelivered };
+  }, [log]);
 
   useEffect(() => {
-    playSound(Sound.BattleMusic, [Sound.FieldMusic, Sound.CaveMusic])
-  }, [playSound])
+    playSound(Sound.BattleMusic, [Sound.FieldMusic, Sound.CaveMusic]);
+  }, [playSound]);
 
   useEffect(() => {
     if (allMessagesDelivered) {
       if (battleEnded) {
-        pauseSound(Sound.BattleMusic)
+        pauseSound(Sound.BattleMusic);
       } else {
-        setPlayerTurnEnabled(true)
+        setPlayerTurnEnabled(true);
       }
     }
-  }, [allMessagesDelivered, battleEnded, pauseSound])
+  }, [allMessagesDelivered, battleEnded, pauseSound]);
 
   return battle ? (
     <ThemedPanel
@@ -83,9 +85,9 @@ const Battle = () => {
               enemies={enemies}
               selectEnemy={selectEnemy}
               takeTurn={(action: string, targetId?: string | number) => {
-                takeTurn(action, targetId)
-                setPlayerTurnEnabled(false)
-                selectEnemy(undefined)
+                takeTurn(action, targetId);
+                setPlayerTurnEnabled(false);
+                selectEnemy(undefined);
               }}
               roundPlayerActions={roundPlayerActions}
               selectedEnemyId={selectedEnemyId}
@@ -97,7 +99,7 @@ const Battle = () => {
         </Flex>
       )}
     </ThemedPanel>
-  ) : null
-}
+  ) : null;
+};
 
-export default Battle
+export default Battle;
