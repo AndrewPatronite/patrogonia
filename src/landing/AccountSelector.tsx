@@ -16,7 +16,7 @@ import { Player } from '../player';
 
 interface AccountSelectorProps {
   login: (username: string, password: string) => void;
-  createAccount: (player: Player) => void;
+  createAccount: (player: Partial<Player>) => void;
 }
 
 const AccountSelector = ({ login, createAccount }: AccountSelectorProps) => {

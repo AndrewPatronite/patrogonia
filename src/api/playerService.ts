@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
 });
 
 export const createAccount = (
-  player: Player,
+  player: Partial<Player>,
   onSuccess: (createdPlayer: Player) => void,
   onFailure: (error: any) => void
 ) => {

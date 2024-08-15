@@ -36,7 +36,7 @@ export const login = (
 
 export const createAccount = (
   dispatch: Dispatch,
-  player: Player,
+  player: Partial<Player>,
   onFailure: (error: any) => void
 ) =>
   createAccountRemote(

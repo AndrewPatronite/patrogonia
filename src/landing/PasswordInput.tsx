@@ -29,7 +29,7 @@ const PasswordInput = ({
         isRequired
         name="password"
         label="Password"
-        maxLength={16}
+        maxLength={45}
         type={showPassword ? 'text' : 'password'}
         value={password}
         onBlur={onBlur}

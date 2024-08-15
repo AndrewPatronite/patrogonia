@@ -4,7 +4,7 @@ import { Player } from '../player';
 
 interface PlayerState {
   castSpell: (spellName: string, targetId: string) => void;
-  createAccount: (player: Player) => void;
+  createAccount: (player: Partial<Player>) => void;
   currentPlayer: Player;
   loadPlayer: (playerId: number) => void;
   loadSave: (playerId: number) => void;

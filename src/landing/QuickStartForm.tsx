@@ -8,7 +8,7 @@ import { Player } from '../player';
 import { CredentialedPlayer } from '../player/types';
 
 interface QuickStartFormProps {
-  createAccount: (player: Player) => void;
+  createAccount: (player: Partial<Player>) => void;
 }
 
 const getRandomEntry = (list: string[]) => list[random(list.length - 1)];
@@ -27,8 +27,7 @@ const QuickStartForm = ({ createAccount }: QuickStartFormProps) => {
   const [character, setCharacter] = useState(generateCharacter);
 
   const create = () => {
-    //@ts-ignore additional fields
-    const newPlayer: CredentialedPlayer = {
+    const newPlayer: Partial<CredentialedPlayer> = {
       ...character,
       password: encrypt(character.password),
     };

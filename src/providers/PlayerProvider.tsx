@@ -30,7 +30,8 @@ const PlayerProvider = ({
       [dispatch, currentPlayer, displayError]
     ),
     createAccount: useCallback(
-      (player: Player) => createAccount(dispatch, player, displayError),
+      (player: Partial<Player>) =>
+        createAccount(dispatch, player, displayError),
       [dispatch, displayError]
     ),
     currentPlayer,

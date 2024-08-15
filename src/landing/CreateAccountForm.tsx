@@ -11,7 +11,7 @@ import { Player } from '../player';
 import { CredentialedPlayer } from '../player/types';
 
 interface CreateAccountFormProps {
-  createAccount: (player: Player) => void;
+  createAccount: (player: Partial<Player>) => void;
 }
 
 const CreateAccountForm = ({ createAccount }: CreateAccountFormProps) => {
@@ -51,8 +51,7 @@ const CreateAccountForm = ({ createAccount }: CreateAccountFormProps) => {
     },
     onSubmit: async (values) => {
       const { name, username, password } = values;
-      //@ts-ignore additional fields
-      const player: CredentialedPlayer = {
+      const player: Partial<CredentialedPlayer> = {
         name,
         username,
         password: encrypt(password),

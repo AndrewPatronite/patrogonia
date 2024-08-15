@@ -12,7 +12,7 @@ import { Player } from '../player';
 
 interface LandingPageProps {
   login: (username: string, password: string) => void;
-  createAccount: (player: Player) => void;
+  createAccount: (player: Partial<Player>) => void;
 }
 
 const LandingPage = ({ login, createAccount }: LandingPageProps) => {
