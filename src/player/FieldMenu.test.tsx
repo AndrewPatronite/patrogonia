@@ -1,13 +1,13 @@
-import React from 'react'
-import { shallow, ShallowWrapper } from 'enzyme'
-import FieldMenu from './FieldMenu'
-import OptionPanel from '../battle/OptionPanel'
-import PlayerStatsPanel from './PlayerStatsPanel'
-import PlayerSpells from './PlayerSpells'
-import { Drawer, Tab, TabList } from '@chakra-ui/react'
-import { Player, Spell } from './types'
-import { Cave, Continent, Town } from '../environment/maps/Maps'
-import { Direction } from '../navigation'
+import React from 'react';
+import { shallow, ShallowWrapper } from 'enzyme';
+import FieldMenu from './FieldMenu';
+import OptionPanel from '../battle/OptionPanel';
+import PlayerStatsPanel from './PlayerStatsPanel';
+import PlayerSpells from './PlayerSpells';
+import { Drawer, Tab, TabList } from '@chakra-ui/react';
+import { Player, Spell } from './types';
+import { Direction } from '../navigation';
+import { CaveName, ContinentName, TownName } from '../environment/maps/types';
 
 describe('FieldMenu', () => {
   const availableSpells: Spell[] = [
@@ -24,15 +24,15 @@ describe('FieldMenu', () => {
       offensive: false,
       battleSpell: false,
     },
-  ]
-  let currentPlayer: Player
-  let closeFieldMenu: jest.Mock
-  let castSpell: jest.Mock
-  let subject: ShallowWrapper
+  ];
+  let currentPlayer: Player;
+  let closeFieldMenu: jest.Mock;
+  let castSpell: jest.Mock;
+  let subject: ShallowWrapper;
 
   beforeEach(() => {
-    closeFieldMenu = jest.fn()
-    castSpell = jest.fn()
+    closeFieldMenu = jest.fn();
+    castSpell = jest.fn();
     currentPlayer = {
       id: 1,
       name: 'Redwan',
@@ -55,16 +55,16 @@ describe('FieldMenu', () => {
         agility: 12,
       },
       location: {
-        mapName: Continent.Atoris,
+        mapName: ContinentName.Atoris,
         rowIndex: 5,
         columnIndex: 7,
         facing: Direction.Down,
-        entranceName: Cave.LavaGrotto,
+        entranceName: CaveName.LavaGrotto,
       },
       lastUpdate: '',
-      visited: [Town.Dewhurst],
+      visited: [TownName.Dewhurst],
       tutorialLessons: [],
-    }
+    };
     subject = shallow(
       <FieldMenu
         showFieldMenu={true}
@@ -72,19 +72,19 @@ describe('FieldMenu', () => {
         currentPlayer={currentPlayer}
         castSpell={castSpell}
       />
-    )
-  })
+    );
+  });
 
   it('is a Drawer with the expected props exposing a field menu', () => {
-    expect(subject.type()).toEqual(Drawer)
-    expect(subject.prop('size')).toEqual('sm')
-    expect(subject.prop('placement')).toEqual('left')
-    expect(subject.prop('onClose')).toEqual(closeFieldMenu)
-    expect(subject.prop('isOpen')).toEqual(true)
-  })
+    expect(subject.type()).toEqual(Drawer);
+    expect(subject.prop('size')).toEqual('sm');
+    expect(subject.prop('placement')).toEqual('left');
+    expect(subject.prop('onClose')).toEqual(closeFieldMenu);
+    expect(subject.prop('isOpen')).toEqual(true);
+  });
 
   it('has an OptionPanel with the expected options', () => {
-    const optionPanel = subject.find(OptionPanel)
+    const optionPanel = subject.find(OptionPanel);
     expect(optionPanel.props()).toEqual({
       options: [
         { value: 'playerStats', display: 'Stats' },
@@ -104,11 +104,11 @@ describe('FieldMenu', () => {
       isBackEnabled: false,
       showNextButton: false,
       initialValue: 'playerStats',
-    })
-  })
+    });
+  });
 
   it("has a TabList with the spells disabled if the player doesn't have any available", () => {
-    currentPlayer.stats.mp = 2
+    currentPlayer.stats.mp = 2;
     subject = shallow(
       <FieldMenu
         showFieldMenu={true}
@@ -116,23 +116,23 @@ describe('FieldMenu', () => {
         currentPlayer={currentPlayer}
         castSpell={castSpell}
       />
-    )
-    const tabList = subject.find(TabList).find(Tab)
-    expect(tabList.length).toEqual(3)
-    expect(tabList.at(0).text()).toEqual('Stats')
-    expect(tabList.at(1).text()).toEqual('Spells')
-    expect(tabList.at(1).prop('isDisabled')).toEqual(true)
-    expect(tabList.at(2).text()).toEqual('Options')
-  })
+    );
+    const tabList = subject.find(TabList).find(Tab);
+    expect(tabList.length).toEqual(3);
+    expect(tabList.at(0).text()).toEqual('Stats');
+    expect(tabList.at(1).text()).toEqual('Spells');
+    expect(tabList.at(1).prop('isDisabled')).toEqual(true);
+    expect(tabList.at(2).text()).toEqual('Options');
+  });
 
   it('displays a PlayerStatsPanel initially with the expected props', () => {
-    const playerStatsPanel = subject.find(PlayerStatsPanel)
+    const playerStatsPanel = subject.find(PlayerStatsPanel);
     expect(playerStatsPanel.props()).toEqual({
       playerStats: currentPlayer.stats,
       showHeading: false,
       includeBorder: false,
-    })
-  })
+    });
+  });
 
   describe('PlayerSpells', () => {
     it('displays PlayerSpells when chosen with the expected outdoor spells', () => {
@@ -143,8 +143,8 @@ describe('FieldMenu', () => {
           currentPlayer={currentPlayer}
           castSpell={castSpell}
         />
-      )
-      const playerSpells = subject.find(PlayerSpells)
+      );
+      const playerSpells = subject.find(PlayerSpells);
       expect(playerSpells.props()).toEqual({
         currentPlayer: currentPlayer,
         availableSpells: [
@@ -163,11 +163,11 @@ describe('FieldMenu', () => {
         ],
         onSpellCast: expect.any(Function),
         castSpell,
-      })
-    })
+      });
+    });
 
     it('displays PlayerSpells when chosen with the expected cave spells', () => {
-      currentPlayer.location.mapName = Cave.LavaGrotto
+      currentPlayer.location.mapName = CaveName.LavaGrotto;
       subject = shallow(
         <FieldMenu
           showFieldMenu={true}
@@ -175,8 +175,8 @@ describe('FieldMenu', () => {
           currentPlayer={currentPlayer}
           castSpell={castSpell}
         />
-      )
-      const playerSpells = subject.find(PlayerSpells)
+      );
+      const playerSpells = subject.find(PlayerSpells);
       expect(playerSpells.props()).toEqual({
         currentPlayer,
         availableSpells: [
@@ -195,11 +195,11 @@ describe('FieldMenu', () => {
         ],
         onSpellCast: expect.any(Function),
         castSpell,
-      })
-    })
+      });
+    });
 
     fit('displays PlayerSpells without HEAL when player is at full health', () => {
-      currentPlayer.stats.hp = currentPlayer.stats.hpTotal
+      currentPlayer.stats.hp = currentPlayer.stats.hpTotal;
       subject = shallow(
         <FieldMenu
           showFieldMenu={true}
@@ -207,8 +207,8 @@ describe('FieldMenu', () => {
           currentPlayer={currentPlayer}
           castSpell={castSpell}
         />
-      )
-      const playerSpells = subject.find(PlayerSpells)
+      );
+      const playerSpells = subject.find(PlayerSpells);
       expect(playerSpells.props()).toEqual({
         currentPlayer,
         availableSpells: [
@@ -221,8 +221,8 @@ describe('FieldMenu', () => {
         ],
         onSpellCast: expect.any(Function),
         castSpell,
-      })
-    })
+      });
+    });
 
     it('sets the menu choice to player stats on spell cast and closes the modal', async () => {
       subject = shallow(
@@ -232,10 +232,10 @@ describe('FieldMenu', () => {
           currentPlayer={currentPlayer}
           castSpell={castSpell}
         />
-      )
-      const playerSpells = subject.find(PlayerSpells)
-      playerSpells.prop('onSpellCast')()
-      expect(closeFieldMenu).toHaveBeenCalled()
-    })
-  })
-})
+      );
+      const playerSpells = subject.find(PlayerSpells);
+      playerSpells.prop('onSpellCast')();
+      expect(closeFieldMenu).toHaveBeenCalled();
+    });
+  });
+});

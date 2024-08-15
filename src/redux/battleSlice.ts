@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { Battle } from '../battle/types'
+import { createSlice } from '@reduxjs/toolkit';
+import { Battle } from '../battle/types';
 
-const INITIAL_STATE: { battle?: Battle } = { battle: undefined }
+const INITIAL_STATE: { battle?: Battle } = { battle: undefined };
 const battleSlice = createSlice({
   name: 'battle',
   initialState: INITIAL_STATE,
@@ -10,6 +10,6 @@ const battleSlice = createSlice({
     loadBattle: (state, { payload }) => ({ battle: payload }),
     updateBattle: (state, { payload }) => ({ battle: payload }),
   },
-})
+});
 
-export default battleSlice
+export default battleSlice;

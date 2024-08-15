@@ -1,21 +1,21 @@
-import React, { useEffect } from 'react'
-import { upperFirst } from 'lodash'
-import OptionPanel from './OptionPanel'
-import ThemedHeader from '../components/theme/ThemedHeader'
-import { getLesson, LessonEnum, TutorialModal } from '../tutorial'
-import { Stack } from '@chakra-ui/react'
-import { Enemy } from './types'
-import { Player } from '../player'
+import React, { useEffect } from 'react';
+import upperFirst from 'lodash/upperFirst';
+import OptionPanel from './OptionPanel';
+import ThemedHeader from '../components/theme/ThemedHeader';
+import { getLesson, LessonEnum, TutorialModal } from '../tutorial';
+import { Stack } from '@chakra-ui/react';
+import { Enemy } from './types';
+import { Player } from '../player';
 
 export interface EnemySelectionPanelProps {
-  currentPlayer: Player
-  enemies: Enemy[]
-  action: string
-  handleBack: () => void
-  handleNext: (selectedEnemyId: string) => void
-  selectEnemy: (selectedEnemyId: string) => void
-  selectedEnemyId?: string
-  playerTurnEnabled: boolean
+  currentPlayer: Player;
+  enemies: Enemy[];
+  action: string;
+  handleBack: () => void;
+  handleNext: (selectedEnemyId: string) => void;
+  selectEnemy: (selectedEnemyId: string) => void;
+  selectedEnemyId?: string;
+  playerTurnEnabled: boolean;
 }
 
 const EnemySelectionPanel = ({
@@ -31,13 +31,13 @@ const EnemySelectionPanel = ({
   const options = enemies.map(({ id, name }) => ({
     value: id,
     display: name,
-  }))
+  }));
 
   useEffect(() => {
     if (playerTurnEnabled && !selectedEnemyId) {
-      selectEnemy(enemies[0].id)
+      selectEnemy(enemies[0].id);
     }
-  }, [enemies, playerTurnEnabled, selectEnemy, selectedEnemyId])
+  }, [enemies, playerTurnEnabled, selectEnemy, selectedEnemyId]);
 
   return (
     <Stack spacing={0}>
@@ -55,7 +55,7 @@ const EnemySelectionPanel = ({
         lessonProps={{ options }}
       />
     </Stack>
-  )
-}
+  );
+};
 
-export default EnemySelectionPanel
+export default EnemySelectionPanel;

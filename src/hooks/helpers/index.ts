@@ -1,4 +1,4 @@
-import { getRandomDirection } from './getRandomDirection'
-import { moveNpc } from './moveNpc'
+import { getRandomDirection } from './getRandomDirection';
+import { moveNpc } from './moveNpc';
 
-export { getRandomDirection, moveNpc }
+export { getRandomDirection, moveNpc };

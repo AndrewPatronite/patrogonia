@@ -1,7 +1,7 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import playerSlice from './playerSlice'
-import battleSlice from './battleSlice'
-import mapSlice from './mapSlice'
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import playerSlice from './playerSlice';
+import battleSlice from './battleSlice';
+import mapSlice from './mapSlice';
 
 export const store = configureStore({
   reducer: combineReducers({
@@ -9,6 +9,6 @@ export const store = configureStore({
     battleState: battleSlice.reducer,
     mapState: mapSlice.reducer,
   }),
-})
+});
 
-export type RootState = ReturnType<typeof store.getState>
+export type RootState = ReturnType<typeof store.getState>;

@@ -1,6 +1,6 @@
-import React from 'react'
-import { Box, BoxProps } from '@chakra-ui/react'
-import { Grass as GrassImage, LandColors } from './terrain'
+import React from 'react';
+import { Box, BoxProps } from '@chakra-ui/react';
+import { Grass as GrassImage, LandColors } from './terrain';
 
 const Grass = ({ children, ...baseProps }: BoxProps) => (
   <Box
@@ -10,6 +10,6 @@ const Grass = ({ children, ...baseProps }: BoxProps) => (
   >
     {children}
   </Box>
-)
+);
 
-export default Grass
+export default Grass;

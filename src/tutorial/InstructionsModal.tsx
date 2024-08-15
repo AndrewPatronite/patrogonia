@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import {
   Button,
   Modal,
@@ -10,28 +10,28 @@ import {
   TabPanels,
   Tabs,
   useDisclosure,
-} from '@chakra-ui/react'
-import ThemedPanel from '../components/theme/ThemedPanel'
+} from '@chakra-ui/react';
+import ThemedPanel from '../components/theme/ThemedPanel';
 import {
   BattleCommandLesson,
   FieldMenuLesson,
   MovementLesson,
   TownVisitLesson,
-} from '../tutorial'
-import NpcLesson from './NpcLesson'
-import IntroductionLesson from '../tutorial/introduction/Introduction'
-import CaveExplorationLesson from './CaveExplorationLesson'
-import { Command } from '../battle/types'
+} from '../tutorial';
+import NpcLesson from './NpcLesson';
+import IntroductionLesson from '../tutorial/introduction/Introduction';
+import CaveExplorationLesson from './CaveExplorationLesson';
+import { Command } from '../battle/types';
 
 interface LessonEntry {
-  name: string
-  lesson: () => JSX.Element
+  name: string;
+  lesson: () => JSX.Element;
 }
 
-const Introduction = () => <IntroductionLesson isCompact={true} />
+const Introduction = () => <IntroductionLesson isCompact={true} />;
 
 const InstructionsModal = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const lessonEntries: LessonEntry[] = [
     {
       name: 'Introduction',
@@ -71,7 +71,7 @@ const InstructionsModal = () => {
       name: 'Caves',
       lesson: CaveExplorationLesson,
     },
-  ]
+  ];
 
   return (
     <>
@@ -113,7 +113,7 @@ const InstructionsModal = () => {
         </ModalContent>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default InstructionsModal
+export default InstructionsModal;

@@ -1,5 +1,5 @@
-import { ListOption } from '../control/List'
-import React from 'react'
+import { ListOption } from '../control/List';
+import React from 'react';
 import {
   HStack,
   Icon,
@@ -9,12 +9,12 @@ import {
   Stack,
   Text,
   VStack,
-} from '@chakra-ui/react'
-import { FaArrowDown, FaArrowUp } from 'react-icons/fa'
+} from '@chakra-ui/react';
+import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 
 interface BattleOptionLessonProps {
-  options: ListOption[]
-  subject: string
+  options: ListOption[];
+  subject: string;
 }
 
 const BattleOptionLesson = ({ options, subject }: BattleOptionLessonProps) => {
@@ -59,7 +59,7 @@ const BattleOptionLesson = ({ options, subject }: BattleOptionLessonProps) => {
         2. Press <Kbd>Enter</Kbd> to confirm the {subject}.
       </Text>
     </Stack>
-  )
-}
+  );
+};
 
-export default BattleOptionLesson
+export default BattleOptionLesson;

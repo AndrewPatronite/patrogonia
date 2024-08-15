@@ -1,39 +1,38 @@
-import React, { useState } from 'react'
-import { Button, Stack, Text } from '@chakra-ui/react'
-import words from 'an-array-of-english-words'
-import { random } from 'lodash'
-import { characterNames, encrypt } from './helper'
-import { startingLocation } from './startingLocation'
-import { Player } from '../player'
-import { CredentialedPlayer } from '../player/types'
+import React, { useState } from 'react';
+import { Button, Stack, Text } from '@chakra-ui/react';
+import words from 'an-array-of-english-words';
+import random from 'lodash/random';
+import { characterNames, encrypt } from './helper';
+import { startingLocation } from './startingLocation';
+import { Player } from '../player';
+import { CredentialedPlayer } from '../player/types';
 
 interface QuickStartFormProps {
-  createAccount: (player: Player) => void
+  createAccount: (player: Partial<Player>) => void;
 }
 
-const getRandomEntry = (list: string[]) => list[random(list.length - 1)]
+const getRandomEntry = (list: string[]) => list[random(list.length - 1)];
 
 const generateCharacter = () => {
-  const randomName = getRandomEntry(characterNames)
+  const randomName = getRandomEntry(characterNames);
   return {
     name: randomName,
     username: `${randomName}${random(1, 9999)}`,
     password: getRandomEntry(words),
     location: startingLocation,
-  }
-}
+  };
+};
 
 const QuickStartForm = ({ createAccount }: QuickStartFormProps) => {
-  const [character, setCharacter] = useState(generateCharacter)
+  const [character, setCharacter] = useState(generateCharacter);
 
   const create = () => {
-    //@ts-ignore additional fields
-    const newPlayer: CredentialedPlayer = {
+    const newPlayer: Partial<CredentialedPlayer> = {
       ...character,
       password: encrypt(character.password),
-    }
-    createAccount(newPlayer)
-  }
+    };
+    createAccount(newPlayer);
+  };
 
   return (
     <Stack spacing="1rem">
@@ -60,7 +59,7 @@ const QuickStartForm = ({ createAccount }: QuickStartFormProps) => {
         Start
       </Button>
     </Stack>
-  )
-}
+  );
+};
 
-export default QuickStartForm
+export default QuickStartForm;

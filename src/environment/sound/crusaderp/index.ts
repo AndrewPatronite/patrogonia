@@ -1,6 +1,6 @@
-const BattleMusic = require('./BattleNO3.mp3').default
-const CaveMusic = require('./AcrosstheSandWIP2.mp3').default
-const FieldMusic = require('./BattleHighlands.mp3').default
-const TownMusic = require('./IndoorsThree.mp3').default
+import BattleMusic from './BattleNO3.mp3';
+import CaveMusic from './AcrosstheSandWIP2.mp3';
+import FieldMusic from './BattleHighlands.mp3';
+import TownMusic from './IndoorsThree.mp3';
 
-export { BattleMusic, CaveMusic, FieldMusic, TownMusic }
+export { BattleMusic, CaveMusic, FieldMusic, TownMusic };

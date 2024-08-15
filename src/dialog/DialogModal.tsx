@@ -1,34 +1,34 @@
-import React, { useState } from 'react'
-import ThemedPanel from '../components/theme/ThemedPanel'
+import React, { useState } from 'react';
+import ThemedPanel from '../components/theme/ThemedPanel';
 import {
   Button,
   Drawer,
   DrawerBody,
   DrawerContent,
   DrawerOverlay,
-} from '@chakra-ui/react'
-import Typist from 'react-typist'
-import { Sound } from '../environment/sound'
-import { useSound } from '../hooks'
-import { debounce } from 'lodash'
+} from '@chakra-ui/react';
+import Typist from 'react-typist';
+import { Sound } from '../environment/sound';
+import { useSound } from '../hooks';
+import debounce from 'lodash/debounce';
 
 const DialogModal = ({
   closeDialog,
   getDialog,
   showDialog,
 }: {
-  closeDialog: () => void
-  getDialog: () => any
-  showDialog: boolean
+  closeDialog: () => void;
+  getDialog: () => any;
+  showDialog: boolean;
 }) => {
-  const { playSound } = useSound()
-  const speak = debounce(() => playSound(Sound.Talking), 30)
-  const [typing, setTyping] = useState(false)
-  const { content = '', onClose = () => {} } = getDialog()
+  const { playSound } = useSound();
+  const speak = debounce(() => playSound(Sound.Talking), 30);
+  const [typing, setTyping] = useState(false);
+  const { content = '', onClose = () => {} } = getDialog();
   const dismiss = () => {
-    closeDialog()
-    onClose()
-  }
+    closeDialog();
+    onClose();
+  };
   return (
     <Drawer size="sm" placement="left" onClose={onClose} isOpen={showDialog}>
       <DrawerOverlay />
@@ -45,8 +45,8 @@ const DialogModal = ({
               stdTypingDelay={15}
               cursor={{ show: false }}
               onCharacterTyped={() => {
-                speak()
-                setTyping(true)
+                speak();
+                setTyping(true);
               }}
               onTypingDone={() => setTyping(false)}
             >
@@ -67,7 +67,7 @@ const DialogModal = ({
         </DrawerBody>
       </DrawerContent>
     </Drawer>
-  )
-}
+  );
+};
 
-export default DialogModal
+export default DialogModal;

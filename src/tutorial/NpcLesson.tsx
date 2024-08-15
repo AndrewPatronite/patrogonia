@@ -1,6 +1,6 @@
-import React from 'react'
-import { Icon, Kbd, Stack, Text } from '@chakra-ui/react'
-import { FaInfoCircle } from 'react-icons/fa'
+import React from 'react';
+import { Icon, Kbd, Stack, Text } from '@chakra-ui/react';
+import { FaInfoCircle } from 'react-icons/fa';
 
 const NpcLesson = () => {
   return (
@@ -13,7 +13,7 @@ const NpcLesson = () => {
         <Icon as={FaInfoCircle} height="1.5rem" width="1.5rem" />.
       </Text>
     </Stack>
-  )
-}
+  );
+};
 
-export default NpcLesson
+export default NpcLesson;

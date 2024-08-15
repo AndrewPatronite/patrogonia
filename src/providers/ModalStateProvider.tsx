@@ -1,14 +1,14 @@
-import React, { useCallback, useState } from 'react'
-import { ModalEnum, ModalInterface, ModalStateContext } from '../context'
+import React, { useCallback, useState } from 'react';
+import { ModalEnum, ModalInterface, ModalStateContext } from '../context';
 
 const ModalStateProvider = ({
   children,
 }: {
-  children: JSX.Element | JSX.Element[]
+  children: JSX.Element | JSX.Element[];
 }) => {
   const [openModals, setOpenModals] = useState<
     { modal: ModalEnum; content?: any; onClose?: () => void }[]
-  >([])
+  >([]);
   const modalInterface: ModalInterface = {
     closeModal: useCallback(
       (modalEnum: ModalEnum) =>
@@ -22,13 +22,13 @@ const ModalStateProvider = ({
     getModalContent: (modalEnum) => {
       const modalData = openModals.find(
         (openModal) => openModal.modal === modalEnum
-      )
-      const content = modalData?.content
-      const onClose = modalData ? modalData?.onClose : () => {}
-      return { content, onClose }
+      );
+      const content = modalData?.content;
+      const onClose = modalData ? modalData?.onClose : () => {};
+      return { content, onClose };
     },
     isModalOpen: (modalEnum: ModalEnum) => {
-      return openModals.some((openModal) => openModal.modal === modalEnum)
+      return openModals.some((openModal) => openModal.modal === modalEnum);
     },
     openModal: useCallback(
       (modalEnum: ModalEnum, content?: any, onClose: () => void = () => {}) =>
@@ -41,12 +41,12 @@ const ModalStateProvider = ({
         ),
       []
     ),
-  }
+  };
   return (
     <ModalStateContext.Provider value={modalInterface}>
       {children}
     </ModalStateContext.Provider>
-  )
-}
+  );
+};
 
-export default ModalStateProvider
+export default ModalStateProvider;

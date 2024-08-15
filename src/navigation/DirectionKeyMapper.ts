@@ -1,4 +1,5 @@
-import { includes, valuesIn } from 'lodash'
+import includes from 'lodash/includes';
+import valuesIn from 'lodash/valuesIn';
 
 enum DirectionKey {
   ArrowUp = 'ArrowUp',
@@ -12,7 +13,7 @@ enum DirectionKey {
 }
 
 export const isDirectionKey = (key: string) =>
-  includes(valuesIn(DirectionKey), key)
+  includes(valuesIn(DirectionKey), key);
 
 export const DirectionKeyMap: { [directionKey: string]: string } = {
   [DirectionKey.ArrowUp]: 'up',
@@ -23,4 +24,4 @@ export const DirectionKeyMap: { [directionKey: string]: string } = {
   [DirectionKey.S]: 'down',
   [DirectionKey.A]: 'left',
   [DirectionKey.D]: 'right',
-}
+};

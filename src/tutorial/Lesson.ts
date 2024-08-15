@@ -1,6 +1,6 @@
-import { LessonEnum } from './LessonEnum'
+import { LessonEnum } from './LessonEnum';
 
 export interface Lesson {
-  name: LessonEnum
-  component: (lessonProps?: any) => JSX.Element
+  name: LessonEnum;
+  component: (lessonProps?: any) => JSX.Element;
 }

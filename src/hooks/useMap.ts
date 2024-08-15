@@ -1,4 +1,4 @@
-import { useContext } from 'react'
-import { MapContext } from '../context'
+import { useContext } from 'react';
+import { MapContext } from '../context';
 
-export const useMap = () => useContext(MapContext)
+export const useMap = () => useContext(MapContext);

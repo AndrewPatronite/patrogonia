@@ -1,6 +1,6 @@
 export default interface Spell {
-  spellName: string
-  mpCost: number
-  offensive: boolean
-  battleSpell: boolean
+  spellName: string;
+  mpCost: number;
+  offensive: boolean;
+  battleSpell: boolean;
 }

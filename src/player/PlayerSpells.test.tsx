@@ -1,25 +1,25 @@
-import React from 'react'
-import PlayerSpells, { PlayerSpellsProps } from './PlayerSpells'
-import { Cave, Continent, Town } from '../environment/maps/Maps'
-import { Direction } from '../navigation'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { upperFirst } from 'lodash'
-import { useSound } from '../hooks'
-import { Sound } from '../environment/sound'
+import React from 'react';
+import PlayerSpells, { PlayerSpellsProps } from './PlayerSpells';
+import { Direction } from '../navigation';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import upperFirst from 'lodash/upperFirst';
+import { useSound } from '../hooks';
+import { Sound } from '../environment/sound';
+import { CaveName, ContinentName, TownName } from '../environment/maps/types';
 
 jest.mock('../hooks', () => ({
   useSound: jest.fn(),
-}))
+}));
 
 describe('PlayerSpells', () => {
-  let props: PlayerSpellsProps
-  let playSound: jest.Mock
+  let props: PlayerSpellsProps;
+  let playSound: jest.Mock;
 
   beforeEach(() => {
-    playSound = jest.fn()
-    ;(useSound as jest.Mock).mockReturnValue({
+    playSound = jest.fn();
+    (useSound as jest.Mock).mockReturnValue({
       playSound,
-    })
+    });
     props = {
       currentPlayer: {
         id: 1,
@@ -57,14 +57,14 @@ describe('PlayerSpells', () => {
           agility: 12,
         },
         location: {
-          mapName: Continent.Atoris,
+          mapName: ContinentName.Atoris,
           rowIndex: 5,
           columnIndex: 7,
           facing: Direction.Down,
-          entranceName: Cave.LavaGrotto,
+          entranceName: CaveName.LavaGrotto,
         },
         lastUpdate: '',
-        visited: [Town.Dewhurst, Town.Fernsworth, Town.Easthaven],
+        visited: [TownName.Dewhurst, TownName.Fernsworth, TownName.Easthaven],
         tutorialLessons: [],
       },
       availableSpells: [
@@ -84,69 +84,71 @@ describe('PlayerSpells', () => {
       ],
       castSpell: jest.fn(),
       onSpellCast: jest.fn(),
-    }
-    render(<PlayerSpells {...props} />)
-  })
+    };
+    render(<PlayerSpells {...props} />);
+  });
 
   it('has a List of spells', () => {
-    const spellList = screen.getByRole('listbox')
-    expect(spellList.children.length).toEqual(props.availableSpells.length)
+    const spellList = screen.getByRole('listbox');
+    expect(spellList.children.length).toEqual(props.availableSpells.length);
     props.availableSpells.forEach(({ spellName }, index) => {
       expect(spellList.children[index].textContent).toEqual(
         upperFirst(spellName.toLowerCase())
-      )
-    })
-  })
+      );
+    });
+  });
 
   it('displays the magic cost of each spell', () => {
-    const spellList = screen.getByRole('listbox')
+    const spellList = screen.getByRole('listbox');
     props.availableSpells.forEach(({ spellName, mpCost }, index) => {
-      fireEvent.click(spellList.children[index])
-      const formattedSpellName = upperFirst(spellName.toLowerCase())
+      fireEvent.click(spellList.children[index]);
+      const formattedSpellName = upperFirst(spellName.toLowerCase());
       const selectedSpellDescription = screen.getAllByText(
         formattedSpellName
-      )[1]
+      )[1];
       if (formattedSpellName === 'Return') {
         expect(selectedSpellDescription?.parentElement?.textContent).toEqual(
           `${formattedSpellName}to ${props.currentPlayer.visited[0]}MP ${mpCost}/${props.currentPlayer.stats.mp}`
-        )
+        );
       } else {
         expect(selectedSpellDescription?.parentElement?.textContent).toEqual(
           `${formattedSpellName}MP ${mpCost}/${props.currentPlayer.stats.mp}`
-        )
+        );
       }
-    })
-  })
+    });
+  });
 
   it('displays the visited towns for Return spell and includes the town name in the spell description', () => {
-    const returnSpell = screen.getByRole('button', { name: 'Return' })
-    fireEvent.click(returnSpell)
-    const townList = screen.getAllByRole('listbox')[1]
-    expect(townList.children.length).toEqual(props.currentPlayer.visited.length)
+    const returnSpell = screen.getByRole('button', { name: 'Return' });
+    fireEvent.click(returnSpell);
+    const townList = screen.getAllByRole('listbox')[1];
+    expect(townList.children.length).toEqual(
+      props.currentPlayer.visited.length
+    );
     props.currentPlayer.visited.forEach((townName, index) => {
-      expect(townList.children[index].textContent).toEqual(townName)
-      fireEvent.click(screen.getByRole('button', { name: townName }))
-      const returnSpellDescription = screen.getAllByText('Return')[1]
+      expect(townList.children[index].textContent).toEqual(townName);
+      fireEvent.click(screen.getByRole('button', { name: townName }));
+      const returnSpellDescription = screen.getAllByText('Return')[1];
       expect(returnSpellDescription?.nextSibling?.textContent).toEqual(
         `to ${townName}`
-      )
-    })
-  })
+      );
+    });
+  });
 
   fit('displays a spell cast message, plays the spell sound, then a few seconds later casts the chosen spell and calls onSpellCast', () => {
-    fireEvent.click(screen.getByRole('button', { name: 'Return' }))
-    fireEvent.click(screen.getByRole('button', { name: 'Easthaven' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Return' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Easthaven' }));
     expect(
       screen.getAllByText('Return')[1]?.parentElement?.textContent
-    ).toEqual('Returnto EasthavenMP 7/20')
-    jest.useFakeTimers()
-    fireEvent.click(screen.getByRole('button', { name: 'Cast' }))
+    ).toEqual('Returnto EasthavenMP 7/20');
+    jest.useFakeTimers();
+    fireEvent.click(screen.getByRole('button', { name: 'Cast' }));
     waitFor(() => {
-      screen.getByText(`${props.currentPlayer.name} cast Return.`)
-    })
-    expect(playSound).toHaveBeenCalledWith(Sound.Warp)
-    jest.runAllTimers()
-    expect(props.castSpell).toHaveBeenCalledWith('RETURN', 'Easthaven')
-    expect(props.onSpellCast).toHaveBeenCalled()
-  })
-})
+      screen.getByText(`${props.currentPlayer.name} cast Return.`);
+    });
+    expect(playSound).toHaveBeenCalledWith(Sound.Warp);
+    jest.runAllTimers();
+    expect(props.castSpell).toHaveBeenCalledWith('RETURN', 'Easthaven');
+    expect(props.onSpellCast).toHaveBeenCalled();
+  });
+});

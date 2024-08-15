@@ -1,4 +1,4 @@
-import { useContext } from 'react'
-import { PlayerContext } from '../context'
+import { useContext } from 'react';
+import { PlayerContext } from '../context';
 
-export const usePlayer = () => useContext(PlayerContext)
+export const usePlayer = () => useContext(PlayerContext);

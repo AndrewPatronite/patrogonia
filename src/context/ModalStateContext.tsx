@@ -1,4 +1,4 @@
-import { createContext } from 'react'
+import { createContext } from 'react';
 
 export enum ModalEnum {
   PlayerStats = 'PlayerStats',
@@ -8,10 +8,14 @@ export enum ModalEnum {
 }
 
 export interface ModalInterface {
-  closeModal: (modalEnum: ModalEnum) => void
-  getModalContent: (modalEnum: ModalEnum) => any
-  isModalOpen: (modalEnum: ModalEnum) => boolean
-  openModal: (modalEnum: ModalEnum, content?: any, onClose?: () => void) => void
+  closeModal: (modalEnum: ModalEnum) => void;
+  getModalContent: (modalEnum: ModalEnum) => any;
+  isModalOpen: (modalEnum: ModalEnum) => boolean;
+  openModal: (
+    modalEnum: ModalEnum,
+    content?: any,
+    onClose?: () => void
+  ) => void;
 }
 
 const ModalStateContext = createContext<ModalInterface>({
@@ -19,6 +23,6 @@ const ModalStateContext = createContext<ModalInterface>({
   getModalContent: () => {},
   isModalOpen: () => false,
   openModal: () => {},
-})
+});
 
-export default ModalStateContext
+export default ModalStateContext;

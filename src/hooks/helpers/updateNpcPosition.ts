@@ -1,5 +1,5 @@
-import { Npc } from '../../npcs'
-import { Direction } from '../../navigation'
+import { Npc } from '../../npcs';
+import { Direction } from '../../navigation';
 
 export const updateNpcPosition = (
   npc: Npc,
@@ -16,6 +16,6 @@ export const updateNpcPosition = (
       currentRowIndex: rowIndex,
       currentColumnIndex: columnIndex,
       directionFacing,
-    })
+    });
   }
-}
+};

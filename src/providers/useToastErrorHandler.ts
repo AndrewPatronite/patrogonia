@@ -1,29 +1,29 @@
-import { useToast } from '@chakra-ui/react'
-import { useCallback } from 'react'
-import { HttpStatus } from '../api'
+import { useToast } from '@chakra-ui/react';
+import { useCallback } from 'react';
+import { HttpStatus } from '../api';
 
 export const useToastErrorHandler = () => {
-  const toast = useToast()
+  const toast = useToast();
   return useCallback(
     (error) => {
-      let errorMessage = 'An unknown error occurred.'
+      let errorMessage = 'An unknown error occurred.';
       if (error) {
         if (error.response && error.response.status) {
           switch (error.response.status) {
             case HttpStatus.Unauthorized:
-              errorMessage = 'Invalid login.'
-              break
+              errorMessage = 'Invalid login.';
+              break;
             case HttpStatus.Conflict:
-              errorMessage = 'Username already exists.'
-              break
+              errorMessage = 'Username already exists.';
+              break;
             case HttpStatus.InternalServerError:
-              errorMessage = 'An internal server error occurred.'
-              break
+              errorMessage = 'An internal server error occurred.';
+              break;
             default:
-              break
+              break;
           }
         } else {
-          errorMessage = `${error}`
+          errorMessage = `${error}`;
         }
       }
       toast({
@@ -33,8 +33,8 @@ export const useToastErrorHandler = () => {
         duration: null,
         isClosable: true,
         description: errorMessage,
-      })
+      });
     },
     [toast]
-  )
-}
+  );
+};

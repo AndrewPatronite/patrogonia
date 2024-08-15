@@ -1,14 +1,14 @@
-import React from 'react'
-import * as Yup from 'yup'
-import { useFormik } from 'formik'
-import { Input } from '../control'
-import PasswordInput from './PasswordInput'
-import { Button, Stack } from '@chakra-ui/react'
-import { isEmpty } from 'lodash'
-import { encrypt } from './helper'
+import React from 'react';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
+import { Input } from '../control';
+import PasswordInput from './PasswordInput';
+import { Button, Stack } from '@chakra-ui/react';
+import isEmpty from 'lodash/isEmpty';
+import { encrypt } from './helper';
 
 interface LoginFormProps {
-  login: (username: string, password: string) => void
+  login: (username: string, password: string) => void;
 }
 
 const LoginForm = ({ login }: LoginFormProps) => {
@@ -18,22 +18,22 @@ const LoginForm = ({ login }: LoginFormProps) => {
       password: '',
     },
     onSubmit: async (values) => {
-      const { username, password } = values
-      login(username, encrypt(password))
+      const { username, password } = values;
+      login(username, encrypt(password));
     },
     validationSchema: Yup.object({
       username: Yup.string().trim().required('Required'),
       password: Yup.string().trim().required('Required'),
     }),
-  })
+  });
 
   const submitLogin = (e: { preventDefault: () => void }) => {
-    formik.submitForm()
-    e.preventDefault()
-  }
+    formik.submitForm();
+    e.preventDefault();
+  };
 
   const handleBlur = ({ target: { name } }: { target: { name: string } }) =>
-    formik.setFieldTouched(name)
+    formik.setFieldTouched(name);
 
   return (
     <form onSubmit={submitLogin}>
@@ -68,7 +68,7 @@ const LoginForm = ({ login }: LoginFormProps) => {
         </Button>
       </Stack>
     </form>
-  )
-}
+  );
+};
 
-export default LoginForm
+export default LoginForm;

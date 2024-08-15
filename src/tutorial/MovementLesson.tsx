@@ -1,11 +1,11 @@
-import React from 'react'
-import { Box, Flex, Icon, Kbd, Stack, Text, VStack } from '@chakra-ui/react'
+import React from 'react';
+import { Box, Flex, Icon, Kbd, Stack, Text, VStack } from '@chakra-ui/react';
 import {
   FaArrowDown,
   FaArrowLeft,
   FaArrowRight,
   FaArrowUp,
-} from 'react-icons/fa'
+} from 'react-icons/fa';
 
 const MovementLesson = () => (
   <Stack width="100%" spacing="1rem">
@@ -38,6 +38,6 @@ const MovementLesson = () => (
       </VStack>
     </Flex>
   </Stack>
-)
+);
 
-export default MovementLesson
+export default MovementLesson;

@@ -1,3 +1,3 @@
-import ColorModeToggle from './ColorModeToggle'
+import ColorModeToggle from './ColorModeToggle';
 
-export { ColorModeToggle }
+export { ColorModeToggle };

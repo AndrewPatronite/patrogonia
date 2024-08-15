@@ -1,88 +1,88 @@
-import React, { useEffect, useState } from 'react'
-import TileRow from './TileRow'
-import { Sound } from '../sound'
-import PlayerStatsModal from '../../player/PlayerStatsModal'
-import FieldMenu from '../../player/FieldMenu'
-import { Maps } from '../maps/Maps'
+import React, { useEffect, useState } from 'react';
+import TileRow from './TileRow';
+import { Sound } from '../sound';
+import PlayerStatsModal from '../../player/PlayerStatsModal';
+import FieldMenu from '../../player/FieldMenu';
+import { isField, isTown } from '../maps/Maps';
 import {
   useMap,
   useModalState,
   useNpcMovementEffect,
   useSound,
-} from '../../hooks'
-import DialogModal from '../../dialog/DialogModal'
-import { usePlayerNavigationEffect } from '../../navigation'
-import { Box, Text } from '@chakra-ui/react'
-import { CaptionModal } from '../../components'
-import { ModalEnum } from '../../context'
-import { Player } from '../../player'
+} from '../../hooks';
+import DialogModal from '../../dialog/DialogModal';
+import { usePlayerNavigationEffect } from '../../navigation';
+import { Box, Text } from '@chakra-ui/react';
+import { CaptionModal } from '../../components';
+import { ModalEnum } from '../../context';
+import { Player } from '../../player';
 
-const SHOW_PLAYER_STATS_DELAY = 5000
+const SHOW_PLAYER_STATS_DELAY = 5000;
 
 const World = ({
   currentPlayer,
   castSpell,
 }: {
-  currentPlayer: Player
-  castSpell: (spellName: string, targetId: string) => void
+  currentPlayer: Player;
+  castSpell: (spellName: string, targetId: string) => void;
 }) => {
-  const { playSound } = useSound()
+  const { playSound } = useSound();
   const {
     closeModal,
     getModalContent,
     isModalOpen,
     openModal,
-  } = useModalState()
+  } = useModalState();
   const {
     location: { mapName, rowIndex, columnIndex },
     stats,
-  } = currentPlayer
-  const { map, npcs, locationToPlayerMap, mapDisplayRange } = useMap()
-  usePlayerNavigationEffect()
-  useNpcMovementEffect(map)
+  } = currentPlayer;
+  const { map, npcs, locationToPlayerMap, mapDisplayRange } = useMap();
+  usePlayerNavigationEffect();
+  useNpcMovementEffect(map);
   const [isLocationCaptionModalOpen, setLocationCaptionModalOpen] = useState(
     false
-  )
-  const [isSaveCaptionModalOpen, setSaveCaptionModalOpen] = useState(false)
+  );
+  const [isSaveCaptionModalOpen, setSaveCaptionModalOpen] = useState(false);
 
   useEffect(() => {
-    setSaveCaptionModalOpen(false)
-    if (Maps.isField(mapName)) {
-      playSound(Sound.FieldMusic, [Sound.CaveMusic, Sound.TownMusic])
-      setLocationCaptionModalOpen(false)
-    } else if (Maps.isTown(mapName)) {
-      playSound(Sound.TownMusic, [Sound.CaveMusic, Sound.FieldMusic])
-      setLocationCaptionModalOpen(true)
+    setSaveCaptionModalOpen(false);
+    if (isField(mapName)) {
+      playSound(Sound.FieldMusic, [Sound.CaveMusic, Sound.TownMusic]);
+      setLocationCaptionModalOpen(false);
+    } else if (isTown(mapName)) {
+      playSound(Sound.TownMusic, [Sound.CaveMusic, Sound.FieldMusic]);
+      setLocationCaptionModalOpen(true);
     } else {
-      playSound(Sound.CaveMusic, [Sound.FieldMusic, Sound.TownMusic])
-      setLocationCaptionModalOpen(true)
+      playSound(Sound.CaveMusic, [Sound.FieldMusic, Sound.TownMusic]);
+      setLocationCaptionModalOpen(true);
     }
     const timeout = setTimeout(() => {
-      setLocationCaptionModalOpen(false)
-      setSaveCaptionModalOpen(true)
-    }, 3000)
+      setLocationCaptionModalOpen(false);
+      setSaveCaptionModalOpen(true);
+    }, 3000);
     const timeout2 = setTimeout(() => {
-      setSaveCaptionModalOpen(false)
-    }, 6000)
+      setSaveCaptionModalOpen(false);
+    }, 6000);
     return () => {
-      clearTimeout(timeout)
-      clearTimeout(timeout2)
-    }
-  }, [mapName, playSound])
+      clearTimeout(timeout);
+      clearTimeout(timeout2);
+    };
+  }, [mapName, playSound]);
 
   useEffect(() => {
-    closeModal(ModalEnum.PlayerStats)
+    closeModal(ModalEnum.PlayerStats);
     const timer = setTimeout(
       () => openModal(ModalEnum.PlayerStats),
       SHOW_PLAYER_STATS_DELAY
-    )
-    return () => clearTimeout(timer)
-  }, [rowIndex, columnIndex, closeModal, openModal])
+    );
+    return () => clearTimeout(timer);
+  }, [rowIndex, columnIndex, closeModal, openModal]);
 
-  const isPlayerStatsOpen = isModalOpen(ModalEnum.PlayerStats)
-  const isFieldMenuOpen = isModalOpen(ModalEnum.FieldMenu)
-  const isDialogOpen = isModalOpen(ModalEnum.Dialog)
-  const isTutorialOpen = isModalOpen(ModalEnum.Tutorial)
+  const isPlayerStatsOpen = isModalOpen(ModalEnum.PlayerStats);
+  const isFieldMenuOpen = isModalOpen(ModalEnum.FieldMenu);
+  const isDialogOpen = isModalOpen(ModalEnum.Dialog);
+  const isTutorialOpen = isModalOpen(ModalEnum.Tutorial);
 
   return (
     <Box
@@ -129,7 +129,7 @@ const World = ({
         getDialog={() => getModalContent(ModalEnum.Dialog)}
       />
       <CaptionModal message={mapName} isOpen={isLocationCaptionModalOpen} />
-      {Maps.isTown(mapName) && (
+      {isTown(mapName) && (
         <CaptionModal
           message={
             <>
@@ -141,7 +141,7 @@ const World = ({
         />
       )}
     </Box>
-  )
-}
+  );
+};
 
-export default World
+export default World;

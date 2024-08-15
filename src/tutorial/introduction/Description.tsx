@@ -1,5 +1,5 @@
-import { Stack, Text } from '@chakra-ui/react'
-import React from 'react'
+import { Stack, Text } from '@chakra-ui/react';
+import React from 'react';
 
 const Description = () => (
   <Stack>
@@ -7,6 +7,6 @@ const Description = () => (
     <Text>where you gain experience and gold</Text>
     <Text>by defeating enemies in battle.</Text>
   </Stack>
-)
+);
 
-export default Description
+export default Description;

@@ -1,11 +1,17 @@
-import { throttle, uniq } from 'lodash'
-import { Direction } from './types'
-import { Map } from '../environment/maps'
-import { Cave, Maps } from '../environment/maps/Maps'
-import { Player } from '../player'
-import { LessonEnum } from '../tutorial'
+import throttle from 'lodash/throttle';
+import uniq from 'lodash/uniq';
+import { Direction } from './types';
+import { Map } from '../environment/maps';
+import {
+  isSaveLocation,
+  isTravelDestination,
+  Maps,
+} from '../environment/maps/Maps';
+import { Player } from '../player';
+import { LessonEnum } from '../tutorial';
+import { CaveName, MapName } from '../environment/maps/types';
 
-const moveDelay = 250
+const moveDelay = 250;
 
 const getCompletedLessons = (
   saveGame: boolean,
@@ -15,16 +21,16 @@ const getCompletedLessons = (
 ): string[] => {
   const completedLessons = saveGame
     ? currentPlayer.tutorialLessons.concat(LessonEnum.TownVisitLesson)
-    : [...currentPlayer.tutorialLessons]
+    : [...currentPlayer.tutorialLessons];
 
-  if (mapName === Cave.LavaGrotto) {
-    completedLessons.push(LessonEnum.CaveExplorationLesson)
+  if (mapName === CaveName.LavaGrotto) {
+    completedLessons.push(LessonEnum.CaveExplorationLesson);
   }
   if (playerMoved) {
-    completedLessons.push(LessonEnum.MovementLesson)
+    completedLessons.push(LessonEnum.MovementLesson);
   }
-  return uniq(completedLessons)
-}
+  return uniq(completedLessons);
+};
 
 const updatePlayerLocation = (
   currentMap: Map,
@@ -39,14 +45,12 @@ const updatePlayerLocation = (
   ) => void,
   canMoveToPosition: (rowIndex: number, columnIndex: number) => boolean
 ) => {
-  const nextPosition = currentMap.layout[nextRowIndex][nextColumnIndex]
-  const isTravelDestination = Maps.isTravelDestination(nextPosition)
+  const nextPosition = currentMap.layout[nextRowIndex][nextColumnIndex];
 
-  if (isTravelDestination) {
-    // @ts-ignore
-    const nextMap = Maps[nextPosition](currentMap.name)
-    const { name: mapName, entrance } = nextMap
-    const saveGame = Maps.isSaveLocation(mapName)
+  if (isTravelDestination(nextPosition)) {
+    const nextMap = Maps[nextPosition as MapName](currentMap.name);
+    const { name: mapName, entrance } = nextMap;
+    const saveGame = isSaveLocation(mapName);
 
     updatePlayer(
       {
@@ -64,7 +68,7 @@ const updatePlayerLocation = (
         ),
       },
       saveGame
-    )
+    );
   } else if (canMoveToPosition(nextRowIndex, nextColumnIndex)) {
     const nextLocation = {
       ...currentPlayer.location,
@@ -72,8 +76,8 @@ const updatePlayerLocation = (
       rowIndex: nextRowIndex,
       columnIndex: nextColumnIndex,
       facing: directionFacing,
-    }
-    const saveGame = Maps.isSaveLocation(nextPosition)
+    };
+    const saveGame = isSaveLocation(nextPosition);
     updatePlayer(
       {
         ...currentPlayer,
@@ -86,13 +90,13 @@ const updatePlayerLocation = (
         ),
       },
       saveGame
-    )
+    );
   } else {
     const nextLocation = {
       ...currentPlayer.location,
       facing: directionFacing,
-    }
-    const saveGame = Maps.isSaveLocation(nextPosition)
+    };
+    const saveGame = isSaveLocation(nextPosition);
     updatePlayer(
       {
         ...currentPlayer,
@@ -105,9 +109,9 @@ const updatePlayerLocation = (
         ),
       },
       saveGame
-    )
+    );
   }
-}
+};
 
 const tryExit = (
   currentPlayer: Player,
@@ -122,9 +126,9 @@ const tryExit = (
     updatePlayer({
       ...currentPlayer,
       location: exit,
-    })
+    });
   }
-}
+};
 
 export const movePlayer = throttle(
   (
@@ -137,12 +141,11 @@ export const movePlayer = throttle(
     ) => void,
     canMoveToPosition: (rowIndex: number, columnIndex: number) => boolean
   ) => {
-    // @ts-ignore
-    const currentMap = Maps[currentPlayer.location.mapName]()
+    const currentMap = Maps[currentPlayer.location.mapName]();
     const {
       rowIndex: currentRowIndex,
       columnIndex: currentColumnIndex,
-    } = currentPlayer.location
+    } = currentPlayer.location;
 
     switch (direction) {
       case Direction.Up:
@@ -155,11 +158,11 @@ export const movePlayer = throttle(
             currentPlayer,
             updatePlayer,
             canMoveToPosition
-          )
+          );
         } else {
-          tryExit(currentPlayer, currentMap, updatePlayer)
+          tryExit(currentPlayer, currentMap, updatePlayer);
         }
-        break
+        break;
       case Direction.Down:
         if (currentRowIndex < currentMap.layout.length - 1) {
           updatePlayerLocation(
@@ -170,11 +173,11 @@ export const movePlayer = throttle(
             currentPlayer,
             updatePlayer,
             canMoveToPosition
-          )
+          );
         } else {
-          tryExit(currentPlayer, currentMap, updatePlayer)
+          tryExit(currentPlayer, currentMap, updatePlayer);
         }
-        break
+        break;
       case Direction.Left:
         if (currentColumnIndex > 0) {
           updatePlayerLocation(
@@ -185,11 +188,11 @@ export const movePlayer = throttle(
             currentPlayer,
             updatePlayer,
             canMoveToPosition
-          )
+          );
         } else {
-          tryExit(currentPlayer, currentMap, updatePlayer)
+          tryExit(currentPlayer, currentMap, updatePlayer);
         }
-        break
+        break;
       case Direction.Right:
         if (
           currentColumnIndex <
@@ -203,14 +206,14 @@ export const movePlayer = throttle(
             currentPlayer,
             updatePlayer,
             canMoveToPosition
-          )
+          );
         } else {
-          tryExit(currentPlayer, currentMap, updatePlayer)
+          tryExit(currentPlayer, currentMap, updatePlayer);
         }
-        break
+        break;
       default:
-        break
+        break;
     }
   },
   moveDelay
-)
+);

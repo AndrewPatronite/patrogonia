@@ -1,11 +1,11 @@
-import React from 'react'
-import { shallow, ShallowWrapper } from 'enzyme'
-import PlayerTurnWizard, { PlayerTurnWizardProps } from './PlayerTurnWizard'
-import CommandPanel from './CommandPanel'
-import EnemySelectionPanel from './EnemySelectionPanel'
-import PlayerSelectionPanel from './PlayerSelectionPanel'
-import { Player, Spell } from '../player'
-import { Command, EnemyName } from './types'
+import React from 'react';
+import { shallow, ShallowWrapper } from 'enzyme';
+import PlayerTurnWizard, { PlayerTurnWizardProps } from './PlayerTurnWizard';
+import CommandPanel from './CommandPanel';
+import EnemySelectionPanel from './EnemySelectionPanel';
+import PlayerSelectionPanel from './PlayerSelectionPanel';
+import { Player, Spell } from '../player';
+import { Command, EnemyName } from './types';
 
 describe('PlayerTurnWizard', () => {
   //@ts-ignore missing Player fields
@@ -13,27 +13,27 @@ describe('PlayerTurnWizard', () => {
     id: 1,
     name: 'Redwan',
     tutorialLessons: [],
-  }
+  };
   //@ts-ignore missing Player fields
   const anotherPlayer: Player = {
     id: 2,
     name: 'Andy',
-  }
+  };
   const iceSpell: Spell = {
     spellName: 'ICE',
     battleSpell: true,
     offensive: true,
     mpCost: 5,
-  }
+  };
   const healSpell: Spell = {
     spellName: 'HEAL',
     battleSpell: true,
     offensive: false,
     mpCost: 5,
-  }
-  const anotherEnemyId = 'cccc123'
-  let props: PlayerTurnWizardProps
-  let subject: ShallowWrapper
+  };
+  const anotherEnemyId = 'cccc123';
+  let props: PlayerTurnWizardProps;
+  let subject: ShallowWrapper;
 
   beforeEach(() => {
     props = {
@@ -50,62 +50,62 @@ describe('PlayerTurnWizard', () => {
       playerTurnEnabled: true,
       mp: 5,
       updatePlayer: jest.fn(),
-    }
-    subject = shallow(<PlayerTurnWizard {...props} />)
-  })
+    };
+    subject = shallow(<PlayerTurnWizard {...props} />);
+  });
 
   describe('command', () => {
     it('is a CommandPanel with the expected props', () => {
-      const commandPanel = subject.find(CommandPanel)
+      const commandPanel = subject.find(CommandPanel);
       expect(commandPanel.props()).toEqual({
         currentPlayer,
         handleCommand: expect.any(Function),
         mp: props.mp,
-      })
-    })
+      });
+    });
 
     it('submits turn if command is "parry"', () => {
-      const commandPanel = subject.find(CommandPanel)
-      commandPanel.prop('handleCommand')(Command.Parry)
-      expect(props.takeTurn).toHaveBeenCalledWith(Command.Parry)
-    })
+      const commandPanel = subject.find(CommandPanel);
+      commandPanel.prop('handleCommand')(Command.Parry);
+      expect(props.takeTurn).toHaveBeenCalledWith(Command.Parry);
+    });
 
     it('submits turn if command is "run"', () => {
-      const commandPanel = subject.find(CommandPanel)
-      commandPanel.prop('handleCommand')(Command.Run)
-      expect(props.takeTurn).toHaveBeenCalledWith(Command.Run)
-    })
+      const commandPanel = subject.find(CommandPanel);
+      commandPanel.prop('handleCommand')(Command.Run);
+      expect(props.takeTurn).toHaveBeenCalledWith(Command.Run);
+    });
 
     it('advances to EnemySelectionPanel if command is "attack"', () => {
-      const commandPanel = subject.find(CommandPanel)
-      commandPanel.prop('handleCommand')(Command.Attack)
-      expect(props.takeTurn).not.toHaveBeenCalled()
-      expect(subject.find(EnemySelectionPanel).exists()).toEqual(true)
-    })
+      const commandPanel = subject.find(CommandPanel);
+      commandPanel.prop('handleCommand')(Command.Attack);
+      expect(props.takeTurn).not.toHaveBeenCalled();
+      expect(subject.find(EnemySelectionPanel).exists()).toEqual(true);
+    });
 
     it('advances to EnemySelectionPanel if command is an offensive spell', () => {
-      const commandPanel = subject.find(CommandPanel)
-      commandPanel.prop('handleCommand')(iceSpell)
-      expect(props.takeTurn).not.toHaveBeenCalled()
-      expect(subject.find(EnemySelectionPanel).exists()).toEqual(true)
-    })
+      const commandPanel = subject.find(CommandPanel);
+      commandPanel.prop('handleCommand')(iceSpell);
+      expect(props.takeTurn).not.toHaveBeenCalled();
+      expect(subject.find(EnemySelectionPanel).exists()).toEqual(true);
+    });
 
     it('advances to PlayerSelectionPanel if command is a defensive spell', () => {
-      const commandPanel = subject.find(CommandPanel)
-      commandPanel.prop('handleCommand')(healSpell)
-      expect(props.takeTurn).not.toHaveBeenCalled()
-      expect(subject.find(PlayerSelectionPanel).exists()).toEqual(true)
-    })
-  })
+      const commandPanel = subject.find(CommandPanel);
+      commandPanel.prop('handleCommand')(healSpell);
+      expect(props.takeTurn).not.toHaveBeenCalled();
+      expect(subject.find(PlayerSelectionPanel).exists()).toEqual(true);
+    });
+  });
 
   describe('attack - EnemySelectionPanel', () => {
-    let enemySelectionPanel: ShallowWrapper<any>
+    let enemySelectionPanel: ShallowWrapper<any>;
 
     beforeEach(() => {
-      const commandPanel = subject.find(CommandPanel)
-      commandPanel.prop('handleCommand')(Command.Attack)
-      enemySelectionPanel = subject.find(EnemySelectionPanel)
-    })
+      const commandPanel = subject.find(CommandPanel);
+      commandPanel.prop('handleCommand')(Command.Attack);
+      enemySelectionPanel = subject.find(EnemySelectionPanel);
+    });
 
     it('is a EnemySelectionPanel with the expected props', () => {
       expect(enemySelectionPanel.props()).toEqual({
@@ -117,19 +117,19 @@ describe('PlayerTurnWizard', () => {
         selectEnemy: props.selectEnemy,
         selectedEnemyId: props.selectedEnemyId,
         playerTurnEnabled: props.playerTurnEnabled,
-      })
-    })
+      });
+    });
 
     it('returns to the CommandPanel onBack', () => {
-      expect(subject.find(CommandPanel).exists()).toEqual(false)
+      expect(subject.find(CommandPanel).exists()).toEqual(false);
 
-      enemySelectionPanel.prop('handleBack')()
+      enemySelectionPanel.prop('handleBack')();
 
-      expect(subject.find(CommandPanel).exists()).toEqual(true)
-    })
+      expect(subject.find(CommandPanel).exists()).toEqual(true);
+    });
 
     it('submits the turn onNext', () => {
-      enemySelectionPanel.prop('handleNext')(props.selectedEnemyId)
+      enemySelectionPanel.prop('handleNext')(props.selectedEnemyId);
 
       expect(props.updatePlayer).toHaveBeenCalledWith({
         ...currentPlayer,
@@ -137,28 +137,28 @@ describe('PlayerTurnWizard', () => {
           ...currentPlayer.tutorialLessons,
           'BattleCommandLesson',
         ],
-      })
+      });
       expect(props.takeTurn).toHaveBeenCalledWith(
         Command.Attack,
         props.selectedEnemyId
-      )
-    })
+      );
+    });
 
     it('calls selectEnemy provided via props', () => {
-      enemySelectionPanel.prop('selectEnemy')(anotherEnemyId)
+      enemySelectionPanel.prop('selectEnemy')(anotherEnemyId);
 
-      expect(props.selectEnemy).toHaveBeenCalledWith(anotherEnemyId)
-    })
-  })
+      expect(props.selectEnemy).toHaveBeenCalledWith(anotherEnemyId);
+    });
+  });
 
   describe('offensive spell - EnemySelectionPanel', () => {
-    let enemySelectionPanel: ShallowWrapper<any>
+    let enemySelectionPanel: ShallowWrapper<any>;
 
     beforeEach(() => {
-      const commandPanel = subject.find(CommandPanel)
-      commandPanel.prop('handleCommand')(iceSpell)
-      enemySelectionPanel = subject.find(EnemySelectionPanel)
-    })
+      const commandPanel = subject.find(CommandPanel);
+      commandPanel.prop('handleCommand')(iceSpell);
+      enemySelectionPanel = subject.find(EnemySelectionPanel);
+    });
 
     it('is a EnemySelectionPanel with the expected props', () => {
       expect(enemySelectionPanel.props()).toEqual({
@@ -170,19 +170,19 @@ describe('PlayerTurnWizard', () => {
         selectEnemy: props.selectEnemy,
         selectedEnemyId: props.selectedEnemyId,
         playerTurnEnabled: props.playerTurnEnabled,
-      })
-    })
+      });
+    });
 
     it('returns to the CommandPanel onBack', () => {
-      expect(subject.find(CommandPanel).exists()).toEqual(false)
+      expect(subject.find(CommandPanel).exists()).toEqual(false);
 
-      enemySelectionPanel.prop('handleBack')()
+      enemySelectionPanel.prop('handleBack')();
 
-      expect(subject.find(CommandPanel).exists()).toEqual(true)
-    })
+      expect(subject.find(CommandPanel).exists()).toEqual(true);
+    });
 
     it('submits the turn onNext', () => {
-      enemySelectionPanel.prop('handleNext')(props.selectedEnemyId)
+      enemySelectionPanel.prop('handleNext')(props.selectedEnemyId);
 
       expect(props.updatePlayer).toHaveBeenCalledWith({
         ...currentPlayer,
@@ -190,25 +190,25 @@ describe('PlayerTurnWizard', () => {
           ...currentPlayer.tutorialLessons,
           'BattleTargetLesson',
         ],
-      })
-      expect(props.takeTurn).toHaveBeenCalledWith('Ice', props.selectedEnemyId)
-    })
+      });
+      expect(props.takeTurn).toHaveBeenCalledWith('Ice', props.selectedEnemyId);
+    });
 
     it('calls selectEnemy provided via props', () => {
-      enemySelectionPanel.prop('selectEnemy')(anotherEnemyId)
+      enemySelectionPanel.prop('selectEnemy')(anotherEnemyId);
 
-      expect(props.selectEnemy).toHaveBeenCalledWith(anotherEnemyId)
-    })
-  })
+      expect(props.selectEnemy).toHaveBeenCalledWith(anotherEnemyId);
+    });
+  });
 
   describe('defensive spell - PlayerSelectionPanel', () => {
-    let playerSelectionPanel: ShallowWrapper<any>
+    let playerSelectionPanel: ShallowWrapper<any>;
 
     beforeEach(() => {
-      const commandPanel = subject.find(CommandPanel)
-      commandPanel.prop('handleCommand')(healSpell)
-      playerSelectionPanel = subject.find(PlayerSelectionPanel)
-    })
+      const commandPanel = subject.find(CommandPanel);
+      commandPanel.prop('handleCommand')(healSpell);
+      playerSelectionPanel = subject.find(PlayerSelectionPanel);
+    });
 
     it('is a PlayerSelectionPanel with the expected props', () => {
       expect(playerSelectionPanel.props()).toEqual({
@@ -217,32 +217,32 @@ describe('PlayerTurnWizard', () => {
         handleBack: expect.any(Function),
         handleNext: expect.any(Function),
         isBackEnabled: true,
-      })
-    })
+      });
+    });
 
     it('returns to the CommandPanel onBack', () => {
-      expect(subject.find(CommandPanel).exists()).toEqual(false)
+      expect(subject.find(CommandPanel).exists()).toEqual(false);
 
-      playerSelectionPanel.prop('handleBack')()
+      playerSelectionPanel.prop('handleBack')();
 
-      expect(subject.find(CommandPanel).exists()).toEqual(true)
-    })
+      expect(subject.find(CommandPanel).exists()).toEqual(true);
+    });
 
     it('submits the turn onNext', () => {
-      playerSelectionPanel.prop('handleNext')(anotherPlayer.id)
+      playerSelectionPanel.prop('handleNext')(anotherPlayer.id);
 
-      expect(props.takeTurn).toHaveBeenCalledWith('Heal', anotherPlayer.id)
-    })
+      expect(props.takeTurn).toHaveBeenCalledWith('Heal', anotherPlayer.id);
+    });
 
     it('heals the current player if there are no others to choose', () => {
-      props.players.pop()
-      subject = shallow(<PlayerTurnWizard {...props} />)
-      const commandPanel = subject.find(CommandPanel)
-      commandPanel.prop('handleCommand')(healSpell)
-      playerSelectionPanel = subject.find(PlayerSelectionPanel)
-      expect(playerSelectionPanel.exists()).toEqual(false)
+      props.players.pop();
+      subject = shallow(<PlayerTurnWizard {...props} />);
+      const commandPanel = subject.find(CommandPanel);
+      commandPanel.prop('handleCommand')(healSpell);
+      playerSelectionPanel = subject.find(PlayerSelectionPanel);
+      expect(playerSelectionPanel.exists()).toEqual(false);
 
-      expect(props.takeTurn).toHaveBeenCalledWith('Heal', currentPlayer.id)
-    })
-  })
-})
+      expect(props.takeTurn).toHaveBeenCalledWith('Heal', currentPlayer.id);
+    });
+  });
+});

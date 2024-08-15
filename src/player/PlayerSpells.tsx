@@ -1,23 +1,23 @@
-import React, { useState } from 'react'
-import { upperFirst } from 'lodash'
-import ThemedPanel, { ThemedPanelProps } from '../components/theme/ThemedPanel'
-import { Button, Flex, Stack, Text } from '@chakra-ui/react'
-import { Sound } from '../environment/sound'
-import List from '../control/List'
-import { Player, Spell } from './types'
-import { useSound } from '../hooks'
+import React, { useState } from 'react';
+import upperFirst from 'lodash/upperFirst';
+import ThemedPanel, { ThemedPanelProps } from '../components/theme/ThemedPanel';
+import { Button, Flex, Stack, Text } from '@chakra-ui/react';
+import { Sound } from '../environment/sound';
+import List from '../control/List';
+import { Player, Spell } from './types';
+import { useSound } from '../hooks';
 
 const spellSounds: { [index: string]: Sound } = {
   HEAL: Sound.Heal,
   OUTSIDE: Sound.Warp,
   RETURN: Sound.Warp,
-}
+};
 
 export interface PlayerSpellsProps extends ThemedPanelProps {
-  currentPlayer: Player
-  availableSpells: Spell[]
-  castSpell: (spellName: string, targetId: string) => void
-  onSpellCast: () => void
+  currentPlayer: Player;
+  availableSpells: Spell[];
+  castSpell: (spellName: string, targetId: string) => void;
+  onSpellCast: () => void;
 }
 
 const PlayerSpells = ({
@@ -32,31 +32,31 @@ const PlayerSpells = ({
   castSpell,
   onSpellCast,
 }: PlayerSpellsProps) => {
-  const { playSound } = useSound()
-  const [spell, setSpell] = useState<Spell>()
-  const [town, setTown] = useState(visited[0])
-  const [castSpellMessage, setSpellCastMessage] = useState('')
+  const { playSound } = useSound();
+  const [spell, setSpell] = useState<Spell>();
+  const [town, setTown] = useState(visited[0]);
+  const [castSpellMessage, setSpellCastMessage] = useState('');
 
   const cast = () => {
     if (spell) {
       setSpellCastMessage(
         `${playerName} cast ${upperFirst(spell.spellName.toLowerCase())}.`
-      )
-      playSound(spellSounds[spell.spellName])
+      );
+      playSound(spellSounds[spell.spellName]);
       setTimeout(() => {
         const spellTarget =
           {
             OUTSIDE: entranceName,
             RETURN: town,
-          }[spell.spellName] || currentPlayerId.toString()
-        castSpell(spell.spellName, spellTarget)
-        setSpell(availableSpells[0])
-        setTown(visited[0])
-        setSpellCastMessage('')
-        onSpellCast()
-      }, 4000)
+          }[spell.spellName] || currentPlayerId.toString();
+        castSpell(spell.spellName, spellTarget);
+        setSpell(availableSpells[0]);
+        setTown(visited[0]);
+        setSpellCastMessage('');
+        onSpellCast();
+      }, 4000);
     }
-  }
+  };
 
   return (
     <ThemedPanel
@@ -116,7 +116,7 @@ const PlayerSpells = ({
         </Stack>
       )}
     </ThemedPanel>
-  )
-}
+  );
+};
 
-export default PlayerSpells
+export default PlayerSpells;

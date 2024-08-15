@@ -1,4 +1,4 @@
-import { getBattleStatusStyle } from './getBattleStatusStyle'
-import { isEnemyTarget } from './isEnemyTarget'
+import { getBattleStatusStyle } from './getBattleStatusStyle';
+import { isEnemyTarget } from './isEnemyTarget';
 
-export { getBattleStatusStyle, isEnemyTarget }
+export { getBattleStatusStyle, isEnemyTarget };

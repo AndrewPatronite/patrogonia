@@ -1,7 +1,7 @@
-import { Player } from '../player'
+import { Player } from '../player';
 
 export const hasCompletedLesson = (player: Player, lesson: string) =>
-  player.tutorialLessons.includes(lesson)
+  player.tutorialLessons.includes(lesson);
 
 export const recordLesson = (
   player: Player,
@@ -13,11 +13,11 @@ export const recordLesson = (
   ) => void
 ) => {
   if (hasCompletedLesson(player, lesson)) {
-    return player
+    return player;
   } else {
     updatePlayer({
       ...player,
       tutorialLessons: player.tutorialLessons.concat(lesson),
-    })
+    });
   }
-}
+};

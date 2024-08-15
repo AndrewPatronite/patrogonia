@@ -1,12 +1,12 @@
-import BattleContext from './BattleContext'
-import MapContext from './MapContext'
+import BattleContext from './BattleContext';
+import MapContext from './MapContext';
 import ModalStateContext, {
   ModalEnum,
   ModalInterface,
-} from './ModalStateContext'
-import PlayerContext from './PlayerContext'
-import SoundContext from './SoundContext'
-import TutorialContext from './TutorialContext'
+} from './ModalStateContext';
+import PlayerContext from './PlayerContext';
+import SoundContext from './SoundContext';
+import TutorialContext from './TutorialContext';
 
 export {
   BattleContext,
@@ -16,6 +16,6 @@ export {
   PlayerContext,
   SoundContext,
   TutorialContext,
-}
+};
 
-export type { ModalInterface }
+export type { ModalInterface };

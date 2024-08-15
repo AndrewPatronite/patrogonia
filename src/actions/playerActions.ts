@@ -1,4 +1,4 @@
-import { pick } from 'lodash'
+import pick from 'lodash/pick';
 import {
   castSpell as castSpellRemote,
   createAccount as createAccountRemote,
@@ -6,10 +6,10 @@ import {
   loadSave as loadSaveRemote,
   login as loginRemote,
   updatePlayer as updatePlayerRemote,
-} from '../api'
-import { Dispatch } from '@reduxjs/toolkit'
-import { playerSlice } from '../redux'
-import { Player } from '../player'
+} from '../api';
+import { Dispatch } from '@reduxjs/toolkit';
+import { playerSlice } from '../redux';
+import { Player } from '../player';
 
 export const login = (
   dispatch: Dispatch,
@@ -32,11 +32,11 @@ export const login = (
         onFailure
       ),
     onFailure
-  )
+  );
 
 export const createAccount = (
   dispatch: Dispatch,
-  player: Player,
+  player: Partial<Player>,
   onFailure: (error: any) => void
 ) =>
   createAccountRemote(
@@ -50,7 +50,7 @@ export const createAccount = (
         onFailure
       ),
     onFailure
-  )
+  );
 
 export const loadPlayer = (
   dispatch: Dispatch,
@@ -62,7 +62,7 @@ export const loadPlayer = (
     (player: Player) =>
       storeAndDispatchPlayerUpdate(dispatch, { ...player, loggedIn: true }),
     onFailure
-  )
+  );
 
 export const loadSave = (
   dispatch: Dispatch,
@@ -73,8 +73,8 @@ export const loadSave = (
     playerId,
     () => loadPlayer(dispatch, playerId, onFailure),
     () => onFailure('Failed to load save. Try again or refresh the page.')
-  )
-}
+  );
+};
 
 const assemblePlayerForServer = (player: Player) =>
   pick(
@@ -88,7 +88,7 @@ const assemblePlayerForServer = (player: Player) =>
     'visited',
     'spells',
     'tutorialLessons'
-  )
+  );
 
 export const updatePlayer = (
   dispatch: Dispatch,
@@ -105,23 +105,23 @@ export const updatePlayer = (
         const mergedPlayer = {
           ...player,
           ...updatedPlayer,
-        }
-        storeAndDispatchPlayerUpdate(dispatch, mergedPlayer)
+        };
+        storeAndDispatchPlayerUpdate(dispatch, mergedPlayer);
       },
       () => onFailure('Failed to update player. Try again or refresh the page.')
-    )
+    );
   } else {
-    storeAndDispatchPlayerUpdate(dispatch, player)
+    storeAndDispatchPlayerUpdate(dispatch, player);
   }
-}
+};
 
 const storeAndDispatchPlayerUpdate = (
   dispatch: Dispatch,
   updatedPlayer: Player
 ) => {
-  localStorage.setItem('currentPlayer', JSON.stringify(updatedPlayer))
-  dispatch(playerSlice.actions.setPlayer(updatedPlayer))
-}
+  localStorage.setItem('currentPlayer', JSON.stringify(updatedPlayer));
+  dispatch(playerSlice.actions.setPlayer(updatedPlayer));
+};
 
 export const castSpell = (
   dispatch: Dispatch,
@@ -138,9 +138,9 @@ export const castSpell = (
       const mergedPlayer = {
         ...currentPlayer,
         ...updatedPlayer,
-      }
-      storeAndDispatchPlayerUpdate(dispatch, mergedPlayer)
+      };
+      storeAndDispatchPlayerUpdate(dispatch, mergedPlayer);
     },
     () => onFailure('Failed to cast spell. Try again or refresh the page.')
-  )
-}
+  );
+};

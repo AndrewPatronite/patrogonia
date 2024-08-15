@@ -1,7 +1,7 @@
-import { Box, Flex, Icon, Image, Stack, Text } from '@chakra-ui/react'
-import React from 'react'
-import { FaDragon } from 'react-icons/fa'
-import InBattle from './screenshots/inBattle.png'
+import { Box, Flex, Icon, Image, Stack, Text } from '@chakra-ui/react';
+import React from 'react';
+import { FaDragon } from 'react-icons/fa';
+import InBattle from './screenshots/inBattle.png';
 
 const TeamUp = ({ isCompact }: { isCompact: boolean }) => (
   <Stack>
@@ -25,6 +25,6 @@ const TeamUp = ({ isCompact }: { isCompact: boolean }) => (
       />
     </Flex>
   </Stack>
-)
+);
 
-export default TeamUp
+export default TeamUp;

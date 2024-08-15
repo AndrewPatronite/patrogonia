@@ -1,9 +1,9 @@
-import { Heading, HeadingProps, useColorMode } from '@chakra-ui/react'
-import React from 'react'
-import { HeadingColor } from '../../theme'
+import { Heading, HeadingProps, useColorMode } from '@chakra-ui/react';
+import React from 'react';
+import { HeadingColor } from '../../theme';
 
 const ThemedHeader = ({ children, ...baseProps }: HeadingProps) => {
-  const { colorMode } = useColorMode()
+  const { colorMode } = useColorMode();
   return (
     <Heading
       as="h1"
@@ -14,7 +14,7 @@ const ThemedHeader = ({ children, ...baseProps }: HeadingProps) => {
     >
       {children}
     </Heading>
-  )
-}
+  );
+};
 
-export default ThemedHeader
+export default ThemedHeader;

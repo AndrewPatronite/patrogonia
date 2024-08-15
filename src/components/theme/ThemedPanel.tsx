@@ -1,13 +1,13 @@
-import React from 'react'
-import ThemedHeader from './ThemedHeader'
-import { Flex, useStyleConfig } from '@chakra-ui/react'
-import { FlexProps } from '@chakra-ui/layout/dist/types/flex'
+import React from 'react';
+import ThemedHeader from './ThemedHeader';
+import { Flex, useStyleConfig } from '@chakra-ui/react';
+import { FlexProps } from '@chakra-ui/layout/dist/types/flex';
 
 export interface ThemedPanelProps extends FlexProps {
-  heading?: string
-  className?: string
-  flexDirection?: 'row' | 'column'
-  includeBorder?: boolean
+  heading?: string;
+  className?: string;
+  flexDirection?: 'row' | 'column';
+  includeBorder?: boolean;
 }
 
 const ThemedPanel = ({
@@ -22,7 +22,7 @@ const ThemedPanel = ({
   sx,
   ...baseProps
 }: ThemedPanelProps) => {
-  const themeStyles = useStyleConfig('ThemedPanel', { includeBorder })
+  const themeStyles = useStyleConfig('ThemedPanel', { includeBorder });
 
   return (
     <Flex
@@ -38,7 +38,7 @@ const ThemedPanel = ({
       {heading && <ThemedHeader>{heading}</ThemedHeader>}
       {children}
     </Flex>
-  )
-}
+  );
+};
 
-export default ThemedPanel
+export default ThemedPanel;

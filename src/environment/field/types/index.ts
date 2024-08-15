@@ -1,4 +1,4 @@
-import LocationToPlayerMap from './LocationToPlayerMap'
-import MapDisplayRange from './MapDisplayRange'
+import LocationToPlayerMap from './LocationToPlayerMap';
+import MapDisplayRange from './MapDisplayRange';
 
-export type { LocationToPlayerMap, MapDisplayRange }
+export type { LocationToPlayerMap, MapDisplayRange };

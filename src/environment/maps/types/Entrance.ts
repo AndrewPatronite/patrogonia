@@ -1,4 +1,7 @@
+import { MapName } from './MapName';
+
 export default interface Entrance {
-  rowIndex: number
-  columnIndex: number
+  entranceName: MapName;
+  rowIndex: number;
+  columnIndex: number;
 }

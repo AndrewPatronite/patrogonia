@@ -1,19 +1,19 @@
-import React from 'react'
-import Tile from './Tile'
-import { Flex } from '@chakra-ui/react'
-import { LocationToPlayerMap, MapDisplayRange } from './types'
-import { MapLayout } from '../maps'
-import { Player } from '../../player'
-import { Npc } from '../../npcs'
+import React from 'react';
+import Tile from './Tile';
+import { Flex } from '@chakra-ui/react';
+import { LocationToPlayerMap, MapDisplayRange } from './types';
+import { MapLayout } from '../maps';
+import { Player } from '../../player';
+import { Npc } from '../../npcs';
 
 interface TileRowProps {
-  rowSymbols: string[]
-  rowIndex: number
-  locationToPlayerMap: LocationToPlayerMap
-  mapDisplayRange: MapDisplayRange
-  mapLayout: MapLayout
-  currentPlayer: Player
-  npcs: Npc[]
+  rowSymbols: string[];
+  rowIndex: number;
+  locationToPlayerMap: LocationToPlayerMap;
+  mapDisplayRange: MapDisplayRange;
+  mapLayout: MapLayout;
+  currentPlayer: Player;
+  npcs: Npc[];
 }
 
 const TileRow = ({
@@ -41,6 +41,6 @@ const TileRow = ({
         />
       ))}
   </Flex>
-)
+);
 
-export default TileRow
+export default TileRow;

@@ -1,9 +1,9 @@
-import { Stack, Text } from '@chakra-ui/react'
-import React from 'react'
-import { Player } from '../../player'
+import { Stack, Text } from '@chakra-ui/react';
+import React from 'react';
+import { Player } from '../../player';
 
 interface WelcomeProps {
-  currentPlayer?: Player
+  currentPlayer?: Player;
 }
 
 const Welcome = ({ currentPlayer }: WelcomeProps) => (
@@ -15,6 +15,6 @@ const Welcome = ({ currentPlayer }: WelcomeProps) => (
     <Text>It is I, Redwan Paettinor,</Text>
     <Text>your guide on this journey.</Text>
   </Stack>
-)
+);
 
-export default Welcome
+export default Welcome;

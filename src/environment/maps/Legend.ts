@@ -1,10 +1,10 @@
-const WATER = 'W'
-const GRASS = 'G'
-const MOUNTAIN = 'M'
-const DIRT = 'D'
-const ROCK = 'R'
-const LAVA = 'L'
-const FOREST = 'F'
+const WATER = 'W';
+const GRASS = 'G';
+const MOUNTAIN = 'M';
+const DIRT = 'D';
+const ROCK = 'R';
+const LAVA = 'L';
+const FOREST = 'F';
 
 export const Legend = {
   [WATER]: 'water',
@@ -23,7 +23,7 @@ export const Legend = {
     LAVA,
     FOREST,
   },
-}
+};
 
 export enum MapSymbol {
   Dirt = 'D',

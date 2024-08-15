@@ -1,19 +1,19 @@
-import React from 'react'
-import ThemedPanel from '../components/theme/ThemedPanel'
-import { ColorModeToggle } from '../components/theme'
-import { Button, Stack } from '@chakra-ui/react'
-import InstructionsModal from '../tutorial/InstructionsModal'
+import React from 'react';
+import ThemedPanel from '../components/theme/ThemedPanel';
+import { ColorModeToggle } from '../components/theme';
+import { Button, Stack } from '@chakra-ui/react';
+import InstructionsModal from '../tutorial/InstructionsModal';
 
 const PlayerOptions = () => {
   const logOut = () => {
-    const currentPlayerKey = 'currentPlayer'
+    const currentPlayerKey = 'currentPlayer';
     const currentPlayer = JSON.parse(
       localStorage.getItem(currentPlayerKey) || ''
-    )
-    currentPlayer.loggedIn = false
-    localStorage.setItem(currentPlayerKey, JSON.stringify(currentPlayer))
-    window.location.href = '/'
-  }
+    );
+    currentPlayer.loggedIn = false;
+    localStorage.setItem(currentPlayerKey, JSON.stringify(currentPlayer));
+    window.location.href = '/';
+  };
 
   return (
     <ThemedPanel flexDirection="column" includeBorder={false}>
@@ -25,7 +25,7 @@ const PlayerOptions = () => {
         </Button>
       </Stack>
     </ThemedPanel>
-  )
-}
+  );
+};
 
-export default PlayerOptions
+export default PlayerOptions;

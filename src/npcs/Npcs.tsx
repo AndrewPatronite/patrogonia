@@ -1,6 +1,6 @@
-import { Direction } from '../navigation'
-import Npc, { NpcType } from './Npc'
-import React from 'react'
+import { Direction } from '../navigation';
+import Npc, { NpcType } from './Npc';
+import React from 'react';
 
 export enum NpcName {
   Alastair = 'Alastair',
@@ -20,7 +20,7 @@ export const Alastair: Npc = {
   startingColumnIndex: 6,
   directionFacing: Direction.Right,
   isTalking: false,
-}
+};
 
 export const Barnaby: Npc = {
   name: NpcName.Barnaby,
@@ -32,7 +32,7 @@ export const Barnaby: Npc = {
   startingColumnIndex: 12,
   directionFacing: Direction.Up,
   isTalking: false,
-}
+};
 
 export const Finlay: Npc = {
   name: NpcName.Finlay,
@@ -44,7 +44,7 @@ export const Finlay: Npc = {
   startingColumnIndex: 11,
   directionFacing: Direction.Down,
   isTalking: false,
-}
+};
 
 export const Nigel: Npc = {
   name: NpcName.Nigel,
@@ -56,7 +56,7 @@ export const Nigel: Npc = {
   startingColumnIndex: 17,
   directionFacing: Direction.Down,
   isTalking: false,
-}
+};
 
 export const Tristan: Npc = {
   name: NpcName.Tristan,
@@ -68,7 +68,7 @@ export const Tristan: Npc = {
   startingColumnIndex: 7,
   directionFacing: Direction.Down,
   isTalking: false,
-}
+};
 
 const NPC_DIALOG: { [index in NpcName]: string | JSX.Element } = {
   [NpcName.Alastair]: (
@@ -102,7 +102,7 @@ const NPC_DIALOG: { [index in NpcName]: string | JSX.Element } = {
   ),
   [NpcName.Nigel]: 'Morning guv!',
   [NpcName.Tristan]: 'Hallo hallo!',
-}
+};
 
 export const getDialog = (npc: NpcName): string | JSX.Element =>
-  NPC_DIALOG[npc] || ''
+  NPC_DIALOG[npc] || '';

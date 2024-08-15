@@ -1,3 +1,3 @@
 export default interface EnemyStats {
-  hp: number
+  hp: number;
 }

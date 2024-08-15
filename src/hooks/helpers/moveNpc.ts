@@ -1,7 +1,7 @@
-import { Map } from '../../environment/maps'
-import { Npc } from '../../npcs'
-import { Direction } from '../../navigation'
-import { updateNpcPosition } from './updateNpcPosition'
+import { Map } from '../../environment/maps';
+import { Npc } from '../../npcs';
+import { Direction } from '../../navigation';
+import { updateNpcPosition } from './updateNpcPosition';
 
 export const moveNpc = (
   npc: Npc,
@@ -16,7 +16,7 @@ export const moveNpc = (
     startingRowIndex,
     startingColumnIndex,
     movementRange,
-  } = npc
+  } = npc;
 
   switch (direction) {
     case Direction.Up:
@@ -32,9 +32,9 @@ export const moveNpc = (
           mapName,
           canMoveToPosition,
           updateNpc
-        )
+        );
       }
-      break
+      break;
     case Direction.Down:
       if (
         currentRowIndex < layout.length - 1 &&
@@ -48,9 +48,9 @@ export const moveNpc = (
           mapName,
           canMoveToPosition,
           updateNpc
-        )
+        );
       }
-      break
+      break;
     case Direction.Left:
       if (
         currentColumnIndex > 0 &&
@@ -64,9 +64,9 @@ export const moveNpc = (
           mapName,
           canMoveToPosition,
           updateNpc
-        )
+        );
       }
-      break
+      break;
     case Direction.Right:
       if (
         currentColumnIndex < layout[currentRowIndex].length - 1 &&
@@ -80,10 +80,10 @@ export const moveNpc = (
           mapName,
           canMoveToPosition,
           updateNpc
-        )
+        );
       }
-      break
+      break;
     default:
-      break
+      break;
   }
-}
+};

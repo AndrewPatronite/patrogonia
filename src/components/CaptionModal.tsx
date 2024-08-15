@@ -1,12 +1,12 @@
 // noinspection HtmlUnknownTarget
 
-import { Flex, Modal, ModalContent } from '@chakra-ui/react'
-import React, { ReactNode } from 'react'
-import ThemedPanel from './theme/ThemedPanel'
+import { Flex, Modal, ModalContent } from '@chakra-ui/react';
+import React, { ReactNode } from 'react';
+import ThemedPanel from './theme/ThemedPanel';
 
 interface CaptionModalProps {
-  message: string | ReactNode
-  isOpen: boolean
+  message: string | ReactNode;
+  isOpen: boolean;
 }
 
 const CaptionModal = ({ message, isOpen }: CaptionModalProps) => (
@@ -30,6 +30,6 @@ const CaptionModal = ({ message, isOpen }: CaptionModalProps) => (
       </Flex>
     </ModalContent>
   </Modal>
-)
+);
 
-export default CaptionModal
+export default CaptionModal;

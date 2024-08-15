@@ -1,13 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { Map } from '../environment/maps'
-import { Npc } from '../npcs'
-import { Player } from '../player'
+import { createSlice } from '@reduxjs/toolkit';
+import { Map } from '../environment/maps';
+import { Npc } from '../npcs';
+import { Player } from '../player';
 
 const INITIAL_STATE: { map?: Map; players: Player[]; npcs: Npc[] } = {
   map: undefined,
   players: [],
   npcs: [],
-}
+};
 
 const mapSlice = createSlice({
   name: 'map',
@@ -30,6 +30,6 @@ const mapSlice = createSlice({
       npcs: state.npcs.filter(({ name }) => name !== npc.name).concat(npc),
     }),
   },
-})
+});
 
-export default mapSlice
+export default mapSlice;

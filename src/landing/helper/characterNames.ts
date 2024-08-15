@@ -395,4 +395,4 @@ export const characterNames = [
   'Wylie',
   'Wyndam',
   'York',
-]
+];

@@ -1,11 +1,11 @@
-import axios from 'axios'
-import { Battle } from '../battle/types'
-import { HttpStatus } from './types'
+import axios from 'axios';
+import { Battle } from '../battle/types';
+import { HttpStatus } from './types';
 
 const axiosInstance = axios.create({
   baseURL: `${process.env.REACT_APP_BASE_URL}/battle`,
   headers: { 'Content-Type': 'application/json' },
-})
+});
 
 export const getBattle = (
   battleId: string,
@@ -16,11 +16,11 @@ export const getBattle = (
     .get(`/get/${battleId}`)
     .then((response) => {
       if (response.status === HttpStatus.Ok) {
-        onSuccess(response.data)
+        onSuccess(response.data);
       }
     })
-    .catch((error) => onFailure(error))
-}
+    .catch((error) => onFailure(error));
+};
 
 export const takeTurn = (
   battleId: string,
@@ -36,8 +36,8 @@ export const takeTurn = (
     )
     .then((response) => {
       if (response.status === HttpStatus.Ok) {
-        onSuccess(response.data)
+        onSuccess(response.data);
       }
     })
-    .catch((error) => onFailure(error))
-}
+    .catch((error) => onFailure(error));
+};
