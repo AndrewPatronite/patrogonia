@@ -3,13 +3,7 @@ import Patrogonia from './Patrogonia';
 import { MemoryRouter } from 'react-router-dom';
 import { Player } from './player';
 import { startingLocation } from './landing/startingLocation';
-import {
-  fireEvent,
-  render,
-  RenderResult,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { useBattle, useMap, useModalState, usePlayer, useSound } from './hooks';
 import { encrypt } from './landing/helper';
 import { EnemyName } from './battle/types';
@@ -31,7 +25,6 @@ describe('Patrogonia', () => {
   let currentPlayer: Partial<Player>;
   let login: jest.Mock;
   let updatePlayer: jest.Mock;
-  let renderResult: RenderResult;
   let playSound: jest.Mock;
 
   const setup = (loggedIn = false, battleId?: string) => {
@@ -97,7 +90,7 @@ describe('Patrogonia', () => {
       closeModal: jest.fn(),
     });
     (useMap as jest.Mock).mockReturnValue({});
-    renderResult = render(
+    render(
       <MemoryRouter initialEntries={['/login']}>
         <Patrogonia />
       </MemoryRouter>

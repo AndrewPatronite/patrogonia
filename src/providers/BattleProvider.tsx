@@ -59,7 +59,7 @@ const BattleProvider = ({
   const battleState = {
     battle,
     dismissBattle: useCallback(
-      (dismissedBattle) => {
+      (dismissedBattle: Battle) => {
         if (isBattleEnded(dismissedBattle.status)) {
           loadPlayer(currentPlayerId);
         }

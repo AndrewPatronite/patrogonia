@@ -60,7 +60,7 @@ const MapProvider = ({
   }, [dispatch, currentPlayerId, playerLocationMessage]);
 
   const canMoveToPosition = useCallback(
-    (rowIndex, columnIndex) => {
+    (rowIndex: number, columnIndex: number) => {
       const isUnoccupied = () => {
         const occupiedByCurrentPlayer =
           rowIndex === currentPlayerRowIndex &&

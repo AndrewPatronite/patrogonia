@@ -18,7 +18,7 @@ describe('Credits', () => {
 
     const verifyLink = (link: Element, href: string) => {
       expect(link.getAttribute('href')).toEqual(href);
-      expect(link.getAttribute('rel')).toEqual('noopener noreferrer');
+      expect(link.getAttribute('rel')).toEqual('noopener');
       expect(link.getAttribute('target')).toEqual('_blank');
     };
 

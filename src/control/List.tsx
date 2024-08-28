@@ -60,6 +60,7 @@ const List = forwardRef(
 
     return (
       <Stack
+        data-testid="list"
         role="listbox"
         ref={ref}
         borderWidth={1}
@@ -79,6 +80,7 @@ const List = forwardRef(
             isSelectedEntry || (index === 0 && valueIndex === -1);
           return (
             <Button
+              data-testid={optionValue}
               id={`${display}-${index}`}
               isDisabled={disabled}
               ref={(entry) => listHasFocus && isSelectedEntry && entry?.focus()}

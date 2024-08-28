@@ -6,6 +6,7 @@ const ThemedHeader = ({ children, ...baseProps }: HeadingProps) => {
   const { colorMode } = useColorMode();
   return (
     <Heading
+      data-testid="themed-header"
       as="h1"
       size="md"
       marginBottom="0.75rem"

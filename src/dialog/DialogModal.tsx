@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ThemedPanel from '../components/theme/ThemedPanel';
 import {
   Button,
@@ -7,10 +7,9 @@ import {
   DrawerContent,
   DrawerOverlay,
 } from '@chakra-ui/react';
-import Typist from 'react-typist';
+import Typist from 'react-typist-component';
 import { Sound } from '../environment/sound';
 import { useSound } from '../hooks';
-import debounce from 'lodash/debounce';
 
 const DialogModal = ({
   closeDialog,
@@ -22,8 +21,32 @@ const DialogModal = ({
   showDialog: boolean;
 }) => {
   const { playSound } = useSound();
-  const speak = debounce(() => playSound(Sound.Talking), 30);
+  const speak = useCallback(() => playSound(Sound.Talking), [playSound]);
   const [typing, setTyping] = useState(false);
+
+  useEffect(() => {
+    setTyping(showDialog);
+    if (showDialog) {
+      speak();
+    }
+  }, [showDialog, speak]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (typing) {
+        if (Math.floor(Math.random() * 2)) {
+          speak();
+        }
+      } else {
+        clearInterval(interval);
+      }
+    }, 90);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [speak, typing]);
+
   const { content = '', onClose = () => {} } = getDialog();
   const dismiss = () => {
     closeDialog();
@@ -41,13 +64,8 @@ const DialogModal = ({
         <DrawerBody padding={0}>
           <ThemedPanel flexDirection="column">
             <Typist
-              avgTypingDelay={10}
-              stdTypingDelay={15}
-              cursor={{ show: false }}
-              onCharacterTyped={() => {
-                speak();
-                setTyping(true);
-              }}
+              typingDelay={15}
+              cursor=""
               onTypingDone={() => setTyping(false)}
             >
               <span>{content}</span>

@@ -2,15 +2,9 @@ import React from 'react';
 import EnemySelectionPanel, {
   EnemySelectionPanelProps,
 } from './EnemySelectionPanel';
-import OptionPanel from './OptionPanel';
 import { Command, EnemyName } from './types';
 import { Player } from '../player';
-import {
-  fireEvent,
-  render,
-  RenderResult,
-  screen,
-} from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { useModalState } from '../hooks';
 
 jest.mock('../hooks', () => ({
@@ -19,7 +13,6 @@ jest.mock('../hooks', () => ({
 
 describe('EnemySelectionPanel', () => {
   let props: EnemySelectionPanelProps;
-  let renderResult: RenderResult;
 
   beforeEach(() => {
     (useModalState as jest.Mock).mockReturnValue({
@@ -42,16 +35,16 @@ describe('EnemySelectionPanel', () => {
       selectedEnemyId: undefined,
       playerTurnEnabled: true,
     };
-    renderResult = render(<EnemySelectionPanel {...props} />);
+    render(<EnemySelectionPanel {...props} />);
   });
 
   it('has an action ThemedHeader', () => {
-    expect(screen.getByRole('heading').textContent).toEqual('Attack');
+    expect(screen.getByTestId('themed-header').textContent).toEqual('Attack');
   });
 
   describe('OptionPanel', () => {
     it('is a list of enemies', () => {
-      const optionPanel = screen.getByRole('listbox');
+      const optionPanel = screen.getByTestId('list');
       expect(optionPanel.children.length).toEqual(props.enemies.length);
       props.enemies.forEach((enemy, index) => {
         expect(optionPanel.children[index].textContent).toEqual(enemy.name);
@@ -63,7 +56,7 @@ describe('EnemySelectionPanel', () => {
     });
 
     it('forwards onBack call to the supplied handleBack', () => {
-      const optionPanel = screen.getByRole('listbox');
+      const optionPanel = screen.getByTestId('list');
       fireEvent.keyDown(optionPanel, {
         key: 'Escape',
       });
@@ -71,13 +64,13 @@ describe('EnemySelectionPanel', () => {
     });
 
     it('calls selectEnemy via OptionPanel change', () => {
-      fireEvent.click(screen.getByRole('button', { name: EnemyName.Knight }));
+      fireEvent.click(screen.getByTestId('aaaa12345'));
       expect(props.selectEnemy).toHaveBeenCalledWith('aaaa12345');
     });
 
     it('forwards onNext call to the supplied handleNext', () => {
-      const optionPanel = screen.getByRole('listbox');
-      fireEvent.click(screen.getByRole('button', { name: EnemyName.Skeleton }));
+      const optionPanel = screen.getByTestId('list');
+      fireEvent.click(screen.getByTestId('ffff12345'));
       fireEvent.keyDown(optionPanel, {
         key: 'Enter',
       });

@@ -12,12 +12,6 @@ import { useSound } from '../hooks';
 jest.mock('../hooks', () => ({
   useSound: jest.fn(),
 }));
-jest.mock(
-  'react-typist',
-  () => ({ children }: { children: JSX.Element | JSX.Element[] }) => (
-    <span>{children}</span>
-  )
-);
 
 describe('Log', () => {
   const originalScrollIntoView = window.HTMLElement.prototype.scrollIntoView;

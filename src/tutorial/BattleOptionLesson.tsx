@@ -40,11 +40,7 @@ const BattleOptionLesson = ({ options, subject }: BattleOptionLessonProps) => {
             <Text paddingLeft="1.5rem">matching the entry</Text>
           </Stack>
         </Stack>
-        <List
-          borderWidth={1}
-          size="sm"
-          options={options.map((option) => ({ ...option, disabled: true }))}
-        >
+        <List borderWidth={1} size="sm">
           {options.map(({ value, display }, index) => (
             <ListItem key={value} padding="0.5rem">
               <Kbd key={value} marginRight="1rem">

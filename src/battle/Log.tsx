@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import Typist from 'react-typist';
+import Typist from 'react-typist-component';
 import isEmpty from 'lodash/isEmpty';
 import ThemedPanel from '../components/theme/ThemedPanel';
 import { Box, Button, Stack, Text } from '@chakra-ui/react';
@@ -58,6 +58,7 @@ const Log = ({
     if (!isEmpty(deliveredEntries)) {
       const lastDeliveredEntryIndex = deliveredEntries.length - 1;
       if (!logEntryMusicPlayed[lastDeliveredEntryIndex]) {
+        setTyping(true);
         const { content, targetId } = deliveredEntries[lastDeliveredEntryIndex];
         if (content.includes('attacks')) {
           if (targetId) {
@@ -81,7 +82,7 @@ const Log = ({
         }
       }
     }
-  }, [deliveredEntries, logEntryMusicPlayed, playSound, pauseSound]);
+  }, [deliveredEntries, logEntryMusicPlayed, playSound, pauseSound, setTyping]);
 
   return (
     <ThemedPanel
@@ -100,10 +101,8 @@ const Log = ({
             index === deliveredEntries.length - 1 ? (
               <Typist
                 key={index}
-                avgTypingDelay={5}
-                stdTypingDelay={10}
-                cursor={{ show: false }}
-                onCharacterTyped={() => setTyping(true)}
+                typingDelay={10}
+                cursor=""
                 onTypingDone={() => setTyping(false)}
               >
                 {entry.content}
