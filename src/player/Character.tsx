@@ -3,8 +3,6 @@ import isEqual from 'lodash/isEqual';
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import { FaCampground, FaDragon, FaInfoCircle } from 'react-icons/fa';
 import { IconType } from 'react-icons/lib';
-import { HeroDown, HeroLeft, HeroRight, HeroUp } from './hero';
-import { PeerDown, PeerLeft, PeerRight, PeerUp } from './peer';
 import { Direction } from '../navigation';
 
 const CAMPING_DURATION_MILLIS = 10000;
@@ -12,19 +10,10 @@ const CAMPING_DURATION_MILLIS = 10000;
 const getCharacterImage = (
   directionFacing: Direction,
   isCurrentPlayer?: boolean
-) => {
-  switch (directionFacing) {
-    case Direction.Up:
-      return isCurrentPlayer ? HeroUp : PeerUp;
-    case Direction.Left:
-      return isCurrentPlayer ? HeroLeft : PeerLeft;
-    case Direction.Right:
-      return isCurrentPlayer ? HeroRight : PeerRight;
-    case Direction.Down:
-    default:
-      return isCurrentPlayer ? HeroDown : PeerDown;
-  }
-};
+) =>
+  `/images/characters/${
+    isCurrentPlayer ? 'hero' : 'peer'
+  }-${directionFacing}.gif`;
 
 export interface CharacterProps {
   name: string;

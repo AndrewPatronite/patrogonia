@@ -7,7 +7,7 @@ import { ContinentName } from '../../maps/types';
 describe('getMapDisplayRange', () => {
   const { WATER: W, GRASS: G } = Legend.symbols;
   const getPlayer = (rowIndex: number, columnIndex: number): Player => ({
-    // @ts-ignore
+    // @ts-expect-error missing fields
     location: { rowIndex, columnIndex },
   });
 

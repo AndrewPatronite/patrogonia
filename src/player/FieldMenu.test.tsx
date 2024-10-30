@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import FieldMenu from './FieldMenu';
-import OptionPanel from '../battle/OptionPanel';
 import PlayerStatsPanel from './PlayerStatsPanel';
 import PlayerSpells from './PlayerSpells';
 import { Drawer, Tab, TabList } from '@chakra-ui/react';
@@ -83,28 +82,21 @@ describe('FieldMenu', () => {
     expect(subject.prop('isOpen')).toEqual(true);
   });
 
-  it('has an OptionPanel with the expected options', () => {
-    const optionPanel = subject.find(OptionPanel);
-    expect(optionPanel.props()).toEqual({
-      options: [
-        { value: 'playerStats', display: 'Stats' },
-        {
-          value: 'spells',
-          display: 'Spells',
-          disabled: false,
-        },
-        {
-          display: 'Options',
-          value: 'playerOptions',
-        },
-      ],
-      onBack: expect.any(Function),
-      onNext: expect.any(Function),
-      onChange: expect.any(Function),
-      isBackEnabled: false,
-      showNextButton: false,
-      initialValue: 'playerStats',
-    });
+  it('has a TabList with the expected options', () => {
+    subject = shallow(
+      <FieldMenu
+        showFieldMenu={true}
+        closeFieldMenu={closeFieldMenu}
+        currentPlayer={currentPlayer}
+        castSpell={castSpell}
+      />
+    );
+    const tabList = subject.find(TabList).find(Tab);
+    expect(tabList.length).toEqual(3);
+    expect(tabList.at(0).text()).toEqual('Stats');
+    expect(tabList.at(1).text()).toEqual('Spells');
+    expect(tabList.at(1).prop('isDisabled')).toEqual(false);
+    expect(tabList.at(2).text()).toEqual('Options');
   });
 
   it("has a TabList with the spells disabled if the player doesn't have any available", () => {
@@ -198,7 +190,7 @@ describe('FieldMenu', () => {
       });
     });
 
-    fit('displays PlayerSpells without HEAL when player is at full health', () => {
+    it('displays PlayerSpells without HEAL when player is at full health', () => {
       currentPlayer.stats.hp = currentPlayer.stats.hpTotal;
       subject = shallow(
         <FieldMenu

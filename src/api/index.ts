@@ -8,14 +8,17 @@ import {
   login,
   updatePlayer,
 } from './playerService';
+import { getNpcs, updateNpc } from './npcService';
 
 export {
   castSpell,
   createAccount,
+  getNpcs,
   getPlayer,
   getPlayers,
   HttpStatus,
   loadSave,
   login,
+  updateNpc,
   updatePlayer,
 };

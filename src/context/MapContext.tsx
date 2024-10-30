@@ -9,15 +9,18 @@ import {
 interface MapState {
   map?: Map;
   npcs: Npc[];
-  locationToPlayerMap: LocationToPlayerMap;
+  locationToPlayerMap?: LocationToPlayerMap;
   mapDisplayRange?: MapDisplayRange;
-  canMoveToPosition: (rowIndex: number, columnIndex: number) => boolean;
+  canMoveToPosition: (
+    rowIndex: number,
+    columnIndex: number,
+    movementType: 'player' | 'npc'
+  ) => boolean;
   updateNpc: (npc: Npc) => void;
 }
 
 const MapContext = createContext<MapState>({
   npcs: [],
-  locationToPlayerMap: {},
   canMoveToPosition: () => false,
   updateNpc: () => {},
 });

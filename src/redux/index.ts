@@ -1,9 +1,9 @@
 import battleSlice from './battleSlice';
 import mapSlice from './mapSlice';
-import playerSlice, { getInitialPlayer } from './playerSlice';
+import playerSlice from './playerSlice';
 import { RootState, store } from './store';
 
-export { battleSlice, getInitialPlayer, mapSlice, playerSlice };
+export { battleSlice, mapSlice, playerSlice };
 
 export { store };
 

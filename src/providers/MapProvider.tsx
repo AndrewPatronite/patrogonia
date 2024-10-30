@@ -1,9 +1,15 @@
 import MapContext from '../context/MapContext';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { usePlayer } from '../hooks';
 import { subscribe } from '../subscription';
 import { useToastErrorHandler } from './useToastErrorHandler';
-import { getPlayers, updateNpc, updatePeerLocation } from '../actions';
+import { getNpcs, getPlayers, updateNpc, updatePeerLocation } from '../actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux';
 import { canTraverse, isTown } from '../environment/maps/Maps';
@@ -13,13 +19,11 @@ import {
   getLocationToPlayerMap,
   getMapDisplayRange,
 } from '../environment/field/helper';
+import { updateNpcLocation } from '../actions/mapActions';
 
-const MapProvider = ({
-  children,
-}: {
-  children: JSX.Element | JSX.Element[];
-}) => {
-  const playerUrl = `${process.env.REACT_APP_WEBSOCKET_BASE_URL}/players`;
+const MapProvider = ({ children }: { children: ReactNode }) => {
+  const playerUrl = `${process.env.NEXT_PUBLIC_WEBSOCKET_BASE_URL}/players`;
+  const npcUrl = `${process.env.NEXT_PUBLIC_WEBSOCKET_BASE_URL}/npcs`;
   const { currentPlayer } = usePlayer();
   const [playerLocationMessage, setPlayerLocationMessage] = useState<
     Player | undefined
@@ -29,14 +33,15 @@ const MapProvider = ({
   const { map, players, npcs } = useSelector(
     (state: RootState) => state.mapState
   );
+  const mapNpcs = useMemo(
+    () => npcs.filter(({ currentMapName }) => currentMapName === map?.name),
+    [map?.name, npcs]
+  );
+
   const {
     id: currentPlayerId,
-    location: {
-      mapName,
-      rowIndex: currentPlayerRowIndex,
-      columnIndex: currentPlayerColumnIndex,
-    },
-  } = currentPlayer;
+    location: { mapName },
+  } = currentPlayer ?? { location: {} };
 
   useEffect(() => {
     const playerLocationSubscription = subscribe(
@@ -46,11 +51,22 @@ const MapProvider = ({
     if (mapName) {
       getPlayers(dispatch, mapName, displayError);
     }
-
     return () => {
       playerLocationSubscription.close();
     };
   }, [dispatch, playerUrl, mapName, displayError]);
+
+  useEffect(() => {
+    const npcSubscription = subscribe(npcUrl, (npcLocation) => {
+      updateNpcLocation(dispatch, npcLocation);
+    });
+    if (mapName) {
+      getNpcs(dispatch, mapName, displayError);
+    }
+    return () => {
+      npcSubscription.close();
+    };
+  }, [dispatch, npcUrl, mapName, displayError]);
 
   useEffect(() => {
     if (playerLocationMessage && playerLocationMessage.id !== currentPlayerId) {
@@ -59,17 +75,27 @@ const MapProvider = ({
     }
   }, [dispatch, currentPlayerId, playerLocationMessage]);
 
+  const locationToPlayerMap = useMemo(
+    () =>
+      currentPlayer
+        ? getLocationToPlayerMap(players, currentPlayer)
+        : undefined,
+    [players, currentPlayer]
+  );
+
   const canMoveToPosition = useCallback(
-    (rowIndex, columnIndex) => {
+    (rowIndex: number, columnIndex: number, movementType: 'player' | 'npc') => {
       const isUnoccupied = () => {
-        const occupiedByCurrentPlayer =
-          rowIndex === currentPlayerRowIndex &&
-          columnIndex === currentPlayerColumnIndex;
-        const occupiedByNpc = !!npcs.find(
+        const blockedByPlayer =
+          movementType === 'npc' &&
+          (locationToPlayerMap
+            ? locationToPlayerMap[`${rowIndex}-${columnIndex}`]?.length > 0
+            : false);
+        const occupiedByNpc = !!mapNpcs.find(
           ({ currentRowIndex, currentColumnIndex }) =>
             currentRowIndex === rowIndex && currentColumnIndex === columnIndex
         );
-        return !(occupiedByCurrentPlayer || occupiedByNpc);
+        return !(blockedByPlayer || occupiedByNpc);
       };
 
       const nextPosition = map?.layout[rowIndex][columnIndex];
@@ -80,22 +106,17 @@ const MapProvider = ({
         (isTown(nextPosition) || isUnoccupied())
       );
     },
-    [map, currentPlayerRowIndex, currentPlayerColumnIndex, npcs]
-  );
-
-  const locationToPlayerMap = useMemo(
-    () => getLocationToPlayerMap(players, currentPlayer),
-    [players, currentPlayer]
+    [locationToPlayerMap, map?.layout, mapNpcs]
   );
 
   const mapDisplayRange = useMemo(
-    () => getMapDisplayRange(currentPlayer, map),
+    () => (currentPlayer ? getMapDisplayRange(currentPlayer, map) : undefined),
     [currentPlayer, map]
   );
 
   const mapState = {
     map,
-    npcs,
+    npcs: mapNpcs,
     canMoveToPosition,
     locationToPlayerMap,
     mapDisplayRange,

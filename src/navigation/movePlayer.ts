@@ -43,7 +43,11 @@ const updatePlayerLocation = (
     saveGame?: boolean,
     updateToServer?: boolean
   ) => void,
-  canMoveToPosition: (rowIndex: number, columnIndex: number) => boolean
+  canMoveToPosition: (
+    rowIndex: number,
+    columnIndex: number,
+    movementType: 'player' | 'npc'
+  ) => boolean
 ) => {
   const nextPosition = currentMap.layout[nextRowIndex][nextColumnIndex];
 
@@ -69,7 +73,7 @@ const updatePlayerLocation = (
       },
       saveGame
     );
-  } else if (canMoveToPosition(nextRowIndex, nextColumnIndex)) {
+  } else if (canMoveToPosition(nextRowIndex, nextColumnIndex, 'player')) {
     const nextLocation = {
       ...currentPlayer.location,
       mapName: currentMap.name,
@@ -139,7 +143,11 @@ export const movePlayer = throttle(
       saveGame?: boolean,
       updateToServer?: boolean
     ) => void,
-    canMoveToPosition: (rowIndex: number, columnIndex: number) => boolean
+    canMoveToPosition: (
+      rowIndex: number,
+      columnIndex: number,
+      movementType: 'player' | 'npc'
+    ) => boolean
   ) => {
     const currentMap = Maps[currentPlayer.location.mapName]();
     const {

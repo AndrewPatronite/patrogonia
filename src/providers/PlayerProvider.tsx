@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PlayerContext } from '../context';
 import { RootState } from '../redux';
@@ -8,24 +8,52 @@ import {
   loadPlayer,
   loadSave,
   login,
-  updatePlayer,
+  updatePlayer as updatePlayerAction,
 } from '../actions';
 import { useToastErrorHandler } from './useToastErrorHandler';
 import { Player } from '../player';
+import isEqual from 'lodash/isEqual';
 
-const PlayerProvider = ({
-  children,
-}: {
-  children: JSX.Element | JSX.Element[];
-}) => {
+const PlayerProvider = ({ children }: { children: ReactNode }) => {
   const displayError = useToastErrorHandler();
   const dispatch = useDispatch();
-
   const currentPlayer = useSelector((state: RootState) => state.currentPlayer);
+  const [updateInProgress, setUpdateInProgress] = useState(false);
+
+  const updatePlayer = useCallback(
+    (player: Player, saveGame = false, updateToServer = true) => {
+      if (!isEqual(player, currentPlayer)) {
+        setUpdateInProgress(true);
+        updatePlayerAction(
+          dispatch,
+          player,
+          saveGame,
+          updateToServer,
+          (error) => {
+            displayError(error);
+            setUpdateInProgress(false);
+          },
+          () => setUpdateInProgress(false)
+        );
+      }
+    },
+    [currentPlayer, dispatch, displayError]
+  );
+
+  useEffect(() => {
+    if (!currentPlayer) {
+      const storedPlayer = localStorage.getItem('currentPlayer');
+
+      if (storedPlayer) {
+        updatePlayer(JSON.parse(storedPlayer), false, false);
+      }
+    }
+  }, [currentPlayer, updatePlayer]);
 
   const playerState = {
     castSpell: useCallback(
       (spellName: string, targetId: string) =>
+        currentPlayer &&
         castSpell(dispatch, currentPlayer, spellName, targetId, displayError),
       [dispatch, currentPlayer, displayError]
     ),
@@ -48,18 +76,8 @@ const PlayerProvider = ({
         login(dispatch, username, password, displayError),
       [dispatch, displayError]
     ),
-    updatePlayer: useCallback(
-      (updatedPlayer: Player, saveGame = false, updateToServer = true) => {
-        updatePlayer(
-          dispatch,
-          updatedPlayer,
-          saveGame,
-          updateToServer,
-          displayError
-        );
-      },
-      [dispatch, displayError]
-    ),
+    updatePlayer,
+    updateInProgress,
   };
   return (
     <PlayerContext.Provider value={playerState}>

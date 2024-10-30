@@ -3,7 +3,7 @@ import { Sound } from '../environment/sound';
 
 interface SoundState {
   pauseSound: (sound: Sound) => void;
-  playSound: (sound: Sound, soundsToPause?: Sound[]) => void;
+  playSound: (sound: Sound) => void;
 }
 
 const SoundContext = createContext<SoundState>({

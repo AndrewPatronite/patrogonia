@@ -2,38 +2,26 @@ import React from 'react';
 import World from './World';
 import { Legend } from '../maps/Legend';
 import { ModalEnum, ModalInterface } from '../../context';
-import { useMap, useModalState, usePlayer, useSound } from '../../hooks';
 import { Player } from '../../player';
 import { Direction } from '../../navigation';
-import {
-  act,
-  fireEvent,
-  render,
-  RenderResult,
-  screen,
-} from '@testing-library/react';
+import { act, fireEvent, RenderResult, screen } from '@testing-library/react';
 import { Sound } from '../sound';
 import { CaveName, ContinentName, MapName, TownName } from '../maps/types';
+import { useModalState, usePlayer, useSound } from '../../hooks';
+import { useMap } from './useMap';
+import { renderChakra } from '../../../test/utils';
 
-jest.mock('../../hooks', () => ({
-  useCharacterPositions: jest.fn().mockReturnValue({
-    canMoveToPosition: jest.fn(),
-    setCharacterTalking: jest.fn(),
-    updateCharacterPosition: jest.fn(),
-  }),
-  useModalState: jest.fn(),
-  useNpcs: jest.fn(),
-  useSound: jest.fn(),
-  useMap: jest.fn(),
-  usePlayer: jest.fn(),
+jest.mock('./useMap', () => ({ useMap: jest.fn() }));
+
+jest.mock('./useNpcMovementEffect', () => ({
   useNpcMovementEffect: jest.fn(),
 }));
-jest.mock(
-  'react-typist',
-  () => ({ children }: { children: JSX.Element | JSX.Element[] }) => (
-    <span>{children}</span>
-  )
-);
+
+jest.mock('../../hooks', () => ({
+  useModalState: jest.fn(),
+  usePlayer: jest.fn(),
+  useSound: jest.fn(),
+}));
 
 describe('World', () => {
   const { WATER: W, GRASS: G } = Legend.symbols;
@@ -65,7 +53,7 @@ describe('World', () => {
         entranceName: ContinentName.Atoris,
         facing: Direction.Down,
       },
-      //@ts-ignore missing fields
+      //@ts-expect-error missing fields
       stats: { hp: 9, hpTotal: 10, mp: 4, mpTotal: 5 },
     };
     const locationToPlayerMap = {
@@ -89,6 +77,7 @@ describe('World', () => {
     (usePlayer as jest.Mock).mockReturnValue({
       currentPlayer,
       updatePlayer: jest.fn(),
+      castSpell: jest.fn(),
     });
     (useMap as jest.Mock).mockReturnValue({
       map,
@@ -105,16 +94,15 @@ describe('World', () => {
     jest.useFakeTimers();
     jest
       .spyOn(global, 'setTimeout')
-      .mockImplementation((callback: string | Function) => {
-        if (callback instanceof Function) {
-          callback();
-        }
+      //@ts-expect-error Types of parameters callback and handler are incompatible.
+      .mockImplementation((callback: () => void) => {
+        callback();
         return 0;
       });
     jest.spyOn(global, 'clearTimeout');
-    renderResult = render(
-      <World currentPlayer={currentPlayer} castSpell={jest.fn()} />
-    );
+    //false error: Image is missing required "alt" property.
+    jest.spyOn(console, 'error').mockImplementation();
+    renderResult = renderChakra(<World />);
   };
 
   it('has TileRows for a subset of the map based on the display range', () => {
@@ -171,26 +159,17 @@ describe('World', () => {
 
   it('plays field music for field maps', () => {
     setup(() => false, ContinentName.Atoris);
-    expect(playSound).toHaveBeenCalledWith(Sound.FieldMusic, [
-      Sound.CaveMusic,
-      Sound.TownMusic,
-    ]);
+    expect(playSound).toHaveBeenCalledWith(Sound.FieldMusic);
   });
 
   it('plays cave music for cave maps', () => {
     setup();
-    expect(playSound).toHaveBeenCalledWith(Sound.CaveMusic, [
-      Sound.FieldMusic,
-      Sound.TownMusic,
-    ]);
+    expect(playSound).toHaveBeenCalledWith(Sound.CaveMusic);
   });
 
   it('plays town music for town maps', () => {
     setup(() => false, TownName.Dewhurst);
-    expect(playSound).toHaveBeenCalledWith(Sound.TownMusic, [
-      Sound.CaveMusic,
-      Sound.FieldMusic,
-    ]);
+    expect(playSound).toHaveBeenCalledWith(Sound.TownMusic);
   });
 
   it('sets show player stats modal via 5 second timer that it clears ', () => {

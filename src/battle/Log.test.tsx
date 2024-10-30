@@ -1,23 +1,13 @@
 import React from 'react';
 import Log, { LogProps } from './Log';
 import { Sound } from '../environment/sound';
-import {
-  fireEvent,
-  render,
-  RenderResult,
-  screen,
-} from '@testing-library/react';
+import { fireEvent, RenderResult, screen } from '@testing-library/react';
 import { useSound } from '../hooks';
+import { renderChakra } from '../../test/utils';
 
 jest.mock('../hooks', () => ({
   useSound: jest.fn(),
 }));
-jest.mock(
-  'react-typist',
-  () => ({ children }: { children: JSX.Element | JSX.Element[] }) => (
-    <span>{children}</span>
-  )
-);
 
 describe('Log', () => {
   const originalScrollIntoView = window.HTMLElement.prototype.scrollIntoView;
@@ -41,10 +31,8 @@ describe('Log', () => {
       showDismiss: false,
       battleStatusStyle: { border: '2px solid #e31e2d' },
       allMessagesDelivered: true,
-      typing: false,
-      setTyping: jest.fn(),
     };
-    renderResult = render(<Log {...props} />);
+    renderResult = renderChakra(<Log {...props} />);
   });
 
   afterEach(() => {
@@ -224,14 +212,14 @@ describe('Log', () => {
       props.deliveredEntries = completeBattleLog;
       renderResult.rerender(<Log {...props} />);
 
-      expect(playSound).toHaveBeenNthCalledWith(1, Sound.PlayerAttack);
-      expect(playSound).toHaveBeenNthCalledWith(2, Sound.EnemyAttack);
-      expect(playSound).toHaveBeenNthCalledWith(3, Sound.EnemyAttack);
+      expect(playSound).toHaveBeenNthCalledWith(1, Sound.PlayerAttacks);
+      expect(playSound).toHaveBeenNthCalledWith(2, Sound.EnemyAttacks);
+      expect(playSound).toHaveBeenNthCalledWith(3, Sound.EnemyAttacks);
       expect(playSound).toHaveBeenNthCalledWith(4, Sound.Ice);
-      expect(playSound).toHaveBeenNthCalledWith(5, Sound.EnemyAttack);
+      expect(playSound).toHaveBeenNthCalledWith(5, Sound.EnemyAttacks);
       expect(playSound).toHaveBeenNthCalledWith(6, Sound.Heal);
-      expect(playSound).toHaveBeenNthCalledWith(7, Sound.EnemyAttack);
-      expect(playSound).toHaveBeenNthCalledWith(8, Sound.PlayerAttack);
+      expect(playSound).toHaveBeenNthCalledWith(7, Sound.EnemyAttacks);
+      expect(playSound).toHaveBeenNthCalledWith(8, Sound.PlayerAttacks);
       expect(playSound).toHaveBeenNthCalledWith(9, Sound.LevelUp);
       expect(pauseSound).toHaveBeenCalledWith(Sound.BattleMusic);
     });
@@ -253,7 +241,7 @@ describe('Log', () => {
       ];
 
       renderResult.rerender(<Log {...props} />);
-      expect(playSound).toHaveBeenCalledWith(Sound.EnemyAttack);
+      expect(playSound).toHaveBeenCalledWith(Sound.EnemyAttacks);
 
       props.deliveredEntries = getDeliveredEntries([
         'Enemies approach.',

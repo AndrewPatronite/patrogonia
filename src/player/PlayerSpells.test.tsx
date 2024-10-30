@@ -1,11 +1,12 @@
 import React from 'react';
 import PlayerSpells, { PlayerSpellsProps } from './PlayerSpells';
 import { Direction } from '../navigation';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import upperFirst from 'lodash/upperFirst';
 import { useSound } from '../hooks';
 import { Sound } from '../environment/sound';
 import { CaveName, ContinentName, TownName } from '../environment/maps/types';
+import { renderChakra } from '../../test/utils';
 
 jest.mock('../hooks', () => ({
   useSound: jest.fn(),
@@ -85,7 +86,7 @@ describe('PlayerSpells', () => {
       castSpell: jest.fn(),
       onSpellCast: jest.fn(),
     };
-    render(<PlayerSpells {...props} />);
+    renderChakra(<PlayerSpells {...props} />);
   });
 
   it('has a List of spells', () => {
@@ -135,7 +136,7 @@ describe('PlayerSpells', () => {
     });
   });
 
-  fit('displays a spell cast message, plays the spell sound, then a few seconds later casts the chosen spell and calls onSpellCast', () => {
+  it('displays a spell cast message, plays the spell sound, then a few seconds later casts the chosen spell and calls onSpellCast', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Return' }));
     fireEvent.click(screen.getByRole('button', { name: 'Easthaven' }));
     expect(

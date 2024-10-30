@@ -5,7 +5,7 @@ import { HttpStatus } from '../api';
 export const useToastErrorHandler = () => {
   const toast = useToast();
   return useCallback(
-    (error) => {
+    (error: any) => {
       let errorMessage = 'An unknown error occurred.';
       if (error) {
         if (error.response && error.response.status) {

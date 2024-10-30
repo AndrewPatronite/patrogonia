@@ -1,15 +1,16 @@
 import React from 'react';
-import { Box, BoxProps } from '@chakra-ui/react';
-import { Cave as CaveImage, LandColors } from './terrain';
+import { BoxProps } from '@chakra-ui/react';
+import { TileColors } from './terrain';
+import TerrainTile from './TerrainTile';
 
 const Cave = ({ children, ...baseProps }: BoxProps) => (
-  <Box
+  <TerrainTile
     {...baseProps}
-    backgroundColor={LandColors.Grass}
-    backgroundImage={CaveImage}
+    backgroundColor={TileColors.Grass}
+    imageSrc="/images/terrain/cave.gif"
   >
     {children}
-  </Box>
+  </TerrainTile>
 );
 
 export default Cave;

@@ -1,6 +1,7 @@
 import React from 'react';
 import PlayerStatsModal, { PlayerStatsModalProps } from './PlayerStatsModal';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderChakra } from '../../test/utils';
 
 describe('PlayerStatsModal', () => {
   let props: PlayerStatsModalProps;
@@ -25,7 +26,7 @@ describe('PlayerStatsModal', () => {
         agility: 5,
       },
     };
-    render(<PlayerStatsModal {...props} />);
+    renderChakra(<PlayerStatsModal {...props} />);
   });
 
   it('displays the stats', () => {

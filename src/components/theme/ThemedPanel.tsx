@@ -1,7 +1,6 @@
 import React from 'react';
 import ThemedHeader from './ThemedHeader';
-import { Flex, useStyleConfig } from '@chakra-ui/react';
-import { FlexProps } from '@chakra-ui/layout/dist/types/flex';
+import { Flex, FlexProps, useStyleConfig } from '@chakra-ui/react';
 
 export interface ThemedPanelProps extends FlexProps {
   heading?: string;

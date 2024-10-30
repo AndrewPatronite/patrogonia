@@ -8,35 +8,37 @@ import {
   PopoverTrigger,
   Text,
 } from '@chakra-ui/react';
-import { Stairs as StairsImage, Stairs270 } from './terrain';
 import React from 'react';
 import { ContinentName } from '../../maps/types';
+import TerrainTile from './TerrainTile';
+import { TileColors } from './terrain';
 
 interface StairsProps extends BoxProps {
   mapsymbol: string;
 }
 
 const Stairs = ({ children, mapsymbol, ...baseProps }: StairsProps) => {
-  let backgroundImage;
+  let stairsImage;
   let popoverPlacement: PlacementWithLogical;
 
   switch (mapsymbol) {
     case ContinentName.Grimes:
-      backgroundImage = Stairs270;
+      stairsImage = '/images/terrain/stairs270.svg';
       popoverPlacement = 'right';
       break;
     case ContinentName.Atoris:
     default:
-      backgroundImage = StairsImage;
+      stairsImage = '/images/terrain/stairs.svg';
       popoverPlacement = 'top-start';
   }
 
   return (
     <Popover isOpen={true} placement={popoverPlacement}>
       <PopoverTrigger>
-        <Box
+        <TerrainTile
           {...baseProps}
-          backgroundImage={backgroundImage}
+          backgroundColor={TileColors.Rock}
+          imageSrc={stairsImage}
           sx={{
             image: {
               transform: 'rotate(270deg)',
@@ -44,14 +46,16 @@ const Stairs = ({ children, mapsymbol, ...baseProps }: StairsProps) => {
           }}
         >
           {children}
-        </Box>
+        </TerrainTile>
       </PopoverTrigger>
-      <PopoverContent width="6.25rem">
-        <PopoverArrow />
-        <Text padding="0.5rem" textAlign="center">
-          {mapsymbol}
-        </Text>
-      </PopoverContent>
+      <Box zIndex={1}>
+        <PopoverContent width="6.25rem">
+          <PopoverArrow />
+          <Text padding="0.5rem" textAlign="center">
+            {mapsymbol}
+          </Text>
+        </PopoverContent>
+      </Box>
     </Popover>
   );
 };

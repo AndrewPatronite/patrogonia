@@ -22,7 +22,7 @@ const Credits = () => {
   return (
     <>
       <Button variant="link" onClick={onOpen}>
-        credits
+        Credits
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

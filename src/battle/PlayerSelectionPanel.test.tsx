@@ -13,9 +13,9 @@ describe('PlayerSelectionPanel', () => {
   beforeEach(() => {
     props = {
       players: [
-        //@ts-ignore missing Stats fields
+        //@ts-expect-error missing Stats fields
         { playerId: 1, playerName: 'Redwan' },
-        //@ts-ignore missing Stats fields
+        //@ts-expect-error missing Stats fields
         { playerId: 2, playerName: 'Orfeo' },
       ],
       action: 'Heal',

@@ -1,4 +1,8 @@
-import { getPlayers as getPlayersRemote } from '../api';
+import {
+  getNpcs as getNpcsRemote,
+  getPlayers as getPlayersRemote,
+  updateNpc as updateNpcRemote,
+} from '../api';
 import { Dispatch } from '@reduxjs/toolkit';
 import { mapSlice } from '../redux';
 import { Maps } from '../environment/maps/Maps';
@@ -24,8 +28,39 @@ export const getPlayers = (
   );
 };
 
+export const getNpcs = (
+  dispatch: Dispatch,
+  mapName: MapName,
+  onFailure: (error: any) => void
+) => {
+  getNpcsRemote(
+    mapName,
+    (npcs: Npc[]) => {
+      npcs.forEach((npc) => {
+        dispatch(mapSlice.actions.updateNpc({ npc }));
+      });
+    },
+    (error: any) => {
+      onFailure(`Failed to get npcs for ${mapName}: ${JSON.stringify(error)}`);
+    }
+  );
+};
+
 export const updatePeerLocation = (dispatch: Dispatch, peer: Player) =>
   dispatch(mapSlice.actions.updatePeerLocation({ peer }));
 
-export const updateNpc = (dispatch: Dispatch, npc: Npc) =>
+export const updateNpc = (dispatch: Dispatch, npc: Npc) => {
+  updateNpcRemote(
+    npc,
+    (updatedNpc) => {
+      updateNpcLocation(dispatch, updatedNpc);
+    },
+    (error) => {
+      console.warn(`Failed to update NPC: ${error}. Dispatching local version`);
+      updateNpcLocation(dispatch, npc);
+    }
+  );
+};
+
+export const updateNpcLocation = (dispatch: Dispatch, npc: Npc) =>
   dispatch(mapSlice.actions.updateNpc({ npc }));

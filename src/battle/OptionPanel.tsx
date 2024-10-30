@@ -10,7 +10,6 @@ export interface OptionPanelProps {
   onChange?: (selectedOption: any) => void;
   onNext: (selectedOption: any) => void;
   isBackEnabled: boolean;
-  initialValue?: any;
 }
 
 const OptionPanel = ({
@@ -19,19 +18,21 @@ const OptionPanel = ({
   onChange = () => {},
   onNext,
   isBackEnabled,
-  initialValue = null,
 }: OptionPanelProps) => {
   const listRef = useRef<HTMLDivElement>(null);
   const [selectedValue, setSelectedValue] = useState(
-    initialValue || (options[0] && options[0].value) || undefined
+    (options[0] && options[0].value) || undefined
   );
-  if (initialValue && initialValue !== selectedValue) {
-    setSelectedValue(initialValue);
-  }
 
   const handleChange = (selected: any) => {
     setSelectedValue(selected);
     onChange(selected);
+  };
+
+  const submitOption = (selectedValue: any) => {
+    if (selectedValue) {
+      onNext(selectedValue);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -39,10 +40,12 @@ const OptionPanel = ({
       case 'Escape':
       case 'Backspace':
       case 'Delete':
-        isBackEnabled && onBack();
+        if (isBackEnabled) {
+          onBack();
+        }
         break;
       case 'Enter':
-        selectedValue && onNext(selectedValue);
+        submitOption(selectedValue);
         break;
       case '1':
       case '2':
@@ -53,14 +56,18 @@ const OptionPanel = ({
       case '7':
       case '8':
       case '9':
-        const optionIndex = parseInt(e.key, 10) - 1;
-        if (inRange(optionIndex, 0, options.length)) {
-          handleChange(options[optionIndex].value);
+        {
+          const optionIndex = parseInt(e.key, 10) - 1;
+          if (inRange(optionIndex, 0, options.length)) {
+            handleChange(options[optionIndex].value);
+          }
         }
         break;
       default:
         break;
     }
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   useEffect(() => {
@@ -76,6 +83,10 @@ const OptionPanel = ({
         options={options}
         value={selectedValue}
         onChange={handleChange}
+        onDoubleClick={(selection) => {
+          handleChange(selection);
+          submitOption(selection);
+        }}
         size="sm"
         tabIndex={0}
       />

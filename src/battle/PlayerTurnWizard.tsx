@@ -58,7 +58,7 @@ const PlayerTurnWizard = ({
           takeTurn(command, livingEnemies[0].id);
         }
         break;
-      default:
+      default: {
         const spell = command;
         const { spellName, offensive } = spell;
         const formattedSpellName = upperFirst(spellName.toLowerCase());
@@ -75,6 +75,7 @@ const PlayerTurnWizard = ({
             takeTurn(formattedSpellName, currentPlayer.id);
           }
         }
+      }
     }
   };
 
@@ -110,7 +111,7 @@ const PlayerTurnWizard = ({
     case Command.Parry:
     case Command.Run:
       return null;
-    default:
+    default: {
       const { spellName, offensive } = action;
       const formattedSpellName = upperFirst(spellName.toLowerCase());
       return offensive ? (
@@ -142,6 +143,7 @@ const PlayerTurnWizard = ({
           isBackEnabled={true}
         />
       );
+    }
   }
 };
 

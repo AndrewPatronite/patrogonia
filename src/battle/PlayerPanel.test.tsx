@@ -33,7 +33,7 @@ describe('PlayerPanel', () => {
       mp: 17,
       mpTotal: 27,
     };
-    //@ts-ignore missing Player fields
+    //@ts-expect-error missing Player fields
     const currentPlayer: Player = { id: currentPlayerId };
 
     props = {

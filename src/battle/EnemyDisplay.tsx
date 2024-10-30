@@ -4,7 +4,6 @@ import find from 'lodash/find';
 import isEqual from 'lodash/isEqual';
 import { isField } from '../environment/maps/Maps';
 import { Box, Flex } from '@chakra-ui/react';
-import { Cave, Field } from './background';
 import { Enemy, LogEntry } from './types';
 import { bestiary } from './bestiary';
 import { MapName } from '../environment/maps/types';
@@ -44,7 +43,9 @@ const EnemyDisplay = ({
       backgroundSize="cover"
       backgroundColor="white"
       margin="1px"
-      backgroundImage={isField(mapName) ? Field : Cave}
+      backgroundImage={`/images/battle/${
+        isField(mapName) ? 'field' : 'cave'
+      }.svg`}
     >
       {displayedEnemies.map(({ id, name }) => (
         <Box

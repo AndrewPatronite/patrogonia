@@ -1,11 +1,16 @@
 import React from 'react';
-import { Box, BoxProps } from '@chakra-ui/react';
-import { Water as WaterImage } from './terrain';
+import { BoxProps } from '@chakra-ui/react';
+import TerrainTile from './TerrainTile';
+import { TileColors } from './terrain';
 
 const Water = ({ children, ...baseProps }: BoxProps) => (
-  <Box {...baseProps} backgroundImage={WaterImage}>
+  <TerrainTile
+    {...baseProps}
+    backgroundColor={TileColors.Water}
+    imageSrc="/images/terrain/water-small.gif"
+  >
     {children}
-  </Box>
+  </TerrainTile>
 );
 
 export default Water;

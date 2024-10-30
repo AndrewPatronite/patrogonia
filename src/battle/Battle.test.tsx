@@ -8,15 +8,19 @@ import Log from './Log';
 import PlayerPanel from './PlayerPanel';
 import ThemedPanel from '../components/theme/ThemedPanel';
 import { Sound } from '../environment/sound';
-import { useBattle, usePlayer, useSound } from '../hooks';
-import { render } from '@testing-library/react';
+import { usePlayer, useSound } from '../hooks';
 import { BattleStatus } from './types/BattleStatus';
 import { CaveName } from '../environment/maps/types';
+import { useBattle } from './useBattle';
+import { renderChakra } from '../../test/utils';
 
 jest.mock('../hooks', () => ({
   useSound: jest.fn(),
-  useBattle: jest.fn(),
   usePlayer: jest.fn(),
+}));
+
+jest.mock('./useBattle', () => ({
+  useBattle: jest.fn(),
 }));
 
 describe('Battle', () => {
@@ -60,15 +64,15 @@ describe('Battle', () => {
         },
       ],
       playerStats: {
-        //@ts-ignore
+        //@ts-expect-error missing fields
         [currentPlayerId]: { playerId: currentPlayerId },
-        //@ts-ignore
+        //@ts-expect-error missing fields
         [anotherPlayerId]: { playerId: anotherPlayerId },
       },
       roundPlayerActions: {
-        //@ts-ignore
+        //@ts-expect-error missing fields
         [currentPlayerId]: Command.Attack,
-        //@ts-ignore
+        //@ts-expect-error missing fields
         [anotherPlayerId]: Command.Parry,
       },
       status: BattleStatus.InProgress,
@@ -131,8 +135,6 @@ describe('Battle', () => {
         showDismiss: false,
         battleStatusStyle: direBattleStatusStyle,
         allMessagesDelivered: false,
-        typing: false,
-        setTyping: expect.any(Function),
       });
     });
 
@@ -224,23 +226,20 @@ describe('Battle', () => {
   });
 
   it('plays battle music via useEffect', () => {
-    render(<Battle />);
-    expect(playSound).toHaveBeenCalledWith(Sound.BattleMusic, [
-      Sound.FieldMusic,
-      Sound.CaveMusic,
-    ]);
+    renderChakra(<Battle />);
+    expect(playSound).toHaveBeenCalledWith(Sound.BattleMusic);
   });
 
   it('enables next player turn after all log messages have been delivered, via useEffect', () => {
     battle.log[1].delivered = true;
-    render(<Battle />);
+    renderChakra(<Battle />);
     expect(pauseSound).not.toHaveBeenCalled();
   });
 
   it('pauses battle music and hides the players panel when the battle is over and all log messages have been delivered, via useEffect', () => {
     battle.status = BattleStatus.Victory;
     battle.log[1].delivered = true;
-    render(<Battle />);
+    renderChakra(<Battle />);
 
     expect(pauseSound).toHaveBeenCalledWith(Sound.BattleMusic);
   });

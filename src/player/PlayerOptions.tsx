@@ -12,7 +12,7 @@ const PlayerOptions = () => {
     );
     currentPlayer.loggedIn = false;
     localStorage.setItem(currentPlayerKey, JSON.stringify(currentPlayer));
-    window.location.href = '/';
+    window.location.href = '/login';
   };
 
   return (

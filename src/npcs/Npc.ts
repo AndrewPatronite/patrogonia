@@ -1,12 +1,14 @@
 import { NpcName } from './Npcs';
 import { Direction } from '../navigation';
+import { MapName } from '../environment/maps/types';
 
 export enum NpcType {
-  Knight,
+  Knight = 'Knight',
 }
 
 export default interface Npc {
   name: NpcName;
+  currentMapName: MapName;
   currentRowIndex: number;
   currentColumnIndex: number;
   movementRange: number;

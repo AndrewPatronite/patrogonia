@@ -30,12 +30,10 @@ export const validatePassword = (
       switch (error) {
         case 'min':
         case 'max':
-          message && (message += ', ');
-          message += '8 to 16 characters';
+          message += `${message ? ', ' : ''}8 to 16 characters`;
           break;
         default:
-          message && (message += ', ');
-          message += error;
+          message += `${message ? ', ' : ''}${error}`;
           break;
       }
     });

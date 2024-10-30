@@ -1,11 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { ReactNode, useCallback, useState } from 'react';
 import { ModalEnum, ModalInterface, ModalStateContext } from '../context';
 
-const ModalStateProvider = ({
-  children,
-}: {
-  children: JSX.Element | JSX.Element[];
-}) => {
+const ModalStateProvider = ({ children }: { children: ReactNode }) => {
   const [openModals, setOpenModals] = useState<
     { modal: ModalEnum; content?: any; onClose?: () => void }[]
   >([]);

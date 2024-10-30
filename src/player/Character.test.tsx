@@ -34,50 +34,62 @@ describe('Character', () => {
 
   it("has the right background image and shows a hero's name on back when facing up", () => {
     const subject = getCharacter(Direction.Up, undefined, undefined, true);
-    expect(subject.find(Flex).prop('backgroundImage')).toEqual('hero-up.gif');
+    expect(subject.find(Flex).prop('backgroundImage')).toEqual(
+      '/images/characters/hero-up.gif'
+    );
     expect(subject.text()).toEqual('Redwan');
   });
 
   it("has the right background image and shows a hero's name on chest when facing down", () => {
     const subject = getCharacter(Direction.Down, undefined, undefined, true);
-    expect(subject.find(Flex).prop('backgroundImage')).toEqual('hero-down.gif');
+    expect(subject.find(Flex).prop('backgroundImage')).toEqual(
+      '/images/characters/hero-down.gif'
+    );
     expect(subject.text()).toEqual('Redwan');
   });
 
   it('has the right background image for hero facing right', () => {
     const subject = getCharacter(Direction.Right, undefined, undefined, true);
     expect(subject.find(Flex).prop('backgroundImage')).toEqual(
-      'hero-right.gif'
+      '/images/characters/hero-right.gif'
     );
   });
 
   it('has the right background image for hero facing left', () => {
     const subject = getCharacter(Direction.Left, undefined, undefined, true);
-    expect(subject.find(Flex).prop('backgroundImage')).toEqual('hero-left.gif');
+    expect(subject.find(Flex).prop('backgroundImage')).toEqual(
+      '/images/characters/hero-left.gif'
+    );
   });
 
   it("has the right background image and shows a peer's name on back when facing up", () => {
     const subject = getCharacter(Direction.Up);
-    expect(subject.find(Flex).prop('backgroundImage')).toEqual('peer-up.gif');
+    expect(subject.find(Flex).prop('backgroundImage')).toEqual(
+      '/images/characters/peer-up.gif'
+    );
     expect(subject.text()).toEqual('Redwan');
   });
 
   it("has the right background image and shows a peer's name on chest when facing down", () => {
     const subject = getCharacter(Direction.Down);
-    expect(subject.find(Flex).prop('backgroundImage')).toEqual('peer-down.gif');
+    expect(subject.find(Flex).prop('backgroundImage')).toEqual(
+      '/images/characters/peer-down.gif'
+    );
     expect(subject.text()).toEqual('Redwan');
   });
 
   it('has the right background image for peer facing right', () => {
     const subject = getCharacter(Direction.Right);
     expect(subject.find(Flex).prop('backgroundImage')).toEqual(
-      'peer-right.gif'
+      '/images/characters/peer-right.gif'
     );
   });
 
   it('has the right background image for peer facing left', () => {
     const subject = getCharacter(Direction.Left);
-    expect(subject.find(Flex).prop('backgroundImage')).toEqual('peer-left.gif');
+    expect(subject.find(Flex).prop('backgroundImage')).toEqual(
+      '/images/characters/peer-left.gif'
+    );
   });
 
   it('shows a dragon icon if player is in battle', () => {

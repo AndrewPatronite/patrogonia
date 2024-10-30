@@ -3,7 +3,7 @@ import { Player } from '../player';
 import { HttpStatus } from './types';
 
 const axiosInstance = axios.create({
-  baseURL: `${process.env.REACT_APP_BASE_URL}/player`,
+  baseURL: `${process.env.NEXT_PUBLIC_BASE_URL}/player`,
   headers: { 'Content-Type': 'application/json' },
 });
 

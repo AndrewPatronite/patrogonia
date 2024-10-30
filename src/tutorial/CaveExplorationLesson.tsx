@@ -1,6 +1,5 @@
 import React from 'react';
 import { Flex, Image, Stack, Text } from '@chakra-ui/react';
-import { Cave } from '../environment/field/tiles/terrain';
 
 const CaveExplorationLesson = () => (
   <Flex>
@@ -13,7 +12,12 @@ const CaveExplorationLesson = () => (
         to Grimes.
       </Text>
     </Stack>
-    <Image alt="Town" boxSize="5rem" marginLeft="1rem" src={Cave} />
+    <Image
+      alt="Town"
+      boxSize="5rem"
+      marginLeft="1rem"
+      src="/images/terrain/cave.gif"
+    />
   </Flex>
 );
 

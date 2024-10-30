@@ -5,8 +5,9 @@ import { Npc, Tristan } from '../../npcs';
 import { LocationToPlayerMap } from './types';
 import { Player } from '../../player';
 import { Direction } from '../../navigation';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { CaveName, TownName } from '../maps/types';
+import { renderChakra } from '../../../test/utils';
 
 export const verifyClass = (subject: Element, expectedClasses: string) =>
   expect(
@@ -29,47 +30,42 @@ describe('Tile', () => {
       [W, W, W, W, W, W, W, W, W, W],
     ],
   };
-  //@ts-ignore missing player fields
   const currentPlayer: Player = {
     id: 1,
     name: 'Andy',
-    //@ts-ignore missing location fields
+    //@ts-expect-error missing location fields
     location: {
       facing: Direction.Down,
     },
   };
-  //@ts-ignore missing player fields
   const currentPlayerCompanion: Player = {
     id: 2,
     name: 'Redwan',
-    //@ts-ignore missing location fields
+    //@ts-expect-error missing location fields
     location: {
       facing: Direction.Down,
     },
   };
-  //@ts-ignore missing player fields
   const stranger: Player = {
     id: 3,
     name: 'Galnor',
-    //@ts-ignore missing location fields
+    //@ts-expect-error missing location fields
     location: {
       facing: Direction.Down,
     },
   };
-  //@ts-ignore missing player fields
   const saved: Player = {
     id: 4,
     name: 'Christian',
-    //@ts-ignore missing location fields
+    //@ts-expect-error missing location fields
     location: {
       facing: Direction.Down,
     },
   };
-  //@ts-ignore missing player fields
   const townie: Player = {
     id: 5,
     name: 'Nester',
-    //@ts-ignore missing location fields
+    //@ts-expect-error missing location fields
     location: {
       facing: Direction.Down,
     },
@@ -88,7 +84,7 @@ describe('Tile', () => {
     };
     const mapLayout = map.layout;
 
-    render(
+    renderChakra(
       <Tile
         mapSymbol={mapSymbol}
         rowIndex={rowIndex}
