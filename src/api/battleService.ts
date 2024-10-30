@@ -3,7 +3,7 @@ import { Battle } from '../battle/types';
 import { HttpStatus } from './types';
 
 const axiosInstance = axios.create({
-  baseURL: `${process.env.REACT_APP_BASE_URL}/battle`,
+  baseURL: `${process.env.NEXT_PUBLIC_BASE_URL}/battle`,
   headers: { 'Content-Type': 'application/json' },
 });
 

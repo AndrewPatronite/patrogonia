@@ -8,13 +8,13 @@ import { Player, Spell } from '../player';
 import { Command, EnemyName } from './types';
 
 describe('PlayerTurnWizard', () => {
-  //@ts-ignore missing Player fields
+  //@ts-expect-error missing Player fields
   const currentPlayer: Player = {
     id: 1,
     name: 'Redwan',
     tutorialLessons: [],
   };
-  //@ts-ignore missing Player fields
+  //@ts-expect-error missing Player fields
   const anotherPlayer: Player = {
     id: 2,
     name: 'Andy',
@@ -38,7 +38,7 @@ describe('PlayerTurnWizard', () => {
   beforeEach(() => {
     props = {
       currentPlayer,
-      //@ts-ignore missing Player fields
+      //@ts-expect-error missing Player fields
       players: [currentPlayer, anotherPlayer],
       enemies: [
         { id: 'abcdef123123', name: EnemyName.Skeleton, stats: { hp: 20 } },

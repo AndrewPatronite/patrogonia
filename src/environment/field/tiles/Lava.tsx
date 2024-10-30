@@ -1,11 +1,16 @@
 import React from 'react';
-import { Box, BoxProps } from '@chakra-ui/react';
-import { Lava as LavaImage } from './terrain';
+import { BoxProps } from '@chakra-ui/react';
+import TerrainTile from './TerrainTile';
+import { TileColors } from './terrain';
 
 const Lava = ({ children, ...baseProps }: BoxProps) => (
-  <Box {...baseProps} backgroundImage={LavaImage}>
+  <TerrainTile
+    {...baseProps}
+    backgroundColor={TileColors.Lava}
+    imageSrc="/images/terrain/lava.gif"
+  >
     {children}
-  </Box>
+  </TerrainTile>
 );
 
 export default Lava;

@@ -62,7 +62,7 @@ export const Maps: { [key in MapName]: (entranceName?: MapName) => Map } = {
     };
   },
 
-  Dewhurst(entranceName: MapName = ContinentName.Atoris): Map {
+  Dewhurst(): Map {
     return {
       name: TownName.Dewhurst,
       // prettier-ignore
@@ -115,7 +115,7 @@ export const Maps: { [key in MapName]: (entranceName?: MapName) => Map } = {
     };
   },
 
-  Fernsworth(entranceName: MapName = ContinentName.Grimes): Map {
+  Fernsworth(): Map {
     return {
       name: TownName.Fernsworth,
       // prettier-ignore
@@ -157,7 +157,7 @@ export const Maps: { [key in MapName]: (entranceName?: MapName) => Map } = {
     };
   },
 
-  Easthaven(entranceName: MapName = ContinentName.Grimes): Map {
+  Easthaven(): Map {
     return {
       name: TownName.Easthaven,
       // prettier-ignore

@@ -31,20 +31,20 @@ describe('EnemyDisplay', () => {
   });
 
   it('has the cave image based on the map', () => {
-    expect(subject.prop('backgroundImage')).toEqual('cave.svg');
+    expect(subject.prop('backgroundImage')).toEqual('/images/battle/cave.svg');
   });
 
   it('has the field image based on the map', () => {
     props.mapName = ContinentName.Grimes;
     subject = shallow(<EnemyDisplay {...props} />);
-    expect(subject.prop('backgroundImage')).toEqual('field.svg');
+    expect(subject.prop('backgroundImage')).toEqual('/images/battle/field.svg');
   });
 
   it("has a Box to house each enemy that hasn't been reported as defeated", () => {
     const enemies = subject.find(Box);
     expect(enemies.length).toEqual(2);
     expect(enemies.at(0).props()).toEqual({
-      backgroundImage: 'rat.svg',
+      backgroundImage: '/images/enemies/rat.svg',
       backgroundRepeat: 'no-repeat',
       border: undefined,
       borderRadius: undefined,
@@ -56,7 +56,7 @@ describe('EnemyDisplay', () => {
       width: expect.anything(),
     });
     expect(enemies.at(1).props()).toEqual({
-      backgroundImage: 'goblin.svg',
+      backgroundImage: '/images/enemies/goblin.svg',
       backgroundRepeat: 'no-repeat',
       border: '3px solid #3734ff',
       borderRadius: '0.3125rem',

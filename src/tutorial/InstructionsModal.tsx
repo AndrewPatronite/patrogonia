@@ -76,12 +76,12 @@ const InstructionsModal = () => {
   return (
     <>
       <Button variant="link" onClick={onOpen}>
-        Instructions
+        How to Play
       </Button>
       <Modal isOpen={isOpen} isCentered={true} onClose={onClose} size="xl">
         <ModalOverlay />
         <ModalContent>
-          <ThemedPanel heading="Instructions" flexDirection="column">
+          <ThemedPanel heading="How to Play" flexDirection="column">
             <Tabs orientation="vertical" width="100%" marginTop="0.5rem">
               <TabList>
                 {lessonEntries.map(({ name }) => (

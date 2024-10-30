@@ -1,22 +1,18 @@
 import { ModalEnum, TutorialContext } from '../context';
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { getLesson, Lesson, LessonEnum, TutorialModal } from '../tutorial';
 import { isTown } from '../environment/maps/Maps';
 import { useModalState, usePlayer } from '../hooks';
 import { ContinentName } from '../environment/maps/types';
 
-const TutorialProvider = ({
-  children,
-}: {
-  children: JSX.Element | JSX.Element[];
-}) => {
+const TutorialProvider = ({ children }: { children: ReactNode }) => {
   const { currentPlayer, updatePlayer } = usePlayer();
   const {
     loggedIn,
     battleId,
     location: { mapName },
     tutorialLessons,
-  } = currentPlayer;
+  } = currentPlayer ?? { location: {} };
   const [nextLesson, setNextLesson] = useState<Lesson>();
   const { isModalOpen } = useModalState();
 
@@ -25,24 +21,26 @@ const TutorialProvider = ({
 
   useEffect(() => {
     const loadNextLesson = () => {
-      const nextLesson = [
-        getLesson(LessonEnum.Introduction),
-        getLesson(LessonEnum.MovementLesson),
-        getLesson(
-          isTown(mapName) ? LessonEnum.NpcLesson : LessonEnum.TownVisitLesson
-        ),
-        getLesson(LessonEnum.FieldMenuLesson),
-        ...(mapName === ContinentName.Atoris
-          ? [getLesson(LessonEnum.CaveExplorationLesson)]
-          : []),
-      ].find(
-        ({ name: lessonName }) =>
-          !tutorialLessons.find(
-            (completedLesson) => lessonName === completedLesson
-          )
-      );
-      if (nextLesson) {
-        setNextLesson(nextLesson);
+      if (mapName && tutorialLessons) {
+        const nextLesson = [
+          getLesson(LessonEnum.Introduction),
+          getLesson(LessonEnum.MovementLesson),
+          getLesson(
+            isTown(mapName) ? LessonEnum.NpcLesson : LessonEnum.TownVisitLesson
+          ),
+          getLesson(LessonEnum.FieldMenuLesson),
+          ...(mapName === ContinentName.Atoris
+            ? [getLesson(LessonEnum.CaveExplorationLesson)]
+            : []),
+        ].find(
+          ({ name: lessonName }) =>
+            !tutorialLessons.find(
+              (completedLesson) => lessonName === completedLesson
+            )
+        );
+        if (nextLesson) {
+          setNextLesson(nextLesson);
+        }
       }
     };
     const interval = setInterval(() => {
@@ -63,7 +61,7 @@ const TutorialProvider = ({
   return (
     <TutorialContext.Provider value={{}}>
       {children}
-      {canShowLesson && nextLesson && (
+      {canShowLesson && nextLesson && currentPlayer && (
         <TutorialModal
           player={currentPlayer}
           lesson={nextLesson}

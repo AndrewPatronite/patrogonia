@@ -29,7 +29,6 @@ export const loadBattle = (
 };
 
 export const takeTurn = (
-  dispatch: Dispatch,
   battleId: string,
   playerId: number,
   playerAction: string,

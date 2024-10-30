@@ -1,6 +1,6 @@
 import { Legend } from '../../maps/Legend';
 import { getLandBorderStyles, landBorderRadius } from './getLandBorderStyles';
-import { LandColors } from '../tiles/terrain';
+import { TileColors } from '../tiles/terrain';
 
 describe('getLandBorderStyles', () => {
   const { WATER: W, GRASS: G } = Legend.symbols;
@@ -23,15 +23,15 @@ describe('getLandBorderStyles', () => {
 
   it('should have water classes on all sides if surrounded by water', () => {
     expect(getLandBorderStyles(G, mapLayout, 1, 2)).toEqual({
-      borderBottomColor: LandColors.WetSand,
+      borderBottomColor: TileColors.WetSand,
       borderBottomLeftRadius: landBorderRadius,
       borderBottomRightRadius: landBorderRadius,
       borderBottomWidth: 2,
-      borderLeftColor: LandColors.WetSand,
+      borderLeftColor: TileColors.WetSand,
       borderLeftWidth: 2,
-      borderRightColor: LandColors.WetSand,
+      borderRightColor: TileColors.WetSand,
       borderRightWidth: 2,
-      borderTopColor: LandColors.WetSand,
+      borderTopColor: TileColors.WetSand,
       borderTopLeftRadius: landBorderRadius,
       borderTopRightRadius: landBorderRadius,
       borderTopWidth: 2,
@@ -40,11 +40,11 @@ describe('getLandBorderStyles', () => {
 
   it("should have water classes on some sides if it's a peninsula", () => {
     expect(getLandBorderStyles(G, mapLayout, 2, 1)).toEqual({
-      borderLeftColor: LandColors.WetSand,
+      borderLeftColor: TileColors.WetSand,
       borderLeftWidth: 2,
-      borderRightColor: LandColors.WetSand,
+      borderRightColor: TileColors.WetSand,
       borderRightWidth: 2,
-      borderTopColor: LandColors.WetSand,
+      borderTopColor: TileColors.WetSand,
       borderTopLeftRadius: landBorderRadius,
       borderTopRightRadius: landBorderRadius,
       borderTopWidth: 2,
@@ -53,10 +53,10 @@ describe('getLandBorderStyles', () => {
 
   it("should have water classes on some sides if it's a corner", () => {
     expect(getLandBorderStyles(G, mapLayout, 3, 1)).toEqual({
-      borderBottomColor: LandColors.WetSand,
+      borderBottomColor: TileColors.WetSand,
       borderBottomLeftRadius: landBorderRadius,
       borderBottomWidth: 2,
-      borderLeftColor: LandColors.WetSand,
+      borderLeftColor: TileColors.WetSand,
       borderLeftWidth: 2,
     });
   });

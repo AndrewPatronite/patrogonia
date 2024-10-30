@@ -1,15 +1,16 @@
 import React from 'react';
-import { Box, BoxProps } from '@chakra-ui/react';
-import { Grass as GrassImage, LandColors } from './terrain';
+import { BoxProps } from '@chakra-ui/react';
+import { TileColors } from './terrain';
+import TerrainTile from './TerrainTile';
 
 const Grass = ({ children, ...baseProps }: BoxProps) => (
-  <Box
+  <TerrainTile
     {...baseProps}
-    backgroundColor={LandColors.Grass}
-    backgroundImage={GrassImage}
+    backgroundColor={TileColors.Grass}
+    imageSrc="/images/terrain/grass.svg"
   >
     {children}
-  </Box>
+  </TerrainTile>
 );
 
 export default Grass;

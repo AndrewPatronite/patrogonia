@@ -9,7 +9,6 @@ import {
   TalkingSound,
   WarpSound,
 } from './zapsplat';
-import { SoundAudio } from './SoundAudio';
 
 export {
   BattleMusic,
@@ -22,7 +21,6 @@ export {
   PartyDestroyedSound,
   PlayerAttackSound,
   Sound,
-  SoundAudio,
   TalkingSound,
   TownMusic,
   WarpSound,

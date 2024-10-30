@@ -4,8 +4,9 @@ import EnemySelectionPanel, {
 } from './EnemySelectionPanel';
 import { Command, EnemyName } from './types';
 import { Player } from '../player';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import { useModalState } from '../hooks';
+import { renderChakra } from '../../test/utils';
 
 jest.mock('../hooks', () => ({
   useModalState: jest.fn(),
@@ -20,7 +21,7 @@ describe('EnemySelectionPanel', () => {
       openModal: () => {},
       closeModal: () => {},
     });
-    //@ts-ignore missing Player fields
+    //@ts-expect-error missing Player fields
     const currentPlayer: Player = { id: 1, name: 'Andy', tutorialLessons: [] };
     props = {
       currentPlayer,
@@ -35,7 +36,7 @@ describe('EnemySelectionPanel', () => {
       selectedEnemyId: undefined,
       playerTurnEnabled: true,
     };
-    render(<EnemySelectionPanel {...props} />);
+    renderChakra(<EnemySelectionPanel {...props} />);
   });
 
   it('has an action ThemedHeader', () => {

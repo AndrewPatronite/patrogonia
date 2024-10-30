@@ -4,7 +4,12 @@ import {
   takeTurn,
   updateBattle,
 } from './battleActions';
-import { getPlayers, updateNpc, updatePeerLocation } from './mapActions';
+import {
+  getNpcs,
+  getPlayers,
+  updateNpc,
+  updatePeerLocation,
+} from './mapActions';
 import {
   castSpell,
   createAccount,
@@ -19,6 +24,7 @@ export {
   createAccount,
   dismissBattle,
   loadBattle,
+  getNpcs,
   getPlayers,
   loadPlayer,
   loadSave,

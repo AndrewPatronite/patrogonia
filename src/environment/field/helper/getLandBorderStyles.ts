@@ -1,7 +1,7 @@
 import { Legend } from '../../maps/Legend';
 import inRange from 'lodash/inRange';
 import isEqual from 'lodash/isEqual';
-import { LandColors } from '../tiles/terrain';
+import { TileColors } from '../tiles/terrain';
 import { MapLayout } from '../../maps';
 
 const getMapSymbol = (
@@ -55,7 +55,7 @@ export const getLandBorderStyles = (
     );
     if (hasWaterAbove) {
       borderClasses.borderTopWidth = 2;
-      borderClasses.borderTopColor = LandColors.WetSand;
+      borderClasses.borderTopColor = TileColors.WetSand;
       if (hasWaterToTheLeft) {
         borderClasses.borderTopLeftRadius = landBorderRadius;
       }
@@ -65,15 +65,15 @@ export const getLandBorderStyles = (
     }
     if (hasWaterToTheLeft) {
       borderClasses.borderLeftWidth = 2;
-      borderClasses.borderLeftColor = LandColors.WetSand;
+      borderClasses.borderLeftColor = TileColors.WetSand;
     }
     if (hasWaterToTheRight) {
       borderClasses.borderRightWidth = 2;
-      borderClasses.borderRightColor = LandColors.WetSand;
+      borderClasses.borderRightColor = TileColors.WetSand;
     }
     if (hasWaterBelow) {
       borderClasses.borderBottomWidth = 2;
-      borderClasses.borderBottomColor = LandColors.WetSand;
+      borderClasses.borderBottomColor = TileColors.WetSand;
       if (hasWaterToTheLeft) {
         borderClasses.borderBottomLeftRadius = landBorderRadius;
       }

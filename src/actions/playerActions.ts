@@ -60,7 +60,7 @@ export const loadPlayer = (
   getPlayer(
     playerId,
     (player: Player) =>
-      storeAndDispatchPlayerUpdate(dispatch, { ...player, loggedIn: true }),
+      dispatchAndStorePlayerUpdate(dispatch, { ...player, loggedIn: true }),
     onFailure
   );
 
@@ -95,7 +95,8 @@ export const updatePlayer = (
   player: Player,
   saveGame: boolean,
   updateToServer: boolean,
-  onFailure: (error: any) => void
+  onFailure: (error: any) => void,
+  onSuccess: () => void = () => {}
 ) => {
   if (updateToServer) {
     updatePlayerRemote(
@@ -106,21 +107,23 @@ export const updatePlayer = (
           ...player,
           ...updatedPlayer,
         };
-        storeAndDispatchPlayerUpdate(dispatch, mergedPlayer);
+        dispatchAndStorePlayerUpdate(dispatch, mergedPlayer);
+        onSuccess();
       },
       () => onFailure('Failed to update player. Try again or refresh the page.')
     );
   } else {
-    storeAndDispatchPlayerUpdate(dispatch, player);
+    dispatchAndStorePlayerUpdate(dispatch, player);
+    onSuccess();
   }
 };
 
-const storeAndDispatchPlayerUpdate = (
+const dispatchAndStorePlayerUpdate = (
   dispatch: Dispatch,
   updatedPlayer: Player
 ) => {
-  localStorage.setItem('currentPlayer', JSON.stringify(updatedPlayer));
   dispatch(playerSlice.actions.setPlayer(updatedPlayer));
+  localStorage.setItem('currentPlayer', JSON.stringify(updatedPlayer));
 };
 
 export const castSpell = (
@@ -139,7 +142,7 @@ export const castSpell = (
         ...currentPlayer,
         ...updatedPlayer,
       };
-      storeAndDispatchPlayerUpdate(dispatch, mergedPlayer);
+      dispatchAndStorePlayerUpdate(dispatch, mergedPlayer);
     },
     () => onFailure('Failed to cast spell. Try again or refresh the page.')
   );

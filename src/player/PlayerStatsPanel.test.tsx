@@ -1,6 +1,7 @@
 import React from 'react';
 import PlayerStatsPanel from './PlayerStatsPanel';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderChakra } from '../../test/utils';
 
 describe('PlayerStatsPanel', () => {
   const playerStats = {
@@ -20,14 +21,16 @@ describe('PlayerStatsPanel', () => {
   };
 
   it('can omit the heading based on props', () => {
-    render(<PlayerStatsPanel playerStats={playerStats} showHeading={false} />);
+    renderChakra(
+      <PlayerStatsPanel playerStats={playerStats} showHeading={false} />
+    );
     expect(
       screen.queryByRole('heading', { name: 'Stats' })
     ).not.toBeInTheDocument();
   });
 
   it('has player stats housing individual stats', () => {
-    render(<PlayerStatsPanel playerStats={playerStats} />);
+    renderChakra(<PlayerStatsPanel playerStats={playerStats} />);
     expect(
       screen.queryByRole('heading', { name: 'Stats' })
     ).toBeInTheDocument();

@@ -1,5 +1,4 @@
 import React from 'react';
-import preval from 'preval.macro';
 import { FaDragon } from 'react-icons/fa';
 import { ColorModeToggle } from '../components/theme';
 import ThemedPanel from '../components/theme/ThemedPanel';
@@ -8,16 +7,18 @@ import { Heading, Text, useColorMode, VStack } from '@chakra-ui/react';
 import { HeadingColor } from '../theme';
 import AccountSelector from './AccountSelector';
 import { InstructionsModal } from '../tutorial';
-import { Player } from '../player';
+import { usePlayer } from '../hooks';
+import useRoutingEffect from '../app/useRoutingEffect';
 
-interface LandingPageProps {
-  login: (username: string, password: string) => void;
-  createAccount: (player: Partial<Player>) => void;
-}
+const LandingPage = () => {
+  const { currentPlayer, createAccount, login } = usePlayer();
 
-const LandingPage = ({ login, createAccount }: LandingPageProps) => {
+  useRoutingEffect(currentPlayer);
+
   const { colorMode } = useColorMode();
-  const lastUpdate = preval`module.exports = new Date().toLocaleString();`;
+  const lastUpdate = new Date(
+    `${process.env.NEXT_PUBLIC_BUILD_DATE}`
+  ).toLocaleString();
 
   return (
     <ThemedPanel

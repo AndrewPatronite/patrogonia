@@ -1,6 +1,7 @@
 import { Direction } from '../navigation';
 import Npc, { NpcType } from './Npc';
 import React from 'react';
+import { TownName } from '../environment/maps/types';
 
 export enum NpcName {
   Alastair = 'Alastair',
@@ -13,6 +14,7 @@ export enum NpcName {
 export const Alastair: Npc = {
   name: NpcName.Alastair,
   type: NpcType.Knight,
+  currentMapName: TownName.Dewhurst,
   currentRowIndex: 17,
   currentColumnIndex: 6,
   movementRange: 10,
@@ -25,6 +27,7 @@ export const Alastair: Npc = {
 export const Barnaby: Npc = {
   name: NpcName.Barnaby,
   type: NpcType.Knight,
+  currentMapName: TownName.Dewhurst,
   currentRowIndex: 21,
   currentColumnIndex: 12,
   movementRange: 10,
@@ -37,6 +40,7 @@ export const Barnaby: Npc = {
 export const Finlay: Npc = {
   name: NpcName.Finlay,
   type: NpcType.Knight,
+  currentMapName: TownName.Fernsworth,
   currentRowIndex: 9,
   currentColumnIndex: 11,
   movementRange: 10,
@@ -49,6 +53,7 @@ export const Finlay: Npc = {
 export const Nigel: Npc = {
   name: NpcName.Nigel,
   type: NpcType.Knight,
+  currentMapName: TownName.Easthaven,
   currentRowIndex: 7,
   currentColumnIndex: 17,
   movementRange: 10,
@@ -61,6 +66,7 @@ export const Nigel: Npc = {
 export const Tristan: Npc = {
   name: NpcName.Tristan,
   type: NpcType.Knight,
+  currentMapName: TownName.Easthaven,
   currentRowIndex: 19,
   currentColumnIndex: 7,
   movementRange: 10,

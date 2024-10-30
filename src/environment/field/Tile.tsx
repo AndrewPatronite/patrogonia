@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import find from 'lodash/find';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
@@ -6,11 +6,11 @@ import { getLandBorderStyles, getTileKey } from './helper';
 import Character from '../../player/Character';
 import { isTown } from '../maps/Maps';
 import { isAdjacentToCurrentPlayer } from '../../utils';
-import { getTile } from './tiles';
 import { LocationToPlayerMap } from './types';
 import { MapLayout } from '../maps';
 import { Player } from '../../player';
 import { Npc } from '../../npcs';
+import { Tiles } from './tiles/Tiles';
 
 interface TileProps {
   mapSymbol: string;
@@ -58,14 +58,12 @@ const Tile = ({
       npcToDisplay.currentRowIndex,
       npcToDisplay.currentColumnIndex
     );
-  const TileComponent = getTile(mapSymbol);
+  const TileComponent = useMemo(() => Tiles[mapSymbol], [mapSymbol]);
 
   return (
     <TileComponent
       key={tileKey}
       className={`tile rc${tileKey}`}
-      height="6.25rem"
-      width="6.25rem"
       {...landBorderStyles}
       mapsymbol={mapSymbol}
       data-testid="tile"

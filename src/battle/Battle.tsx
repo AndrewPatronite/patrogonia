@@ -6,23 +6,25 @@ import Log from './Log';
 import PlayerPanel from './PlayerPanel';
 import ThemedPanel from '../components/theme/ThemedPanel';
 import { Flex } from '@chakra-ui/react';
-import { useBattle, usePlayer, useSound } from '../hooks';
+import { usePlayer, useSound } from '../hooks';
 import { isBattleEnded } from './types';
 import EnemyDisplay from './EnemyDisplay';
 import { Sound } from '../environment/sound';
+import useRoutingEffect from '../app/useRoutingEffect';
+import { useBattle } from './useBattle';
 
 const Battle = () => {
-  const { playSound, pauseSound } = useSound();
   const { currentPlayer, loadSave, updatePlayer } = usePlayer();
+
+  useRoutingEffect(currentPlayer);
+
+  const { playSound, pauseSound } = useSound();
   const { battle, dismissBattle, takeTurn } = useBattle();
   const { enemies = [], log, playerStats, roundPlayerActions = {}, status } =
     battle || {};
-  const {
-    location: { mapName },
-  } = currentPlayer;
+  const mapName = currentPlayer?.location.mapName;
   const [selectedEnemyId, selectEnemy] = useState<string>();
   const [playerTurnEnabled, setPlayerTurnEnabled] = useState<boolean>(true);
-  const [typing, setTyping] = useState(false);
   const players = values(playerStats);
   const battleStatusStyle = getBattleStatusStyle(players);
   const battleEnded = !!status && isBattleEnded(status);
@@ -35,7 +37,7 @@ const Battle = () => {
   }, [log]);
 
   useEffect(() => {
-    playSound(Sound.BattleMusic, [Sound.FieldMusic, Sound.CaveMusic]);
+    playSound(Sound.BattleMusic);
   }, [playSound]);
 
   useEffect(() => {
@@ -46,9 +48,14 @@ const Battle = () => {
         setPlayerTurnEnabled(true);
       }
     }
-  }, [allMessagesDelivered, battleEnded, pauseSound]);
+  }, [
+    deliveredLogEntries.length,
+    allMessagesDelivered,
+    battleEnded,
+    pauseSound,
+  ]);
 
-  return battle ? (
+  return battle && mapName ? (
     <ThemedPanel
       flexDirection="column"
       padding="0"
@@ -70,10 +77,8 @@ const Battle = () => {
         showDismiss={battleEnded}
         battleStatusStyle={battleStatusStyle}
         allMessagesDelivered={allMessagesDelivered}
-        typing={typing}
-        setTyping={setTyping}
       />
-      {!battleEnded && playerTurnEnabled && !typing && (
+      {!battleEnded && playerTurnEnabled && currentPlayer && (
         <Flex flex="1 1 auto" maxHeight="14.75rem" margin="0 1px 1px 1px">
           {players.map((playerStat) => (
             <PlayerPanel
@@ -85,8 +90,8 @@ const Battle = () => {
               enemies={enemies}
               selectEnemy={selectEnemy}
               takeTurn={(action: string, targetId?: string | number) => {
-                takeTurn(action, targetId);
                 setPlayerTurnEnabled(false);
+                takeTurn(action, targetId);
                 selectEnemy(undefined);
               }}
               roundPlayerActions={roundPlayerActions}

@@ -10,7 +10,7 @@ describe('CommandPanel', () => {
   let subject: ShallowWrapper<any>;
   beforeEach(() => {
     props = {
-      //@ts-ignore missing Player fields
+      //@ts-expect-error missing Player fields
       currentPlayer: {
         spells: [
           { spellName: 'HEAL', mpCost: 5, battleSpell: true, offensive: false },

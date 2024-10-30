@@ -4,28 +4,24 @@ import { Sound } from '../sound';
 import PlayerStatsModal from '../../player/PlayerStatsModal';
 import FieldMenu from '../../player/FieldMenu';
 import { isField, isTown } from '../maps/Maps';
-import {
-  useMap,
-  useModalState,
-  useNpcMovementEffect,
-  useSound,
-} from '../../hooks';
+import { useMap } from './useMap';
+import { useNpcMovementEffect } from './useNpcMovementEffect';
+import { useModalState, usePlayer, useSound } from '../../hooks';
 import DialogModal from '../../dialog/DialogModal';
 import { usePlayerNavigationEffect } from '../../navigation';
 import { Box, Text } from '@chakra-ui/react';
 import { CaptionModal } from '../../components';
 import { ModalEnum } from '../../context';
-import { Player } from '../../player';
+import useRoutingEffect from '../../app/useRoutingEffect';
+import { TileColors } from './tiles/terrain';
 
 const SHOW_PLAYER_STATS_DELAY = 5000;
 
-const World = ({
-  currentPlayer,
-  castSpell,
-}: {
-  currentPlayer: Player;
-  castSpell: (spellName: string, targetId: string) => void;
-}) => {
+const World = () => {
+  const { castSpell, currentPlayer } = usePlayer();
+
+  useRoutingEffect(currentPlayer);
+
   const { playSound } = useSound();
   const {
     closeModal,
@@ -36,7 +32,7 @@ const World = ({
   const {
     location: { mapName, rowIndex, columnIndex },
     stats,
-  } = currentPlayer;
+  } = currentPlayer ?? { location: {} };
   const { map, npcs, locationToPlayerMap, mapDisplayRange } = useMap();
   usePlayerNavigationEffect();
   useNpcMovementEffect(map);
@@ -47,15 +43,17 @@ const World = ({
 
   useEffect(() => {
     setSaveCaptionModalOpen(false);
-    if (isField(mapName)) {
-      playSound(Sound.FieldMusic, [Sound.CaveMusic, Sound.TownMusic]);
-      setLocationCaptionModalOpen(false);
-    } else if (isTown(mapName)) {
-      playSound(Sound.TownMusic, [Sound.CaveMusic, Sound.FieldMusic]);
-      setLocationCaptionModalOpen(true);
-    } else {
-      playSound(Sound.CaveMusic, [Sound.FieldMusic, Sound.TownMusic]);
-      setLocationCaptionModalOpen(true);
+    if (mapName) {
+      if (isField(mapName)) {
+        playSound(Sound.FieldMusic);
+        setLocationCaptionModalOpen(false);
+      } else if (isTown(mapName)) {
+        playSound(Sound.TownMusic);
+        setLocationCaptionModalOpen(true);
+      } else {
+        playSound(Sound.CaveMusic);
+        setLocationCaptionModalOpen(true);
+      }
     }
     const timeout = setTimeout(() => {
       setLocationCaptionModalOpen(false);
@@ -85,62 +83,73 @@ const World = ({
   const isTutorialOpen = isModalOpen(ModalEnum.Tutorial);
 
   return (
-    <Box
-      backgroundColor="#0055d4"
-      height="62.5rem"
-      maxHeight="62.5rem"
-      width="62.5rem"
-      maxWidth="62.5rem"
-    >
-      {mapDisplayRange &&
-        map?.layout
-          .slice(mapDisplayRange.rowStartIndex, mapDisplayRange.rowEndIndex + 1)
-          .map((rowSymbols: string[], rowIndexOffset: number) => (
-            <TileRow
-              key={`tileRow-${mapDisplayRange.rowStartIndex + rowIndexOffset}`}
-              rowSymbols={rowSymbols}
-              rowIndex={mapDisplayRange.rowStartIndex + rowIndexOffset}
-              locationToPlayerMap={locationToPlayerMap}
-              mapDisplayRange={mapDisplayRange}
-              mapLayout={map.layout}
-              currentPlayer={currentPlayer}
-              npcs={npcs}
+    (locationToPlayerMap &&
+      mapDisplayRange &&
+      currentPlayer &&
+      mapName &&
+      stats && (
+        <Box
+          backgroundColor={TileColors.Water}
+          height="62.5rem"
+          maxHeight="62.5rem"
+          width="62.5rem"
+          maxWidth="62.5rem"
+        >
+          {map?.layout
+            .slice(
+              mapDisplayRange.rowStartIndex,
+              mapDisplayRange.rowEndIndex + 1
+            )
+            .map((rowSymbols: string[], rowIndexOffset: number) => (
+              <TileRow
+                key={`tileRow-${
+                  mapDisplayRange.rowStartIndex + rowIndexOffset
+                }`}
+                rowSymbols={rowSymbols}
+                rowIndex={mapDisplayRange.rowStartIndex + rowIndexOffset}
+                locationToPlayerMap={locationToPlayerMap}
+                mapDisplayRange={mapDisplayRange}
+                mapLayout={map.layout}
+                currentPlayer={currentPlayer}
+                npcs={npcs}
+              />
+            ))}
+          <PlayerStatsModal
+            isOpen={
+              isPlayerStatsOpen &&
+              !isFieldMenuOpen &&
+              !isDialogOpen &&
+              !isTutorialOpen
+            }
+            onClose={() => closeModal(ModalEnum.PlayerStats)}
+            stats={stats}
+          />
+          <FieldMenu
+            showFieldMenu={isFieldMenuOpen && !isDialogOpen}
+            closeFieldMenu={() => closeModal(ModalEnum.FieldMenu)}
+            currentPlayer={currentPlayer}
+            castSpell={castSpell}
+          />
+          <DialogModal
+            showDialog={isDialogOpen}
+            closeDialog={() => closeModal(ModalEnum.Dialog)}
+            getDialog={() => getModalContent(ModalEnum.Dialog)}
+          />
+          <CaptionModal message={mapName} isOpen={isLocationCaptionModalOpen} />
+          {isTown(mapName) && (
+            <CaptionModal
+              message={
+                <>
+                  <Text>HP/MP restored</Text>
+                  <Text>Game saved</Text>
+                </>
+              }
+              isOpen={isSaveCaptionModalOpen}
             />
-          ))}
-      <PlayerStatsModal
-        isOpen={
-          isPlayerStatsOpen &&
-          !isFieldMenuOpen &&
-          !isDialogOpen &&
-          !isTutorialOpen
-        }
-        onClose={() => closeModal(ModalEnum.PlayerStats)}
-        stats={stats}
-      />
-      <FieldMenu
-        showFieldMenu={isFieldMenuOpen && !isDialogOpen}
-        closeFieldMenu={() => closeModal(ModalEnum.FieldMenu)}
-        currentPlayer={currentPlayer}
-        castSpell={castSpell}
-      />
-      <DialogModal
-        showDialog={isDialogOpen}
-        closeDialog={() => closeModal(ModalEnum.Dialog)}
-        getDialog={() => getModalContent(ModalEnum.Dialog)}
-      />
-      <CaptionModal message={mapName} isOpen={isLocationCaptionModalOpen} />
-      {isTown(mapName) && (
-        <CaptionModal
-          message={
-            <>
-              <Text>HP/MP restored</Text>
-              <Text>Game saved</Text>
-            </>
-          }
-          isOpen={isSaveCaptionModalOpen}
-        />
-      )}
-    </Box>
+          )}
+        </Box>
+      )) ??
+    null
   );
 };
 

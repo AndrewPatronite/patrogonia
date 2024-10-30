@@ -1,15 +1,16 @@
 import React from 'react';
-import { Box, BoxProps } from '@chakra-ui/react';
-import { LandColors, Mountain as MountainImage } from './terrain';
+import { BoxProps } from '@chakra-ui/react';
+import { TileColors } from './terrain';
+import TerrainTile from './TerrainTile';
 
 const Mountain = ({ children, ...baseProps }: BoxProps) => (
-  <Box
+  <TerrainTile
     {...baseProps}
-    backgroundColor={LandColors.Grass}
-    backgroundImage={MountainImage}
+    backgroundColor={TileColors.Grass}
+    imageSrc="/images/terrain/mountain.svg"
   >
     {children}
-  </Box>
+  </TerrainTile>
 );
 
 export default Mountain;

@@ -1,4 +1,4 @@
-import React, { forwardRef, Ref, useState } from 'react';
+import React, { forwardRef, Ref, useEffect, useRef, useState } from 'react';
 import { Button, SelectProps, Stack } from '@chakra-ui/react';
 import isEqual from 'lodash/isEqual';
 
@@ -15,13 +15,15 @@ interface ListProps extends SelectProps {
   value: any;
   options: ListOption[];
   onChange: (value: any) => void;
+  onDoubleClick?: (value: any) => void;
 }
 
 const List = forwardRef(
   (
-    { options, onChange, height, width, value, size }: ListProps,
+    { options, onChange, onDoubleClick, height, width, value, size }: ListProps,
     ref: Ref<HTMLDivElement>
   ) => {
+    const currentButtonRef = useRef<HTMLButtonElement>(null);
     const [listHasFocus, setListHasFocus] = useState(false);
     const valueIndex = getValueIndex(options, value);
 
@@ -54,9 +56,11 @@ const List = forwardRef(
       }
     };
 
-    const handleClick = (selectedValue: any) => {
-      onChange(selectedValue);
-    };
+    useEffect(() => {
+      if (currentButtonRef?.current) {
+        currentButtonRef.current.focus();
+      }
+    }, [value, currentButtonRef]);
 
     return (
       <Stack
@@ -83,14 +87,20 @@ const List = forwardRef(
               data-testid={optionValue}
               id={`${display}-${index}`}
               isDisabled={disabled}
-              ref={(entry) => listHasFocus && isSelectedEntry && entry?.focus()}
+              ref={listHasFocus && isSelectedEntry ? currentButtonRef : null}
               tabIndex={isTabEnabled ? 0 : -1}
               key={`${display}-${index}`}
               colorScheme={isSelectedEntry ? 'blue' : undefined}
               variant={isSelectedEntry ? 'outline' : 'ghost'}
               borderRadius={0}
               width={width}
-              onClick={() => handleClick(optionValue)}
+              onClick={() => {
+                if (isSelectedEntry && onDoubleClick) {
+                  onDoubleClick(optionValue);
+                } else {
+                  onChange(optionValue);
+                }
+              }}
               onKeyDown={handleKeyDown}
               fontWeight="normal"
               size={size}
@@ -103,5 +113,7 @@ const List = forwardRef(
     );
   }
 );
+
+List.displayName = 'List';
 
 export default List;

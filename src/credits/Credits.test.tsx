@@ -1,14 +1,15 @@
 import React from 'react';
 import Credits from './Credits';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
+import { renderChakra } from '../../test/utils';
 
 describe('Credits', () => {
   beforeEach(() => {
-    render(<Credits />);
+    renderChakra(<Credits />);
   });
 
   it('has a LinkButton to show the credits modal', () => {
-    expect(screen.getByRole('button').textContent).toEqual('credits');
+    expect(screen.getByRole('button').textContent).toEqual('Credits');
   });
 
   describe('Modal', () => {

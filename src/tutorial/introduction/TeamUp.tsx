@@ -1,7 +1,6 @@
 import { Box, Flex, Icon, Image, Stack, Text } from '@chakra-ui/react';
 import React from 'react';
 import { FaDragon } from 'react-icons/fa';
-import InBattle from './screenshots/inBattle.png';
 
 const TeamUp = ({ isCompact }: { isCompact: boolean }) => (
   <Stack>
@@ -21,7 +20,7 @@ const TeamUp = ({ isCompact }: { isCompact: boolean }) => (
         alt="Player in battle"
         boxSize={isCompact ? '12rem' : '20rem'}
         marginLeft="1rem"
-        src={InBattle}
+        src="/images/introduction/inBattle.png"
       />
     </Flex>
   </Stack>

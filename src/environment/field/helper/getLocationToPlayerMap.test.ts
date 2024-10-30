@@ -29,7 +29,7 @@ describe('getLocationToPlayerMap', () => {
       grimesPlayer,
     ];
 
-    //@ts-ignore players missing required fields
+    //@ts-expect-error players missing required fields
     expect(getLocationToPlayerMap(players, currentPlayer)).toEqual({
       '1-2': [currentPlayerCompanion, currentPlayer],
       '3-4': [lavaGrottoDweller],
@@ -38,7 +38,7 @@ describe('getLocationToPlayerMap', () => {
       ...currentPlayer,
       location: { ...currentPlayer.location, mapName: ContinentName.Atoris },
     };
-    //@ts-ignore players missing required fields
+    //@ts-expect-error players missing required fields
     expect(getLocationToPlayerMap(players, currentPlayerInAtoris)).toEqual({
       '1-2': [currentPlayerInAtoris],
       '5-6': [atorisPlayer],
@@ -47,7 +47,7 @@ describe('getLocationToPlayerMap', () => {
       ...currentPlayer,
       location: { ...currentPlayer.location, mapName: ContinentName.Grimes },
     };
-    //@ts-ignore players missing required fields
+    //@ts-expect-error players missing required fields
     expect(getLocationToPlayerMap(players, currentPlayerInGrimes)).toEqual({
       '1-2': [currentPlayerInGrimes],
       '7-8': [grimesPlayer],

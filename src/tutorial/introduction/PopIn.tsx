@@ -14,7 +14,7 @@ const PopIn = ({ isCompact }: { isCompact: boolean }) => (
         <Character name="Redwan" directionFacing={Direction.Down} />
       </Flex>
     ) : (
-      <Text>I'll pop in from time to time with instructions.</Text>
+      <Text>I&apos;ll pop in from time to time with instructions.</Text>
     )}
     <Text>You can review them again anytime from</Text>
     <Text>

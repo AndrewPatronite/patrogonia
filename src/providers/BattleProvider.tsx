@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { usePlayer } from '../hooks';
 import isEmpty from 'lodash/isEmpty';
 import { subscribe } from '../subscription';
@@ -9,15 +9,11 @@ import { dismissBattle, loadBattle, takeTurn, updateBattle } from '../actions';
 import { BattleContext } from '../context';
 import { useToastErrorHandler } from './useToastErrorHandler';
 
-const BattleProvider = ({
-  children,
-}: {
-  children: JSX.Element | JSX.Element[];
-}) => {
-  const battleUrl = `${process.env.REACT_APP_WEBSOCKET_BASE_URL}/battles`;
+const BattleProvider = ({ children }: { children: ReactNode }) => {
+  const battleUrl = `${process.env.NEXT_PUBLIC_WEBSOCKET_BASE_URL}/battles`;
   const displayError = useToastErrorHandler();
   const { currentPlayer, loadPlayer } = usePlayer();
-  const { id: currentPlayerId, battleId } = currentPlayer;
+  const { id: currentPlayerId, battleId } = currentPlayer ?? {};
   const [battleMessage, setBattleMessage] = useState<Battle | undefined>(
     undefined
   );
@@ -38,7 +34,7 @@ const BattleProvider = ({
         updateBattle(dispatch, battleMessage);
         setBattleMessage(undefined);
       }
-    } else if (battleId) {
+    } else if (battleId && currentPlayerId) {
       loadBattle(
         dispatch,
         battleId,
@@ -60,7 +56,7 @@ const BattleProvider = ({
     battle,
     dismissBattle: useCallback(
       (dismissedBattle: Battle) => {
-        if (isBattleEnded(dismissedBattle.status)) {
+        if (currentPlayerId && isBattleEnded(dismissedBattle.status)) {
           loadPlayer(currentPlayerId);
         }
         dismissBattle(dispatch);
@@ -70,15 +66,15 @@ const BattleProvider = ({
     takeTurn: useCallback(
       (playerAction: string, targetId?: string | number) =>
         battleId &&
+        currentPlayerId &&
         takeTurn(
-          dispatch,
           battleId,
           currentPlayerId,
           playerAction,
           displayError,
           targetId
         ),
-      [dispatch, battleId, currentPlayerId, displayError]
+      [battleId, currentPlayerId, displayError]
     ),
   };
   return (

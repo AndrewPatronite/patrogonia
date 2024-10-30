@@ -1,16 +1,11 @@
 import React from 'react';
 import OptionPanel, { OptionPanelProps } from './OptionPanel';
 import { Command } from './types';
-import {
-  fireEvent,
-  render,
-  RenderResult,
-  screen,
-} from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
+import { renderChakra } from '../../test/utils';
 
 describe('OptionPanel', () => {
   let props: OptionPanelProps;
-  let renderResult: RenderResult;
 
   beforeEach(() => {
     props = {
@@ -25,7 +20,7 @@ describe('OptionPanel', () => {
       onNext: jest.fn(),
       isBackEnabled: true,
     };
-    renderResult = render(<OptionPanel {...props} />);
+    renderChakra(<OptionPanel {...props} />);
   });
 
   it('has the expected options', () => {
@@ -62,18 +57,16 @@ describe('OptionPanel', () => {
     expect(props.onNext).toHaveBeenNthCalledWith(1, props.options[0].value);
   });
 
-  it('calls onNext with the initialValue when present', () => {
-    fireEvent.keyDown(screen.getByRole('listbox'), {
-      key: 'Enter',
-    });
-    expect(props.onNext).toHaveBeenNthCalledWith(1, props.options[0].value);
+  it('calls onNext with the chosen option', () => {
+    props.options.forEach((option, index) => {
+      fireEvent.keyDown(screen.getByRole('listbox'), {
+        key: 'Enter',
+      });
 
-    props.initialValue = Command.Run;
-    renderResult.rerender(<OptionPanel {...props} />);
-
-    fireEvent.keyDown(screen.getByRole('listbox'), {
-      key: 'Enter',
+      expect(props.onNext).toHaveBeenNthCalledWith(index + 1, option.value);
+      fireEvent.keyDown(screen.getByTestId(option.value), {
+        key: 'ArrowDown',
+      });
     });
-    expect(props.onNext).toHaveBeenNthCalledWith(2, Command.Run);
   });
 });

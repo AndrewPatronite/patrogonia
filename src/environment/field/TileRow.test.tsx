@@ -4,10 +4,11 @@ import { Legend } from '../maps/Legend';
 import { LocationToPlayerMap, MapDisplayRange } from './types';
 import { Player } from '../../player';
 import { Npc, Tristan } from '../../npcs';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { Direction } from '../../navigation';
 import { verifyClass } from './Tile.test';
 import { TownName } from '../maps/types';
+import { renderChakra } from '../../../test/utils';
 
 describe('TileRow', () => {
   const { WATER: W, GRASS: G } = Legend.symbols;
@@ -19,11 +20,10 @@ describe('TileRow', () => {
     [W, W, W, W, W],
   ];
   const rowIndex = 2;
-  //@ts-ignore missing player fields
   const currentPlayer: Player = {
     id: 1,
     name: 'Andy',
-    //@ts-ignore missing location fields
+    //@ts-expect-error missing location fields
     location: { facing: Direction.Down },
   };
   const locationToPlayerMap: LocationToPlayerMap = {
@@ -44,7 +44,7 @@ describe('TileRow', () => {
   let subject: HTMLElement;
 
   beforeEach(() => {
-    render(
+    renderChakra(
       <TileRow
         rowSymbols={rowSymbols}
         rowIndex={rowIndex}
