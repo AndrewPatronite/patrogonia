@@ -20,8 +20,9 @@ const DialogModal = ({
   getDialog: () => any;
   showDialog: boolean;
 }) => {
-  const { playSound } = useSound();
+  const { playSound, pauseSound } = useSound();
   const speak = useCallback(() => playSound(Sound.Talking), [playSound]);
+  const pause = useCallback(() => pauseSound(Sound.Talking), [pauseSound]);
   const [typing, setTyping] = useState(false);
 
   useEffect(() => {
@@ -35,17 +36,18 @@ const DialogModal = ({
     const interval = setInterval(() => {
       if (typing) {
         if (Math.floor(Math.random() * 2)) {
+          pause();
           speak();
         }
       } else {
         clearInterval(interval);
       }
-    }, 90);
+    }, 100);
 
     return () => {
       clearInterval(interval);
     };
-  }, [speak, typing]);
+  }, [pause, speak, typing]);
 
   const { content = '', onClose = () => {} } = getDialog();
   const dismiss = () => {
@@ -68,7 +70,7 @@ const DialogModal = ({
               cursor=""
               onTypingDone={() => setTyping(false)}
             >
-              <span>{content}</span>
+              {content}
             </Typist>
             {!typing && (
               <Button

@@ -4,15 +4,16 @@ import isEmpty from 'lodash/isEmpty';
 import { subscribe } from '../subscription';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux';
-import { Battle, isBattleEnded } from '../battle/types';
+import { Battle } from '../battle/types';
 import { dismissBattle, loadBattle, takeTurn, updateBattle } from '../actions';
 import { BattleContext } from '../context';
 import { useToastErrorHandler } from './useToastErrorHandler';
+import { BattleStatus } from '../battle/types/BattleStatus';
 
 const BattleProvider = ({ children }: { children: ReactNode }) => {
   const battleUrl = `${process.env.NEXT_PUBLIC_WEBSOCKET_BASE_URL}/battles`;
   const displayError = useToastErrorHandler();
-  const { currentPlayer, loadPlayer } = usePlayer();
+  const { currentPlayer, loadPlayer, loadSave } = usePlayer();
   const { id: currentPlayerId, battleId } = currentPlayer ?? {};
   const [battleMessage, setBattleMessage] = useState<Battle | undefined>(
     undefined
@@ -56,12 +57,19 @@ const BattleProvider = ({ children }: { children: ReactNode }) => {
     battle,
     dismissBattle: useCallback(
       (dismissedBattle: Battle) => {
-        if (currentPlayerId && isBattleEnded(dismissedBattle.status)) {
-          loadPlayer(currentPlayerId);
+        if (currentPlayerId) {
+          switch (dismissedBattle.status) {
+            case BattleStatus.Victory:
+              loadPlayer(currentPlayerId);
+              break;
+            case BattleStatus.Defeat:
+              loadSave(currentPlayerId);
+              break;
+          }
         }
         dismissBattle(dispatch);
       },
-      [dispatch, loadPlayer, currentPlayerId]
+      [currentPlayerId, dispatch, loadPlayer, loadSave]
     ),
     takeTurn: useCallback(
       (playerAction: string, targetId?: string | number) =>

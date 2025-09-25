@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import upperFirst from 'lodash/upperFirst';
-import OptionPanel from './OptionPanel';
+import { OptionPanel } from '../control';
 import ThemedHeader from '../components/theme/ThemedHeader';
 import { getLesson, LessonEnum, TutorialModal } from '../tutorial';
 import { Stack } from '@chakra-ui/react';
@@ -48,6 +48,7 @@ const EnemySelectionPanel = ({
         onChange={selectEnemy}
         onNext={handleNext}
         isBackEnabled={true}
+        width="8rem"
       />
       <TutorialModal
         player={currentPlayer}

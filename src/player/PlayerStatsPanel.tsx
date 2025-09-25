@@ -2,6 +2,7 @@ import React from 'react';
 import ThemedPanel from '../components/theme/ThemedPanel';
 import { Stats } from './types';
 import PlayerStat from './PlayerStat';
+import { FieldMenuOption } from '../menu/FieldMenuOption';
 
 const PlayerStatsPanel = ({
   playerStats: {
@@ -29,7 +30,7 @@ const PlayerStatsPanel = ({
     className="player-stats-panel"
     width="14rem"
     minHeight="23rem"
-    heading={showHeading ? 'Stats' : undefined}
+    heading={showHeading ? FieldMenuOption.Stats : undefined}
     flexDirection="column"
     includeBorder={includeBorder}
   >

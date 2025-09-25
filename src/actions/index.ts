@@ -4,6 +4,7 @@ import {
   takeTurn,
   updateBattle,
 } from './battleActions';
+import { purchaseItem, sellItem } from './itemActions';
 import {
   getNpcs,
   getPlayers,
@@ -29,6 +30,8 @@ export {
   loadPlayer,
   loadSave,
   login,
+  purchaseItem,
+  sellItem,
   takeTurn,
   updateBattle,
   updateNpc,

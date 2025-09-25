@@ -11,7 +11,11 @@ const PopIn = ({ isCompact }: { isCompact: boolean }) => (
           <Text>Redwan will pop in from</Text>
           <Text>time to time with instructions.</Text>
         </Stack>
-        <Character name="Redwan" directionFacing={Direction.Down} />
+        <Character
+          name="Redwan"
+          directionFacing={Direction.Down}
+          characterType="Peer"
+        />
       </Flex>
     ) : (
       <Text>I&apos;ll pop in from time to time with instructions.</Text>

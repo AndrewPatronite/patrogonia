@@ -4,31 +4,39 @@ import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import { FaCampground, FaDragon, FaInfoCircle } from 'react-icons/fa';
 import { IconType } from 'react-icons/lib';
 import { Direction } from '../navigation';
+import { NpcType } from '../npcs';
 
 const CAMPING_DURATION_MILLIS = 10000;
 
+export type CharacterType = NpcType | 'Hero' | 'Peer';
+
+const characterImage: { [key in CharacterType]: string } = {
+  [NpcType.Knight]: 'hero',
+  [NpcType.ItemMerchant]: 'merchant',
+  Hero: 'hero',
+  Peer: 'peer',
+};
+
 const getCharacterImage = (
   directionFacing: Direction,
-  isCurrentPlayer?: boolean
+  characterType: CharacterType
 ) =>
-  `/images/characters/${
-    isCurrentPlayer ? 'hero' : 'peer'
-  }-${directionFacing}.gif`;
+  `/images/characters/${characterImage[characterType]}-${directionFacing}.gif`;
 
 export interface CharacterProps {
   name: string;
+  characterType: CharacterType;
   directionFacing: Direction;
   battleId?: string;
-  isCurrentPlayer?: boolean;
   lastUpdate?: string;
   inDialogRange?: boolean;
 }
 
 const Character = ({
   name,
+  characterType,
   directionFacing,
   battleId,
-  isCurrentPlayer,
   lastUpdate,
   inDialogRange,
 }: CharacterProps) => {
@@ -52,7 +60,7 @@ const Character = ({
   return (
     <Box position="relative">
       <Flex
-        backgroundImage={getCharacterImage(directionFacing, isCurrentPlayer)}
+        backgroundImage={getCharacterImage(directionFacing, characterType)}
         height="6.25rem"
         justifyContent="center"
         width="6.25rem"
@@ -71,7 +79,9 @@ const Character = ({
           <Text
             color="gold"
             fontSize="7px"
-            marginLeft="0.625rem"
+            marginLeft={
+              characterType === NpcType.ItemMerchant ? '0.25rem' : '0.625rem'
+            }
             marginTop="1.5625rem"
           >
             {name}

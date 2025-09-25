@@ -6,6 +6,7 @@ import EnemySelectionPanel from './EnemySelectionPanel';
 import PlayerSelectionPanel from './PlayerSelectionPanel';
 import { Player, Spell } from '../player';
 import { Command, EnemyName } from './types';
+import { SpellName } from '../player/types';
 
 describe('PlayerTurnWizard', () => {
   //@ts-expect-error missing Player fields
@@ -20,13 +21,13 @@ describe('PlayerTurnWizard', () => {
     name: 'Andy',
   };
   const iceSpell: Spell = {
-    spellName: 'ICE',
+    spellName: SpellName.Ice,
     battleSpell: true,
     offensive: true,
     mpCost: 5,
   };
   const healSpell: Spell = {
-    spellName: 'HEAL',
+    spellName: SpellName.Heal,
     battleSpell: true,
     offensive: false,
     mpCost: 5,

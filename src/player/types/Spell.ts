@@ -1,5 +1,7 @@
+import { SpellName } from './SpellName';
+
 export default interface Spell {
-  spellName: string;
+  spellName: SpellName;
   mpCost: number;
   offensive: boolean;
   battleSpell: boolean;

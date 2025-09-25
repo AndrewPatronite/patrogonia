@@ -1,9 +1,10 @@
 import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import CommandPanel, { CommandPanelProps } from './CommandPanel';
-import OptionPanel from './OptionPanel';
+import { OptionPanel } from '../control';
 import ThemedHeader from '../components/theme/ThemedHeader';
 import { Command } from './types';
+import { SpellName } from '../player/types';
 
 describe('CommandPanel', () => {
   let props: CommandPanelProps;
@@ -13,17 +14,32 @@ describe('CommandPanel', () => {
       //@ts-expect-error missing Player fields
       currentPlayer: {
         spells: [
-          { spellName: 'HEAL', mpCost: 5, battleSpell: true, offensive: false },
-          { spellName: 'FIRE', mpCost: 5, battleSpell: true, offensive: true },
-          { spellName: 'ICE', mpCost: 5, battleSpell: true, offensive: true },
           {
-            spellName: 'RETURN',
+            spellName: SpellName.Heal,
+            mpCost: 5,
+            battleSpell: true,
+            offensive: false,
+          },
+          {
+            spellName: SpellName.Fire,
+            mpCost: 5,
+            battleSpell: true,
+            offensive: true,
+          },
+          {
+            spellName: SpellName.Ice,
+            mpCost: 5,
+            battleSpell: true,
+            offensive: true,
+          },
+          {
+            spellName: SpellName.Return,
             mpCost: 5,
             battleSpell: false,
             offensive: false,
           },
           {
-            spellName: 'OUTSIDE',
+            spellName: SpellName.Outside,
             mpCost: 5,
             battleSpell: false,
             offensive: false,
@@ -52,7 +68,7 @@ describe('CommandPanel', () => {
           {
             display: 'Heal',
             value: {
-              spellName: 'HEAL',
+              spellName: SpellName.Heal,
               mpCost: 5,
               battleSpell: true,
               offensive: false,
@@ -61,7 +77,7 @@ describe('CommandPanel', () => {
           {
             display: 'Fire',
             value: {
-              spellName: 'FIRE',
+              spellName: SpellName.Fire,
               mpCost: 5,
               battleSpell: true,
               offensive: true,
@@ -70,7 +86,7 @@ describe('CommandPanel', () => {
           {
             display: 'Ice',
             value: {
-              spellName: 'ICE',
+              spellName: SpellName.Ice,
               mpCost: 5,
               battleSpell: true,
               offensive: true,
@@ -87,6 +103,7 @@ describe('CommandPanel', () => {
         ],
         onNext: props.handleCommand,
         isBackEnabled: false,
+        width: '8rem',
       });
     });
 
@@ -111,6 +128,7 @@ describe('CommandPanel', () => {
         ],
         onNext: props.handleCommand,
         isBackEnabled: false,
+        width: '8rem',
       });
     });
 

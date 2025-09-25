@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import TileRow from './TileRow';
 import { Sound } from '../sound';
 import PlayerStatsModal from '../../player/PlayerStatsModal';
-import FieldMenu from '../../player/FieldMenu';
 import { isField, isTown } from '../maps/Maps';
 import { useMap } from './useMap';
 import { useNpcMovementEffect } from './useNpcMovementEffect';
@@ -14,6 +13,8 @@ import { CaptionModal } from '../../components';
 import { ModalEnum } from '../../context';
 import useRoutingEffect from '../../app/useRoutingEffect';
 import { TileColors } from './tiles/terrain';
+import ShopModal from '../../dialog/ShopModal';
+import { FieldMenu } from '../../menu';
 
 const SHOW_PLAYER_STATS_DELAY = 5000;
 
@@ -77,10 +78,25 @@ const World = () => {
     return () => clearTimeout(timer);
   }, [rowIndex, columnIndex, closeModal, openModal]);
 
+  const {
+    closePlayerStats,
+    closeFieldMenu,
+    closeDialog,
+    closeShopModal,
+  } = useMemo(
+    () => ({
+      closePlayerStats: () => closeModal(ModalEnum.PlayerStats),
+      closeFieldMenu: () => closeModal(ModalEnum.FieldMenu),
+      closeDialog: () => closeModal(ModalEnum.Dialog),
+      closeShopModal: () => closeModal(ModalEnum.Shop),
+    }),
+    [closeModal]
+  );
+
   const isPlayerStatsOpen = isModalOpen(ModalEnum.PlayerStats);
   const isFieldMenuOpen = isModalOpen(ModalEnum.FieldMenu);
   const isDialogOpen = isModalOpen(ModalEnum.Dialog);
-  const isTutorialOpen = isModalOpen(ModalEnum.Tutorial);
+  const isShopModalOpen = isModalOpen(ModalEnum.Shop);
 
   return (
     (locationToPlayerMap &&
@@ -115,25 +131,26 @@ const World = () => {
               />
             ))}
           <PlayerStatsModal
-            isOpen={
-              isPlayerStatsOpen &&
-              !isFieldMenuOpen &&
-              !isDialogOpen &&
-              !isTutorialOpen
-            }
-            onClose={() => closeModal(ModalEnum.PlayerStats)}
+            isOpen={isPlayerStatsOpen}
+            onClose={closePlayerStats}
             stats={stats}
           />
           <FieldMenu
-            showFieldMenu={isFieldMenuOpen && !isDialogOpen}
-            closeFieldMenu={() => closeModal(ModalEnum.FieldMenu)}
+            showFieldMenu={isFieldMenuOpen}
+            closeFieldMenu={closeFieldMenu}
             currentPlayer={currentPlayer}
             castSpell={castSpell}
           />
           <DialogModal
             showDialog={isDialogOpen}
-            closeDialog={() => closeModal(ModalEnum.Dialog)}
-            getDialog={() => getModalContent(ModalEnum.Dialog)}
+            closeDialog={closeDialog}
+            getDialog={getModalContent}
+          />
+          <ShopModal
+            currentPlayer={currentPlayer}
+            showDialog={isShopModalOpen}
+            closeShop={closeShopModal}
+            getDialog={getModalContent}
           />
           <CaptionModal message={mapName} isOpen={isLocationCaptionModalOpen} />
           {isTown(mapName) && (

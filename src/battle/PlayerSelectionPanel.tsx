@@ -1,5 +1,5 @@
 import React from 'react';
-import OptionPanel from './OptionPanel';
+import { OptionPanel } from '../control';
 import ThemedHeader from '../components/theme/ThemedHeader';
 import { Stack } from '@chakra-ui/react';
 import { Stats } from '../player';

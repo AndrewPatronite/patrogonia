@@ -1,39 +1,41 @@
 import React, { ReactNode, useCallback, useState } from 'react';
 import { ModalEnum, ModalInterface, ModalStateContext } from '../context';
 
+interface ModalProps {
+  modal: ModalEnum;
+  content?: any;
+  onClose: () => void;
+}
+
 const ModalStateProvider = ({ children }: { children: ReactNode }) => {
-  const [openModals, setOpenModals] = useState<
-    { modal: ModalEnum; content?: any; onClose?: () => void }[]
-  >([]);
+  const [openModal, setOpenModal] = useState<ModalProps | null>();
   const modalInterface: ModalInterface = {
-    closeModal: useCallback(
-      (modalEnum: ModalEnum) =>
-        setOpenModals((currentlyOpenModals) =>
-          currentlyOpenModals.filter(
-            (openModal) => openModal.modal !== modalEnum
-          )
-        ),
-      []
-    ),
-    getModalContent: (modalEnum) => {
-      const modalData = openModals.find(
-        (openModal) => openModal.modal === modalEnum
+    closeModal: useCallback((modalEnum: ModalEnum) => {
+      setOpenModal((previous) =>
+        previous?.modal === modalEnum ? null : previous
       );
-      const content = modalData?.content;
-      const onClose = modalData ? modalData?.onClose : () => {};
+    }, []),
+    getModalContent: useCallback(() => {
+      const content = openModal?.content;
+      const onClose = openModal?.onClose ?? (() => {});
       return { content, onClose };
-    },
-    isModalOpen: (modalEnum: ModalEnum) => {
-      return openModals.some((openModal) => openModal.modal === modalEnum);
-    },
+    }, [openModal?.content, openModal?.onClose]),
+    isModalOpen: useCallback(
+      (modalEnum: ModalEnum) => {
+        return openModal?.modal === modalEnum;
+      },
+      [openModal?.modal]
+    ),
     openModal: useCallback(
       (modalEnum: ModalEnum, content?: any, onClose: () => void = () => {}) =>
-        setOpenModals((currentlyOpenModals) =>
-          currentlyOpenModals.concat({
-            modal: modalEnum,
-            content,
-            onClose,
-          })
+        setOpenModal((previous) =>
+          previous
+            ? previous
+            : {
+                modal: modalEnum,
+                content,
+                onClose,
+              }
         ),
       []
     ),

@@ -4,26 +4,29 @@ import { ModalEnum } from '../context';
 import { isAdjacentToCurrentPlayer } from '../utils';
 import { hasCompletedLesson, LessonEnum, recordLesson } from '../tutorial';
 import { useModalState, usePlayer } from '../hooks';
-import { getDialog } from '../npcs';
+import { getDialog, NpcType } from '../npcs';
 import { movePlayer } from './movePlayer';
 import uniq from 'lodash/uniq';
 import { DirectionKeyMap, isDirectionKey } from './DirectionKeyMapper';
 import { Direction } from './types';
 import { useMap } from '../environment/field';
+import { ShopType } from '../shop';
 
 export const usePlayerNavigationEffect = () => {
-  const { isModalOpen, openModal } = useModalState();
+  const { closeModal, isModalOpen, openModal } = useModalState();
   const { currentPlayer, updatePlayer, updateInProgress } = usePlayer();
   const { npcs, canMoveToPosition, updateNpc } = useMap();
   return useEffect(() => {
-    const handleKeyDown = ({ key }: { key: string }) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const { key } = e;
       if (currentPlayer && !updateInProgress) {
         const isDialogOpen = isModalOpen(ModalEnum.Dialog);
         const isFieldMenuOpen = isModalOpen(ModalEnum.FieldMenu);
+        const isShopModalOpen = isModalOpen(ModalEnum.Shop);
         const navigationEnabled =
           currentPlayer.loggedIn &&
           !currentPlayer.battleId &&
-          !(isDialogOpen || isFieldMenuOpen) &&
+          !(isDialogOpen || isFieldMenuOpen || isShopModalOpen) &&
           hasCompletedLesson(currentPlayer, LessonEnum.Introduction);
         if (navigationEnabled) {
           if (isDirectionKey(key)) {
@@ -82,25 +85,35 @@ export const usePlayerNavigationEffect = () => {
                       updatePlayer,
                       canMoveToPosition
                     );
-                    updateNpc({
-                      ...firstAdjacentNpc,
-                      directionFacing: npcFacing,
-                      isTalking: true,
-                    });
-                    openModal(
-                      ModalEnum.Dialog,
-                      getDialog(firstAdjacentNpc.name),
-                      () =>
-                        updateNpc({
-                          ...firstAdjacentNpc,
-                          directionFacing: npcFacing,
-                          isTalking: false,
-                        })
-                    );
+                    closeModal(ModalEnum.PlayerStats);
+                    if (firstAdjacentNpc.type === NpcType.ItemMerchant) {
+                      openModal(ModalEnum.Shop, {
+                        mapName: firstAdjacentNpc.currentMapName,
+                        shopType: ShopType.General,
+                      });
+                    } else {
+                      updateNpc({
+                        ...firstAdjacentNpc,
+                        directionFacing: npcFacing,
+                        isTalking: true,
+                      });
+                      openModal(
+                        ModalEnum.Dialog,
+                        getDialog(firstAdjacentNpc.name),
+                        () =>
+                          updateNpc({
+                            ...firstAdjacentNpc,
+                            directionFacing: npcFacing,
+                            isTalking: false,
+                          })
+                      );
+                    }
                   }
                 }
                 break;
               case FieldMenuKeys.OpenFieldMenu:
+                e.preventDefault();
+                e.stopPropagation();
                 recordLesson(
                   currentPlayer,
                   LessonEnum.FieldMenuLesson,
@@ -122,6 +135,7 @@ export const usePlayerNavigationEffect = () => {
     };
   }, [
     canMoveToPosition,
+    closeModal,
     currentPlayer,
     isModalOpen,
     npcs,
