@@ -1,5 +1,6 @@
 export enum Sound {
   BattleMusic = 'battle-music',
+  Coins = 'coins',
   CaveMusic = 'cave-music',
   EnemyAttacks = 'enemy-attacks',
   FieldMusic = 'field-music',

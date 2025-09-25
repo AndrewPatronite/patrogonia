@@ -8,8 +8,7 @@ import {
   MapName,
   TownName,
 } from './types';
-import { Alastair, Barnaby, Nigel, Tristan } from '../../npcs';
-import { Finlay } from '../../npcs/Npcs';
+import { Alastair, Barnaby, Digby, Finlay, Nigel, Tristan } from '../../npcs';
 import { Direction } from '../../navigation';
 
 const {
@@ -111,7 +110,7 @@ export const Maps: { [key in MapName]: (entranceName?: MapName) => Map } = {
         facing: Direction.Down,
         entranceName: TownName.Dewhurst,
       },
-      npcs: [Alastair, Barnaby],
+      npcs: [Alastair, Barnaby, Digby],
     };
   },
 

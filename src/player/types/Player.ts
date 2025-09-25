@@ -1,6 +1,7 @@
 import Spell from './Spell';
 import Stats from './Stats';
 import Location from './Location';
+import { Item } from '../../item';
 
 export default interface Player {
   id: number;
@@ -13,4 +14,5 @@ export default interface Player {
   lastUpdate: string;
   visited: string[];
   tutorialLessons: string[];
+  inventory: Item[];
 }

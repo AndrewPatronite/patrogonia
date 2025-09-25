@@ -141,7 +141,7 @@ describe('PlayerPanel', () => {
 
     it('calls loadSave supplied via props onClick', () => {
       loadSaveButton.simulate('click');
-      expect(props.loadSave).toHaveBeenCalledWith(currentPlayerId);
+      expect(props.loadSave).toHaveBeenCalled();
     });
   });
 });

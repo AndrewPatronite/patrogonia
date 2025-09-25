@@ -4,6 +4,7 @@ import { MapName } from '../environment/maps/types';
 
 export enum NpcType {
   Knight = 'Knight',
+  ItemMerchant = 'ItemMerchant',
 }
 
 export default interface Npc {

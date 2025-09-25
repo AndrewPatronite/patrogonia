@@ -3,7 +3,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import PlayerSelectionPanel, {
   PlayerSelectionPanelProps,
 } from './PlayerSelectionPanel';
-import OptionPanel from './OptionPanel';
+import { OptionPanel } from '../control';
 import ThemedHeader from '../components/theme/ThemedHeader';
 
 describe('PlayerSelectionPanel', () => {

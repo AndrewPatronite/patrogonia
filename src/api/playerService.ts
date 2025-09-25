@@ -102,16 +102,13 @@ export const loadSave = (
 export const castSpell = (
   player: Partial<Player>,
   spellName: string,
-  targetId: string,
-  onSuccess: (updatedPlayer: Player) => void,
-  onFailure: (error: any) => void
-) => {
+  targetId: string
+): Promise<Player> => {
   return axiosInstance
     .put(`/castSpell/${spellName}/${targetId}`, player)
     .then((response) => {
       if (response.status === HttpStatus.Ok) {
-        onSuccess(response.data);
+        return response.data;
       }
-    })
-    .catch((error) => onFailure(error));
+    });
 };

@@ -3,6 +3,7 @@ import React, { ReactNode, useCallback, useEffect } from 'react';
 import {
   BattleMusic,
   CaveMusic,
+  Coins,
   EnemyAttackSound,
   FieldMusic,
   HealingSound,
@@ -41,6 +42,7 @@ const SoundProvider = ({ children }: { children: ReactNode }) => {
       sounds[Sound.Ice] = new Audio(IceSound);
       sounds[Sound.Warp] = new Audio(WarpSound);
       sounds[Sound.Talking] = new Audio(TalkingSound);
+      sounds[Sound.Coins] = new Audio(Coins);
     }
   }, []);
 

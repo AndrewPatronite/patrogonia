@@ -73,7 +73,9 @@ const Tile = ({
           name={playerToDisplay.name}
           directionFacing={playerToDisplay.location.facing}
           battleId={playerToDisplay.battleId}
-          isCurrentPlayer={isEqual(playerToDisplay.id, currentPlayerId)}
+          characterType={
+            isEqual(playerToDisplay.id, currentPlayerId) ? 'Hero' : 'Peer'
+          }
           lastUpdate={playerToDisplay.lastUpdate}
         />
       )}
@@ -81,6 +83,7 @@ const Tile = ({
         <Character
           name={npcToDisplay.name}
           directionFacing={npcToDisplay.directionFacing}
+          characterType={npcToDisplay.type}
           lastUpdate={new Date().toString()}
           inDialogRange={npcInDialogRange}
         />

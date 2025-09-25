@@ -9,6 +9,7 @@ export enum NpcName {
   Finlay = 'Finlay',
   Nigel = 'Nigel',
   Tristan = 'Tristan',
+  Digby = 'Digby',
 }
 
 export const Alastair: Npc = {
@@ -34,6 +35,19 @@ export const Barnaby: Npc = {
   startingRowIndex: 21,
   startingColumnIndex: 12,
   directionFacing: Direction.Up,
+  isTalking: false,
+};
+
+export const Digby: Npc = {
+  name: NpcName.Digby,
+  type: NpcType.ItemMerchant,
+  currentMapName: TownName.Dewhurst,
+  currentRowIndex: 5,
+  currentColumnIndex: 9,
+  movementRange: 0,
+  startingRowIndex: 5,
+  startingColumnIndex: 9,
+  directionFacing: Direction.Down,
   isTalking: false,
 };
 
@@ -76,9 +90,9 @@ export const Tristan: Npc = {
   isTalking: false,
 };
 
-const NPC_DIALOG: { [index in NpcName]: string | JSX.Element } = {
+const NPC_DIALOG: { [index in NpcName]?: string | JSX.Element } = {
   [NpcName.Alastair]: (
-    <span>
+    <p>
       The marketplace and hostel are vacant and the villagers seem to have
       vanished.
       <br />
@@ -87,24 +101,24 @@ const NPC_DIALOG: { [index in NpcName]: string | JSX.Element } = {
       <br />
       <br />
       Beware, fierce monsters lurk there.
-    </span>
+    </p>
   ),
   [NpcName.Barnaby]: (
-    <span>
+    <p>
       You should visit towns often to restore your health and save your game.
       <br />
       <br /> You can access your field menu by pressing Enter.
       <br />
       <br />
       View stats, cast spells, change settings, or log out.
-    </span>
+    </p>
   ),
   [NpcName.Finlay]: (
-    <span>
+    <p>
       Where is everyone?
       <br />
       <br />I stopped here on my way to Easthaven and nary a soul to be found.
-    </span>
+    </p>
   ),
   [NpcName.Nigel]: 'Morning guv!',
   [NpcName.Tristan]: 'Hallo hallo!',

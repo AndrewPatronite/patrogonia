@@ -1,4 +1,4 @@
-import pick from 'lodash/pick';
+import { Dispatch } from '@reduxjs/toolkit';
 import {
   castSpell as castSpellRemote,
   createAccount as createAccountRemote,
@@ -7,9 +7,8 @@ import {
   login as loginRemote,
   updatePlayer as updatePlayerRemote,
 } from '../api';
-import { Dispatch } from '@reduxjs/toolkit';
-import { playerSlice } from '../redux';
 import { Player } from '../player';
+import { assemblePlayerForServer, dispatchAndStorePlayerUpdate } from './utils';
 
 export const login = (
   dispatch: Dispatch,
@@ -76,20 +75,6 @@ export const loadSave = (
   );
 };
 
-const assemblePlayerForServer = (player: Player) =>
-  pick(
-    player,
-    'id',
-    'battleId',
-    'name',
-    'username',
-    'location',
-    'stats',
-    'visited',
-    'spells',
-    'tutorialLessons'
-  );
-
 export const updatePlayer = (
   dispatch: Dispatch,
   player: Player,
@@ -118,32 +103,24 @@ export const updatePlayer = (
   }
 };
 
-const dispatchAndStorePlayerUpdate = (
-  dispatch: Dispatch,
-  updatedPlayer: Player
-) => {
-  dispatch(playerSlice.actions.setPlayer(updatedPlayer));
-  localStorage.setItem('currentPlayer', JSON.stringify(updatedPlayer));
-};
-
 export const castSpell = (
-  dispatch: Dispatch,
   currentPlayer: Player,
   spellName: string,
-  targetId: string,
-  onFailure: (error: any) => void
-) => {
-  castSpellRemote(
+  targetId: string
+): Promise<Player> => {
+  return castSpellRemote(
     assemblePlayerForServer(currentPlayer),
     spellName,
-    targetId,
-    (updatedPlayer: Player) => {
+    targetId
+  )
+    .then((updatedPlayer: Player) => {
       const mergedPlayer = {
         ...currentPlayer,
         ...updatedPlayer,
       };
-      dispatchAndStorePlayerUpdate(dispatch, mergedPlayer);
-    },
-    () => onFailure('Failed to cast spell. Try again or refresh the page.')
-  );
+      return Promise.resolve(mergedPlayer);
+    })
+    .catch(() =>
+      Promise.reject('Failed to cast spell. Try again or refresh the page.')
+    );
 };

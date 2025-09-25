@@ -1,8 +1,9 @@
 import { createContext } from 'react';
 import { Player } from '../player';
+import { SpellName } from '../player/types';
 
 interface PlayerState {
-  castSpell: (spellName: string, targetId: string) => void;
+  castSpell: (spellName: SpellName, targetId: string) => Promise<Player>;
   createAccount: (player: Partial<Player>) => void;
   currentPlayer: Player | null;
   loadPlayer: (playerId: number) => void;
@@ -17,7 +18,7 @@ interface PlayerState {
 }
 
 const PlayerContext = createContext<PlayerState>({
-  castSpell: () => {},
+  castSpell: () => Promise.reject('fff'),
   createAccount: () => {},
   currentPlayer: null,
   loadPlayer: () => {},

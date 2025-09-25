@@ -1,39 +1,66 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import inRange from 'lodash/inRange';
-import List, { ListOption } from '../control/List';
-import { Box } from '@chakra-ui/react';
+import List, { ListOption } from './List';
+import { Box, BoxProps } from '@chakra-ui/react';
 import { advanceFocus } from '../utils';
+import { Token } from '@chakra-ui/styled-system/dist/types/utils';
+import * as CSS from 'csstype';
+import isEqual from 'lodash/isEqual';
 
-export interface OptionPanelProps {
+export interface OptionPanelProps extends BoxProps {
   options: ListOption[];
+  value?: any;
   onBack?: () => void;
   onChange?: (selectedOption: any) => void;
   onNext: (selectedOption: any) => void;
   isBackEnabled: boolean;
+  submitOnClick?: 'single' | 'double';
+  width?: Token<CSS.Property.Width | number, 'sizes'>;
 }
 
 const OptionPanel = ({
   options,
+  value,
   onBack = () => {},
   onChange = () => {},
   onNext,
   isBackEnabled,
+  submitOnClick = 'double',
+  width,
+  ...boxProps
 }: OptionPanelProps) => {
   const listRef = useRef<HTMLDivElement>(null);
   const [selectedValue, setSelectedValue] = useState(
-    (options[0] && options[0].value) || undefined
+    (options[0] && options[0].value) || null
   );
 
-  const handleChange = (selected: any) => {
-    setSelectedValue(selected);
-    onChange(selected);
-  };
-
-  const submitOption = (selectedValue: any) => {
-    if (selectedValue) {
-      onNext(selectedValue);
+  useEffect(() => {
+    if (value !== undefined) {
+      setSelectedValue(value);
     }
-  };
+  }, [value]);
+
+  const handleChange = useCallback(
+    (selected: any) => {
+      setSelectedValue(selected);
+      onChange(selected);
+    },
+    [onChange]
+  );
+
+  const submitOption = useCallback(
+    (selectedValue: any) => {
+      if (
+        selectedValue &&
+        options.find(
+          (option) => isEqual(option.value, selectedValue) && !option.disabled
+        )
+      ) {
+        onNext(selectedValue);
+      }
+    },
+    [onNext, options]
+  );
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     switch (e.key) {
@@ -66,8 +93,10 @@ const OptionPanel = ({
       default:
         break;
     }
-    e.preventDefault();
-    e.stopPropagation();
+    if (e.key != 'Tab') {
+      e.preventDefault();
+      e.stopPropagation();
+    }
   };
 
   useEffect(() => {
@@ -77,18 +106,20 @@ const OptionPanel = ({
   });
 
   return (
-    <Box onKeyDown={handleKeyDown}>
+    <Box onKeyDown={handleKeyDown} {...boxProps}>
       <List
         ref={listRef}
         options={options}
         value={selectedValue}
         onChange={handleChange}
-        onDoubleClick={(selection) => {
+        submitOnClick={submitOnClick}
+        onSubmit={(selection) => {
           handleChange(selection);
           submitOption(selection);
         }}
         size="sm"
         tabIndex={0}
+        width={width}
       />
     </Box>
   );

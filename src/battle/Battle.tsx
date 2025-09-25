@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import filter from 'lodash/filter';
 import values from 'lodash/values';
 import { getBattleStatusStyle } from './helper';
@@ -14,7 +14,7 @@ import useRoutingEffect from '../app/useRoutingEffect';
 import { useBattle } from './useBattle';
 
 const Battle = () => {
-  const { currentPlayer, loadSave, updatePlayer } = usePlayer();
+  const { currentPlayer, updatePlayer } = usePlayer();
 
   useRoutingEffect(currentPlayer);
 
@@ -55,6 +55,11 @@ const Battle = () => {
     pauseSound,
   ]);
 
+  const dismiss = useCallback(() => battle && dismissBattle(battle), [
+    battle,
+    dismissBattle,
+  ]);
+
   return battle && mapName ? (
     <ThemedPanel
       flexDirection="column"
@@ -73,13 +78,13 @@ const Battle = () => {
       />
       <Log
         deliveredEntries={deliveredLogEntries}
-        onDismiss={() => battle && dismissBattle(battle)}
+        onDismiss={dismiss}
         showDismiss={battleEnded}
         battleStatusStyle={battleStatusStyle}
         allMessagesDelivered={allMessagesDelivered}
       />
       {!battleEnded && playerTurnEnabled && currentPlayer && (
-        <Flex flex="1 1 auto" maxHeight="14.75rem" margin="0 1px 1px 1px">
+        <Flex flex="1 1 auto" maxHeight="15.75rem" margin="0 1px 1px 1px">
           {players.map((playerStat) => (
             <PlayerPanel
               key={playerStat.playerId}
@@ -97,7 +102,7 @@ const Battle = () => {
               roundPlayerActions={roundPlayerActions}
               selectedEnemyId={selectedEnemyId}
               playerTurnEnabled={playerTurnEnabled}
-              loadSave={loadSave}
+              loadSave={dismiss}
               updatePlayer={updatePlayer}
             />
           ))}

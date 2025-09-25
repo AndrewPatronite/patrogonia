@@ -13,6 +13,7 @@ import {
 import { useToastErrorHandler } from './useToastErrorHandler';
 import { Player } from '../player';
 import isEqual from 'lodash/isEqual';
+import { SpellName } from '../player/types';
 
 const PlayerProvider = ({ children }: { children: ReactNode }) => {
   const displayError = useToastErrorHandler();
@@ -52,10 +53,14 @@ const PlayerProvider = ({ children }: { children: ReactNode }) => {
 
   const playerState = {
     castSpell: useCallback(
-      (spellName: string, targetId: string) =>
-        currentPlayer &&
-        castSpell(dispatch, currentPlayer, spellName, targetId, displayError),
-      [dispatch, currentPlayer, displayError]
+      (spellName: SpellName, targetId: string): Promise<Player> =>
+        currentPlayer
+          ? castSpell(currentPlayer, spellName, targetId).catch((error) => {
+              displayError(error);
+              return Promise.reject(error);
+            })
+          : Promise.reject('Player is undefined'),
+      [currentPlayer, displayError]
     ),
     createAccount: useCallback(
       (player: Partial<Player>) =>

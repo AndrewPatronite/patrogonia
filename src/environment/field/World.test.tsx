@@ -23,6 +23,10 @@ jest.mock('../../hooks', () => ({
   useSound: jest.fn(),
 }));
 
+jest.mock('react-redux', () => ({
+  useDispatch: jest.fn(),
+}));
+
 describe('World', () => {
   const { WATER: W, GRASS: G } = Legend.symbols;
   const map = {
@@ -55,6 +59,8 @@ describe('World', () => {
       },
       //@ts-expect-error missing fields
       stats: { hp: 9, hpTotal: 10, mp: 4, mpTotal: 5 },
+      inventory: [],
+      spells: [],
     };
     const locationToPlayerMap = {
       '1-2': [currentPlayer],
@@ -138,11 +144,13 @@ describe('World', () => {
 
   it('displays a field menu', () => {
     setup((modal) => modal === ModalEnum.FieldMenu);
-    const menuSections = screen.getAllByRole('tab');
-    expect(menuSections.length).toEqual(3);
+    const menuSections = screen.getAllByRole('button');
+    expect(menuSections.length).toEqual(5);
     expect(menuSections[0].textContent).toEqual('Stats');
     expect(menuSections[1].textContent).toEqual('Spells');
-    expect(menuSections[2].textContent).toEqual('Options');
+    expect(menuSections[2].textContent).toEqual('Items');
+    expect(menuSections[3].textContent).toEqual('Options');
+    expect(menuSections[4].textContent).toEqual('<< Back');
   });
 
   it('displays dialogue', () => {
@@ -154,7 +162,7 @@ describe('World', () => {
     expect(screen.getByText("Important stuff n' things")).toBeInTheDocument();
     const okButton = screen.getByRole('button', { name: 'OK' });
     fireEvent.click(okButton);
-    expect(modalState.closeModal).toHaveBeenCalledWith(ModalEnum.Dialog);
+    expect(modalState.closeModal).toHaveBeenCalled();
   });
 
   it('plays field music for field maps', () => {
@@ -174,7 +182,7 @@ describe('World', () => {
 
   it('sets show player stats modal via 5 second timer that it clears ', () => {
     setup();
-    expect(modalState.closeModal).toHaveBeenCalledWith(ModalEnum.PlayerStats);
+    expect(modalState.closeModal).toHaveBeenCalled();
     act(() => {
       jest.runAllTimers();
       expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 5000);

@@ -2,6 +2,7 @@ import { Sound } from './types';
 import { BattleMusic, CaveMusic, FieldMusic, TownMusic } from './crusaderp';
 import { EnemyAttackSound, PlayerAttackSound } from './FXhome.com';
 import {
+  Coins,
   HealingSound,
   IceSound,
   LevelUpSound,
@@ -11,6 +12,7 @@ import {
 } from './zapsplat';
 
 export {
+  Coins,
   BattleMusic,
   CaveMusic,
   EnemyAttackSound,

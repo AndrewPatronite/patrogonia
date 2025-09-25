@@ -66,7 +66,11 @@ const TutorialModal = ({
             {NextLesson && (
               <ThemedPanel>
                 <HStack spacing="1rem">
-                  <Character name="Redwan" directionFacing={Direction.Down} />
+                  <Character
+                    name="Redwan"
+                    directionFacing={Direction.Down}
+                    characterType="Peer"
+                  />
                   <NextLesson {...lessonProps} />
                 </HStack>
               </ThemedPanel>

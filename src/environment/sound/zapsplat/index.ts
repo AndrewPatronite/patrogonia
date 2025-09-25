@@ -7,8 +7,11 @@ const PartyDestroyedSound = '/sound/zapsplat/cartoon_fail_strings_trumpet.mp3';
 const WarpSound = '/sound/zapsplat/magic_spell_ascending_metallic_pad.mp3';
 const TalkingSound =
   '/sound/zapsplat/zapsplat_multimedia_game_sound_retro_blip_022_29554.mp3';
+const Coins =
+  '/sound/zapsplat/zapsplat_foley_money_x2_coins_drop_on_other_coins_hand_110171.mp3';
 
 export {
+  Coins,
   HealingSound,
   IceSound,
   LevelUpSound,

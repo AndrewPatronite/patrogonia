@@ -17,7 +17,7 @@ export interface PlayerPanelProps {
   roundPlayerActions: RoundPlayerActions;
   selectedEnemyId?: string;
   playerTurnEnabled: boolean;
-  loadSave: (playerId: number) => void;
+  loadSave: () => void;
   updatePlayer: (
     player: Player,
     saveGame?: boolean,
@@ -79,7 +79,7 @@ const PlayerPanel = ({
             colorScheme="blue"
             marginTop="1rem"
             marginRight="1rem"
-            onClick={() => loadSave(playerId)}
+            onClick={loadSave}
           >
             Load save
           </Button>

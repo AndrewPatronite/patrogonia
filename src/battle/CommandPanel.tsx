@@ -2,7 +2,7 @@ import React from 'react';
 import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';
 import upperFirst from 'lodash/upperFirst';
-import OptionPanel from './OptionPanel';
+import { OptionPanel } from '../control';
 import ThemedHeader from '../components/theme/ThemedHeader';
 import { Stack } from '@chakra-ui/react';
 import { getLesson, LessonEnum, TutorialModal } from '../tutorial';
@@ -42,6 +42,7 @@ const CommandPanel = ({
         options={options}
         onNext={handleCommand}
         isBackEnabled={false}
+        width="8rem"
       />
       <TutorialModal
         player={currentPlayer}

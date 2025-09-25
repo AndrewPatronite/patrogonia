@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Character, { CharacterProps } from './Character';
+import Character, { CharacterProps, CharacterType } from './Character';
 import { Box, Flex, Icon } from '@chakra-ui/react';
 import { Direction } from '../navigation';
 import { FaCampground, FaDragon, FaInfoCircle } from 'react-icons/fa';
@@ -12,15 +12,15 @@ describe('Character', () => {
     directionFacing: Direction = Direction.Up,
     battleId?: string,
     lastUpdate: string = new Date().toString(),
-    isCurrentPlayer: boolean = false,
-    inDialogRange: boolean = false
+    inDialogRange: boolean = false,
+    characterType: CharacterType = 'Peer'
   ) => {
     props = {
       name: 'Redwan',
       directionFacing,
       battleId,
       lastUpdate,
-      isCurrentPlayer,
+      characterType,
       inDialogRange,
     };
     return shallow(<Character {...props} />);
@@ -33,7 +33,13 @@ describe('Character', () => {
   });
 
   it("has the right background image and shows a hero's name on back when facing up", () => {
-    const subject = getCharacter(Direction.Up, undefined, undefined, true);
+    const subject = getCharacter(
+      Direction.Up,
+      undefined,
+      undefined,
+      false,
+      'Hero'
+    );
     expect(subject.find(Flex).prop('backgroundImage')).toEqual(
       '/images/characters/hero-up.gif'
     );
@@ -41,7 +47,13 @@ describe('Character', () => {
   });
 
   it("has the right background image and shows a hero's name on chest when facing down", () => {
-    const subject = getCharacter(Direction.Down, undefined, undefined, true);
+    const subject = getCharacter(
+      Direction.Down,
+      undefined,
+      undefined,
+      false,
+      'Hero'
+    );
     expect(subject.find(Flex).prop('backgroundImage')).toEqual(
       '/images/characters/hero-down.gif'
     );
@@ -49,14 +61,26 @@ describe('Character', () => {
   });
 
   it('has the right background image for hero facing right', () => {
-    const subject = getCharacter(Direction.Right, undefined, undefined, true);
+    const subject = getCharacter(
+      Direction.Right,
+      undefined,
+      undefined,
+      false,
+      'Hero'
+    );
     expect(subject.find(Flex).prop('backgroundImage')).toEqual(
       '/images/characters/hero-right.gif'
     );
   });
 
   it('has the right background image for hero facing left', () => {
-    const subject = getCharacter(Direction.Left, undefined, undefined, true);
+    const subject = getCharacter(
+      Direction.Left,
+      undefined,
+      undefined,
+      false,
+      'Hero'
+    );
     expect(subject.find(Flex).prop('backgroundImage')).toEqual(
       '/images/characters/hero-left.gif'
     );
@@ -138,7 +162,7 @@ describe('Character', () => {
       undefined,
       undefined,
       true,
-      true
+      'Hero'
     );
     const icon = subject.find(Icon);
     expect(icon.props()).toEqual({

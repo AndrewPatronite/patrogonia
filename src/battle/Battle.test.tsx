@@ -42,7 +42,6 @@ describe('Battle', () => {
   let playSound: jest.Mock;
   let pauseSound: jest.Mock;
   let updatePlayer: jest.Mock;
-  let loadSave: jest.Mock;
 
   beforeEach(() => {
     battle = {
@@ -84,11 +83,9 @@ describe('Battle', () => {
       playSound,
       pauseSound,
     });
-    loadSave = jest.fn();
     updatePlayer = jest.fn();
     (usePlayer as jest.Mock).mockReturnValue({
       currentPlayer,
-      loadSave,
       updatePlayer,
     });
     takeTurn = jest.fn();
@@ -166,7 +163,7 @@ describe('Battle', () => {
         roundPlayerActions: battle.roundPlayerActions,
         selectedEnemyId: undefined,
         playerTurnEnabled: true,
-        loadSave,
+        loadSave: expect.any(Function),
         updatePlayer,
       });
       expect(playerPanels.at(1).props()).toEqual({
@@ -180,7 +177,7 @@ describe('Battle', () => {
         roundPlayerActions: battle.roundPlayerActions,
         selectedEnemyId: undefined,
         playerTurnEnabled: true,
-        loadSave,
+        loadSave: expect.any(Function),
         updatePlayer,
       });
     });
@@ -221,7 +218,7 @@ describe('Battle', () => {
     it('calls the loadSave provided by props', () => {
       playerPanel.prop('loadSave')();
 
-      expect(loadSave).toHaveBeenCalled();
+      expect(dismissBattle).toHaveBeenCalled();
     });
   });
 

@@ -5,11 +5,12 @@ export enum ModalEnum {
   FieldMenu = 'FieldMenu',
   Dialog = 'Dialog',
   Tutorial = 'Tutorial',
+  Shop = 'Shop',
 }
 
 export interface ModalInterface {
   closeModal: (modalEnum: ModalEnum) => void;
-  getModalContent: (modalEnum: ModalEnum) => any;
+  getModalContent: () => any;
   isModalOpen: (modalEnum: ModalEnum) => boolean;
   openModal: (
     modalEnum: ModalEnum,
@@ -20,7 +21,7 @@ export interface ModalInterface {
 
 const ModalStateContext = createContext<ModalInterface>({
   closeModal: () => {},
-  getModalContent: () => {},
+  getModalContent: () => null,
   isModalOpen: () => false,
   openModal: () => {},
 });

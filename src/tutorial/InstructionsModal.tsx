@@ -22,6 +22,7 @@ import NpcLesson from './NpcLesson';
 import IntroductionLesson from '../tutorial/introduction/Introduction';
 import CaveExplorationLesson from './CaveExplorationLesson';
 import { Command } from '../battle/types';
+import { SpellName } from '../player/types';
 
 interface LessonEntry {
   name: string;
@@ -59,8 +60,8 @@ const InstructionsModal = () => {
         <BattleCommandLesson
           options={[
             { value: 'ATTACK', display: 'Attack' },
-            { value: 'HEAL', display: 'Heal' },
-            { value: 'ICE', display: 'Ice' },
+            { value: SpellName.Heal, display: 'Heal' },
+            { value: SpellName.Ice, display: 'Ice' },
             { value: 'PARRY', display: 'Parry' },
             { value: 'RUN', display: Command.Run },
           ]}

@@ -1,6 +1,6 @@
 import React from 'react';
 import OptionPanel, { OptionPanelProps } from './OptionPanel';
-import { Command } from './types';
+import { Command } from '../battle/types';
 import { fireEvent, screen } from '@testing-library/react';
 import { renderChakra } from '../../test/utils';
 

@@ -10,7 +10,7 @@ interface CaptionModalProps {
 }
 
 const CaptionModal = ({ message, isOpen }: CaptionModalProps) => (
-  <Modal isOpen={isOpen} onClose={() => {}} size="full">
+  <Modal isOpen={isOpen} onClose={() => {}} size="full" trapFocus={false}>
     <ModalContent background="transparent">
       <Flex
         alignItems="center"

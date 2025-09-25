@@ -1,5 +1,11 @@
 import { HttpStatus } from './types';
 import {
+  getShopInventory,
+  purchaseItem,
+  sellItem,
+  useItem,
+} from './itemService';
+import {
   castSpell,
   createAccount,
   getPlayer,
@@ -16,9 +22,13 @@ export {
   getNpcs,
   getPlayer,
   getPlayers,
+  getShopInventory,
   HttpStatus,
   loadSave,
   login,
+  purchaseItem,
+  sellItem,
   updateNpc,
   updatePlayer,
+  useItem,
 };
